@@ -44,11 +44,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .size-40 { width: 160px; height: 50px; } 
 .slot-name-tag { font-size: 9px; font-weight: 800; color: #7F8C8D; z-index: 1; pointer-events: none; }
 
-/* CONTENEDORES CALZADOS PERFECTOS Y RECTOS */
+/* RECTANGULOS 3D LIMPIOS SIN TEXTO ENCIMA */
 .cube-stack-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column-reverse; justify-content: flex-start; padding: 2px; gap: 1px; pointer-events: none; }
-.container-box-3d { width: 100%; border-radius: 3px; position: relative; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.2); overflow: hidden; }
-.box-face-top { height: 4px; background: rgba(255,255,255,0.25); width: 100%; }
-.box-face-front { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); padding: 0 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.container-box-3d { width: 100%; border-radius: 3px; position: relative; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.25); border: 1px solid rgba(0,0,0,0.2); overflow: hidden; }
+.box-face-top { height: 4px; background: rgba(255,255,255,0.3); width: 100%; }
+.box-face-front { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.6); padding: 0 2px; }
 
 .bottom-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-top: 20px; }
 @media(max-width: 768px) { .bottom-layout { grid-template-columns: 1fr; } }
@@ -61,7 +61,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .bitacora-table td { padding: 9px; border-bottom: 1px solid #F2F4F4; font-weight: 600; }
 .badge-mov { padding: 3px 6px; border-radius: 4px; color: white; font-size: 9px; font-weight: bold; }
 
-/* CUADRO FLOTANTE DE INFORMACIÓN */
+/* CUADRO FLOTANTE TÁCTIL DE INFORMACIÓN */
 .popover { position: absolute; background: white; border-radius: 8px; box-shadow: 0 6px 25px rgba(0,0,0,0.25); border: 1px solid var(--gris-borde); padding: 10px; width: 250px; z-index: 1000; display: none; font-size: 11px; }
 .popover-title { font-weight: 800; color: var(--az-oscuro); border-bottom: 1.5px solid #EAECEE; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
 .popover-close-btn { background: #E74C3C; color: white; border: none; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
@@ -208,12 +208,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 </div>
 
 <script>
-// ==================== SECCIÓN DE CONFIGURACIÓN DEL SCRIPT ====================
-// Pega tu enlace CSV publicado de Google Sheets entre las comillas de abajo:
-const URL_SHEETS_CSV = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
-
+// ==================== CONFIGURACIÓN DE CONEXIÓN INTEGRADA DIRECTA ====================
+// El script de Google Apps Script se usa tanto para el mapa como para romper la caché CORS
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
-// =============================================================================
+// =====================================================================================
 
 let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
 const COLORES = { 'A': 'var(--a-color)', 'B': 'var(--b-color)', 'C': 'var(--c-color)', 'D': 'var(--d-color)' };
@@ -228,36 +226,44 @@ function switchTab(tabId, btn) {
 window.onload = () => {
   construirPatioFisico(); 
   cargarDatosPermanentes();
-  setInterval(cargarDatosPermanentes, 10000); // Polling automático de refresco global cada 10 segundos
+  // Consulta automática en segundo plano cada 5 segundos rompiendo caché
+  setInterval(cargarDatosPermanentes, 5000);
 };
 
 function cargarDatosPermanentes() {
-  if(URL_SHEETS_CSV.includes("AQUÍ_PEGA")) return;
-  fetch(URL_SHEETS_CSV + "?t=" + new Date().getTime())
-    .then(res => res.text())
-    .then(csvText => {
-      procesarCSV(csvText);
+  // Apuntamos directo a tu script agregando un anti-caché dinámico por milisegundos
+  var urlLimpia = URL_WEBAPP_SCRIPT + "?action=read&v=" + new Date().getTime();
+  
+  fetch(urlLimpia)
+    .then(res => res.json())
+    .then(jsonData => {
+      db3D = jsonData.patio || {};
       actualizarMapa3D();
-    }).catch(err => console.error("Error leyendo Excel Central:", err));
+      actualizarHistorialVisual(jsonData.historial || []);
+    }).catch(err => console.error("Error sincronizando en red central:", err));
 }
 
-function procesarCSV(text) {
-  db3D = {};
-  const lineas = text.split("\n");
-  for(let i = 1; i < lineas.length; i++) {
-    if(!lineas[i].trim()) continue;
-    const columnas = lineas[i].split(",");
-    const ubicacion = columnas[0].trim().toUpperCase();
-    const sigla = columnas[1]?.trim().toUpperCase();
-    const cliente = columnas[2]?.trim();
-    const alto = columnas[3]?.trim() || "2.50";
-    const estado = columnas[4]?.trim() || "FULL";
-    
-    if(ubicacion && sigla) {
-      if(!db3D[ubicacion]) db3D[ubicacion] = [];
-      db3D[ubicacion].push({ sigla, cliente, alto, estado });
-    }
+function actualizarHistorialVisual(historial) {
+  const tBody = document.getElementById('bitacora-rows');
+  tBody.innerHTML = '';
+  if(historial.length === 0) {
+    tBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#95A5A6;">Sin registros de movimientos en el turno</td></tr>`;
+    return;
   }
+  historial.forEach(log => {
+    let badgCol = log.tipo === 'INGRESO' ? '#27AE60' : (log.tipo === 'SALIDA' ? '#E74C3C' : '#E67E22');
+    tBody.innerHTML += `
+      <tr>
+        <td>${log.fecha}</td>
+        <td style="color:var(--az-oscuro); font-weight:800;">${log.sigla}</td>
+        <td><span class="badge-mov" style="background:${badgCol}">${log.tipo}</span></td>
+        <td style="color:#7F8C8D;">${log.origen}</td>
+        <td style="color:#27AE60; font-weight:700;">${log.destino}</td>
+        <td><strong>${log.operador}</strong></td>
+        <td>${log.detalles}</td>
+      </tr>
+    `;
+  });
 }
 
 function construirPatioFisico() {
@@ -303,7 +309,7 @@ function actualizarMapa3D() {
         const box = document.createElement('div'); box.className = 'container-box-3d';
         box.style.height = item.alto === "2.20" ? '13px' : '17px';
         box.style.backgroundColor = item.estado === "VACIO" ? 'var(--vacio-color)' : COLORES[cKey];
-        box.innerHTML = `<div class="box-face-top"></div><div class="box-face-front">${item.sigla}</div>`;
+        box.innerHTML = `<div class="box-face-top"></div><div class="box-face-front"></div>`;
         stackWrapper.appendChild(box);
       });
       slot.appendChild(stackWrapper);
@@ -382,39 +388,27 @@ function ejecutarMovimientoPatio() {
   
   if(!sigla) { alert("Debe introducir las siglas del contenedor obligatoriamente."); return; }
   
-  if(!db3D[selectedId3D]) db3D[selectedId3D] = [];
-  db3D[selectedId3D].push({ sigla, cliente, alto, estado });
-  actualizarMapa3D();
+  const payload = { action: "save", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, tipo: tipoOp, origen: origenAnt || "PORTERÍA" };
   
-  const tBody = document.getElementById('bitacora-rows');
-  if(tBody.innerHTML.includes("Sincronizando con el servidor")) tBody.innerHTML = '';
-  const nuevaFila = `<tr><td>${new Date().toLocaleString('es-CL')}</td><td style="color:var(--az-oscuro); font-weight:800;">${sigla}</td><td><span class="badge-mov" style="background:${tipoOp=='INGRESO'?'#27AE60':'#E67E22'}">${tipoOp}</span></td><td>${tipoOp==='REUBICACION'?origenAnt:'PORTERÍA'}</td><td style="color:#27AE60; font-weight:700;">${selectedId3D}</td><td><strong>${operador}</strong></td><td>${cliente} (${estado} - H: ${alto}m)</td></tr>`;
-  tBody.innerHTML = nuevaFila + tBody.innerHTML;
-
-  if(!URL_WEBAPP_SCRIPT.includes("AQUÍ_PEGA")) {
-    const payload = { action: "save", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, tipo: tipoOp, origen: origenAnt || "PORTERÍA" };
-    fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
-    .then(() => setTimeout(cargarDatosPermanentes, 800));
-  }
-  cerrarModal();
+  fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
+  .then(() => {
+    cerrarModal();
+    setTimeout(cargarDatosPermanentes, 500);
+  });
 }
 
 function despacharTope3D() {
   if(db3D[selectedId3D] && db3D[selectedId3D].length > 0) {
-    const unidad = db3D[selectedId3D].pop();
+    const unidad = db3D[selectedId3D][db3D[selectedId3D].length - 1];
     const operador = document.getElementById('form-operador').value;
-    actualizarMapa3D();
     
-    const tBody = document.getElementById('bitacora-rows');
-    const nuevaFila = `<tr><td>${new Date().toLocaleString('es-CL')}</td><td style="color:var(--az-oscuro); font-weight:800;">${unidad.sigla}</td><td><span class="badge-mov" style="background:#E74C3C">SALIDA</span></td><td>${selectedId3D}</td><td style="color:#E74C3C; font-weight:700;">DESPACHO</td><td><strong>${operador}</strong></td><td>${unidad.cliente} (${unidad.estado || 'FULL'})</td></tr>`;
-    tBody.innerHTML = nuevaFila + tBody.innerHTML;
-
-    if(!URL_WEBAPP_SCRIPT.includes("AQUÍ_PEGA")) {
-      const payload = { action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador };
-      fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
-      .then(() => setTimeout(cargarDatosPermanentes, 800));
-    }
-    cerrarModal();
+    const payload = { action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador };
+    
+    fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
+    .then(() => {
+      cerrarModal();
+      setTimeout(cargarDatosPermanentes, 500);
+    });
   }
 }
 
