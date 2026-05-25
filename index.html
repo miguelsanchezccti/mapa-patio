@@ -5,76 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TOS Sheets Pro - CCTI Maipú</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
   --az-oscuro: #1F3864; --az-medio: #2E75B6; --az-claro: #D6E4F0;
   --gris-bg: #EAECEE; --gris-borde: #BDC3C7; --txt-principal: #2C3E50;
-  --a-top: #A569BD; --a-side: #8E44AD;
-  --b-top: #5DADE2; --b-side: #2980B9;
-  --c-full-top: #58D68D; --c-full-side: #27AE60;
-  --d-top: #F5B041; --d-side: #E67E22;
+  --a-color: #8E44AD; --b-color: #2980B9; --c-color: #27AE60; --d-color: #E67E22;
+  --vacio-color: #7F8C8D;
 }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: var(--gris-bg); color: var(--txt-principal); padding-bottom: 20px; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: var(--gris-bg); color: var(--txt-principal); padding-bottom: 30px; }
 
-.header { background: var(--az-oscuro); color: white; padding: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.header h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; }
-.header p { font-size: 11px; color: var(--az-claro); }
+.header { background: var(--az-oscuro); color: white; padding: 14px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.header h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.header p { font-size: 11px; color: var(--az-claro); margin-top: 2px; }
 
-/* BARRA DE NAVEGACIÓN POR PESTAÑAS */
-.nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.tab-btn { flex: 1; padding: 14px; text-align: center; border: none; background: none; font-size: 13px; font-weight: 800; color: #7F8C8D; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); }
+.tab-btn { flex: 1; padding: 14px; text-align: center; border: none; background: none; font-size: 12px; font-weight: 800; color: #7F8C8D; cursor: pointer; transition: all 0.2s; }
 .tab-btn.active { color: var(--az-medio); border-bottom: 4px solid var(--az-medio); background: #F2F4F4; }
 
-.tab-content { display: none; max-width: 1350px; margin: 15px auto; padding: 0 15px; }
+.tab-content { display: none; max-width: 1400px; margin: 15px auto; padding: 0 10px; }
 .tab-content.active { display: block; }
 
-.info-panel { background: white; border-radius: 8px; padding: 12px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-around; font-size: 11px; font-weight: 700; }
+.info-panel { background: white; border-radius: 8px; padding: 12px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; font-size: 11px; font-weight: 700; }
 .legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-color { width: 14px; height: 14px; border-radius: 3px; }
+.legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
 
-/* MAPA INTERACTIVO SIN ESTORBOS */
-.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 40px 20px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; align-items: start; overflow-x: auto; }
-.column-block { display: flex; flex-direction: column; gap: 14px; }
-.block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 4px; }
-.lane-3d-row { display: flex; align-items: center; gap: 15px; }
-.lane-label { width: 35px; font-size: 11px; font-weight: 900; color: #7F8C8D; text-align: right; }
-.slots-3d-container { display: flex; gap: 20px; }
+.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 25px 15px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; overflow-x: auto; }
+@media(max-width: 900px) { .yard-perspective-container { grid-template-columns: 1fr; gap: 30px; } }
 
-.slot-3d { position: relative; background: #BDC3C7; border: 1px solid #95A5A6; border-radius: 4px; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.slot-3d:hover { background: #A6ACAF; transform: scale(1.04); }
-.size-20 { width: 70px; height: 40px; } 
-.size-40 { width: 140px; height: 40px; } 
-.slot-name-tag { position: absolute; bottom: 2px; right: 4px; font-size: 8px; font-weight: 800; color: #7F8C8D; }
+.column-block { display: flex; flex-direction: column; gap: 10px; }
+.block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 4px; margin-bottom: 5px; }
+.lane-3d-row { display: flex; align-items: center; gap: 10px; }
+.lane-label { width: 30px; font-size: 11px; font-weight: 900; color: #566573; text-align: right; }
+.slots-3d-container { display: flex; gap: 12px; flex: 1; }
 
-.cube-container { position: absolute; top: -6px; left: 2px; width: 92%; height: 92%; }
-.container-cube { position: absolute; width: 100%; transform-style: preserve-3d; transition: transform 0.3s; }
-.face { position: absolute; width: 100%; height: 100%; border: 1px solid rgba(255,255,255,0.25); font-size: 9px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-.face.front { background: var(--side-color); transform: skewY(-10deg); top: 4px; }
-.face.top { background: var(--top-color); transform: translateY(-6px) skewX(25deg); height: 12px; }
+.slot-3d { position: relative; background: #BDC3C7; border: 1px solid #95A5A6; border-radius: 5px; cursor: pointer; transition: transform 0.2s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.15); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; }
+.slot-3d:hover { transform: scale(1.02); background: #A6ACAF; }
+.size-20 { width: 85px; height: 50px; } 
+.size-40 { width: 160px; height: 50px; } 
+.slot-name-tag { font-size: 9px; font-weight: 800; color: #7F8C8D; z-index: 1; pointer-events: none; }
 
-.bottom-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; margin-top: 25px; }
-.office-zone { background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; color: #566573; text-transform: uppercase; text-align: center; padding: 10px; }
+/* CONTENEDORES CALZADOS PERFECTOS Y RECTOS */
+.cube-stack-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column-reverse; justify-content: flex-start; padding: 2px; gap: 1px; pointer-events: none; }
+.container-box-3d { width: 100%; border-radius: 3px; position: relative; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.2); overflow: hidden; }
+.box-face-top { height: 4px; background: rgba(255,255,255,0.25); width: 100%; }
+.box-face-front { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); padding: 0 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* PESTAÑA HISTORIAL DEDICADA */
-.history-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--az-oscuro); }
-.history-title { font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; color: var(--az-oscuro); }
-.bitacora-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
-.bitacora-table th { background: #F2F4F4; padding: 10px; font-weight: 700; color: #5D6D7E; text-transform: uppercase; font-size: 10px; border-bottom: 2px solid #E5E7EB; }
-.bitacora-table td { padding: 10px; border-bottom: 1px solid #F2F4F4; font-weight: 600; }
-.badge-mov { padding: 3px 8px; border-radius: 4px; color: white; font-size: 9px; font-weight: bold; text-transform: uppercase; }
+.bottom-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-top: 20px; }
+@media(max-width: 768px) { .bottom-layout { grid-template-columns: 1fr; } }
+.office-zone { background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; color: #4D5656; text-transform: uppercase; text-align: center; padding: 15px; }
 
-.popover { position: absolute; background: white; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); border: 1px solid var(--gris-borde); padding: 8px; width: 240px; z-index: 1000; display: none; pointer-events: none; font-size: 11px; }
-.popover-title { font-size: 11px; font-weight: 700; color: var(--az-oscuro); border-bottom: 1px solid #EAECEE; padding-bottom: 3px; margin-bottom: 5px; }
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; justify-content: center; align-items: center; }
-.modal-content { background: white; padding: 18px; border-radius: 10px; width: 90%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-.modal-header { font-size: 14px; font-weight: 700; color: var(--az-oscuro); margin-bottom: 10px; }
+.history-card { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--az-oscuro); overflow-x: auto; }
+.history-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; color: var(--az-oscuro); }
+.bitacora-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; min-width: 650px; }
+.bitacora-table th { background: #F2F4F4; padding: 10px; font-weight: 700; color: #5D6D7E; text-transform: uppercase; border-bottom: 2px solid #E5E7EB; }
+.bitacora-table td { padding: 9px; border-bottom: 1px solid #F2F4F4; font-weight: 600; }
+.badge-mov { padding: 3px 6px; border-radius: 4px; color: white; font-size: 9px; font-weight: bold; }
+
+/* CUADRO FLOTANTE DE INFORMACIÓN */
+.popover { position: absolute; background: white; border-radius: 8px; box-shadow: 0 6px 25px rgba(0,0,0,0.25); border: 1px solid var(--gris-borde); padding: 10px; width: 250px; z-index: 1000; display: none; font-size: 11px; }
+.popover-title { font-weight: 800; color: var(--az-oscuro); border-bottom: 1.5px solid #EAECEE; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+.popover-close-btn { background: #E74C3C; color: white; border: none; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
+
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; padding: 10px; }
+.modal-content { background: white; padding: 20px; border-radius: 10px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.modal-header { font-size: 14px; font-weight: 800; color: var(--az-oscuro); margin-bottom: 12px; text-transform: uppercase; border-bottom: 1px solid #EAECEE; padding-bottom: 6px; }
+.form-group { margin-bottom: 10px; }
+.form-group label { display: block; font-size: 10px; font-weight: 700; color: #5D6D7E; margin-bottom: 3px; text-transform: uppercase; }
+.form-control { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gris-borde); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--txt-principal); }
+.form-control:focus { border-color: var(--az-medio); outline: none; }
+.btn-mando { width: 100%; padding: 10px; background: var(--az-medio); color: white; border: none; font-weight: bold; border-radius: 5px; margin-top: 5px; cursor: pointer; }
 </style>
 </head>
 <body>
 
 <div class="header">
   <h1>SISTEMA OPERATIVO DE PATIO 3D PRO (TOS)</h1>
-  <p>CCTI S.A. — Conexión Directa Planilla Sheets (Maipú)</p>
+  <p>CCTI S.A. — Distribución Portuaria y Trazabilidad Satelital (Maipú)</p>
 </div>
 
 <div class="nav-tabs">
@@ -84,101 +90,133 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 
 <div id="tab-mapa" class="tab-content active">
   <div class="info-panel">
-    <div class="legend-item"><div class="legend-color" style="background:var(--a-side)"></div><span>Bloque A (A1-A11 | 40')</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--b-side)"></div><span>Bloque B (B6-B11 | 40')</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--c-full-side)"></div><span>Bloque C (C1-C11 | 20')</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--d-side)"></div><span>Zona X-D (P1-P7 | Perímetro)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Específicos)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--c-color)"></div><span>Bloque C (20' Full)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Perímetro 40')</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:#7F8C8D"></div><span>Unidad VACÍA (Cualquier Bloque)</span></div>
   </div>
 
   <div class="yard-perspective-container">
-    <div class="column-block"><div class="block-3d-title" style="color:var(--a-side)">◀ Bloque A (A1 - A11)</div><div id="render-A"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--b-side)">▲ Bloque B (B6 - B11)</div><div id="render-B"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--c-full-side)">▶ Bloque C (C1 - C11)</div><div id="render-C"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ Bloque A (A1 - A11)</div><div id="render-A"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--b-color)">▲ Bloque B (B6 - B11)</div><div id="render-B"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--c-color)">▶ Bloque C (C1 - C11)</div><div id="render-C"></div></div>
   </div>
 
   <div class="bottom-layout">
     <div class="column-block" style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-      <div class="block-3d-title" style="color:var(--d-side)">▼ Perímetro de Vacíos Ocasionales (Zona X / D)</div>
-      <div id="render-D" style="display:flex; justify-content: space-between; padding: 5px 0;"></div>
+      <div class="block-3d-title" style="color:var(--d-color)">▼ Perímetro de Vacíos Ocasionales (Zona X / D)</div>
+      <div id="render-D" style="display:flex; justify-content: space-between; gap:5px; padding: 5px 0;"></div>
     </div>
-    <div class="office-zone">🏢 Garita Central CCTI Maipú — Sincronizado con Google Sheets</div>
+    <div class="office-zone">🏢 Garita Central CCTI Maipú — Sincronización Portuaria Excel</div>
   </div>
 </div>
 
 <div id="tab-historial" class="tab-content">
   <div class="history-card">
-    <div class="history-title">📋 Registro Técnico Histórico de Patio</div>
+    <div class="history-title">📋 Registro Técnico de Control de Operadores</div>
     <table class="bitacora-table">
       <thead>
         <tr>
           <th>Hora/Fecha</th>
           <th>Contenedor</th>
-          <th>Tipo Movimiento</th>
-          <th>Origen Anterior</th>
-          <th>Destino Nuevo</th>
-          <th>Operador / Detalles</th>
+          <th>Movimiento</th>
+          <th>Origen</th>
+          <th>Destino Real</th>
+          <th>Operador Reachstacker</th>
+          <th>Detalles de Carga</th>
         </tr>
       </thead>
       <tbody id="bitacora-rows">
-        <tr><td colspan="6" style="text-align:center; color:#95A5A6; font-style:italic;">Cargando datos desde la planilla...</td></tr>
+        <tr><td colspan="7" style="text-align:center; color:#95A5A6; font-style:italic;">Sincronizando con el servidor central...</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<div id="popover-mall" class="popover"><div class="popover-title" id="pop-title">Casilla</div><div class="popover-body" id="pop-body"></div></div>
+<div id="popover-mall" class="popover">
+  <div class="popover-title">
+    <span id="pop-title">Ubicación</span>
+    <button class="popover-close-btn" onclick="cerrarPopover(event)">Cerrar X</button>
+  </div>
+  <div id="pop-body"></div>
+  <button id="pop-mando-btn" class="btn-mando">⚙️ Abrir Mando de Operación</button>
+</div>
 
 <div id="modal-operacion" class="modal">
   <div class="modal-content">
-    <div class="modal-header" id="modal-title">Operación Técnico-Logística</div>
+    <div class="modal-header" id="modal-title">Operación de Patio</div>
+    
     <div class="form-group">
-      <label>Tipo de Operación</label>
-      <select id="form-tipo-op" class="form-control" onchange="conmutarFormularioOp(this.value)" style="width:100%; padding:8px; border-radius:5px; border:1px solid var(--gris-borde);">
-        <option value="INGRESO" selected>📥 Ingreso Nuevo de Contenedor</option>
+      <label>Tipo de Acción</label>
+      <select id="form-tipo-op" onchange="conmutarFormularioOp(this.value)" class="form-control" style="font-weight: bold;">
+        <option value="INGRESO" selected>📥 Ingreso Nuevo a Patio</option>
         <option value="REUBICACION">🔄 Reubicación / Movimiento Interno</option>
       </select>
     </div>
+
+    <div class="form-group">
+      <label>Operador de Grúa Reachstacker</label>
+      <select id="form-operador" class="form-control" style="border: 1.5px solid var(--az-medio); font-weight: bold;">
+        <option value="Alexis Perez">Alexis Perez</option>
+        <option value="Claudio Araya">Claudio Araya</option>
+        <option value="Joel Poppa">Joel Poppa</option>
+      </select>
+    </div>
+
     <div id="form-ingreso">
-      <div style="margin-bottom:8px;"><label style="display:block; font-size:9px; font-weight:700; color:#5D6D7E; margin-bottom:2px; text-transform:uppercase;">Siglas / Código Contenedor</label><input type="text" id="form-sigla" style="width:100%; padding:8px; border:1.5px solid var(--gris-borde); border-radius:5px; text-transform:uppercase"></div>
-      <div style="margin-bottom:8px;"><label style="display:block; font-size:9px; font-weight:700; color:#5D6D7E; margin-bottom:2px; text-transform:uppercase;">Línea / Operador</label><input type="text" id="form-cliente" style="width:100%; padding:8px; border:1.5px solid var(--gris-borde); border-radius:5px;"></div>
-      <div style="margin-bottom:8px;">
-        <label style="display:block; font-size:9px; font-weight:700; color:#5D6D7E; margin-bottom:2px; text-transform:uppercase;">Altura del Contenedor</label>
-        <select id="form-alto-tipo" style="width:100%; padding:8px; border:1.5px solid var(--gris-borde); border-radius:5px;">
-          <option value="2.20">Estándar (2.20 mts alto)</option>
-          <option value="2.50" selected>High Cube (2.50 mts alto)</option>
+      <div class="form-group">
+        <label>Siglas de Contenedor</label>
+        <input type="text" id="form-sigla" class="form-control" placeholder="Ej: OOLU190633-7" style="text-transform:uppercase; font-weight: 700; letter-spacing: 0.5px;">
+      </div>
+      <div class="form-group">
+        <label>Línea / Cliente</label>
+        <input type="text" id="form-cliente" class="form-control" placeholder="Ej: MSC / Cosco">
+      </div>
+      
+      <div class="form-group">
+        <label>Estado de Carga (F/V)</label>
+        <select id="form-estado-carga" class="form-control">
+          <option value="FULL">FULL (Cargado)</option>
+          <option value="VACIO">VACIO (Disponible)</option>
         </select>
       </div>
-      <div id="group-origen" style="display:none; margin-bottom:8px;">
-        <label style="display:block; font-size:9px; font-weight:700; color:#5D6D7E; margin-bottom:2px; text-transform:uppercase;">Ubicación de Origen Anterior</label>
-        <input type="text" id="form-origen-ant" style="width:100%; padding:8px; border:1.5px solid var(--gris-borde); border-radius:5px; text-transform:uppercase" placeholder="Ej: A4-2">
+
+      <div class="form-group">
+        <label>Altura / Tipo</label>
+        <select id="form-alto-tipo" class="form-control">
+          <option value="2.20">Estándar (2.20m)</option>
+          <option value="2.50" selected>High Cube (2.50m)</option>
+        </select>
       </div>
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button class="btn btn-save" onclick="ejecutarMovimientoPatio()" style="flex:1; padding:10px; background:var(--az-medio); color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">Confirmar Posición</button>
-        <button class="btn btn-cancel" onclick="cerrarModal()" style="flex:1; padding:10px; background:#95A5A6; color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">Cancelar</button>
+      
+      <div id="group-origen" style="display:none;" class="form-group">
+        <label>Ubicación de Origen Anterior</label>
+        <input type="text" id="form-origen-ant" class="form-control" style="text-transform:uppercase" placeholder="Ej: C1-1">
+      </div>
+      
+      <div style="display:flex; gap:10px; margin-top:15px;">
+        <button onclick="ejecutarMovimientoPatio()" style="flex:1; padding:11px; background:var(--az-medio); color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Confirmar Movimiento</button>
+        <button onclick="cerrarModal()" style="flex:1; padding:11px; background:#95A5A6; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Cancelar</button>
       </div>
     </div>
-    <div id="form-salida" style="display:none; margin-top:10px; border-top:1px solid #EAECEE; padding-top:8px;">
-      <button onclick="despacharTope3D()" style="width:100%; padding:10px; background:#E74C3C; color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">Despachar Contenedor Superior (Salida)</button>
+    
+    <div id="form-salida" style="display:none; margin-top:12px; border-top:2px dashed #EAECEE; padding-top:10px;">
+      <button onclick="despacharTope3D()" style="width:100%; padding:11px; background:#E74C3C; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Despachar Contenedor Superior (Salida)</button>
     </div>
   </div>
 </div>
 
 <script>
-// ==================== CONFIGURACIÓN CENTRAL DE GOOGLE SHEETS ====================
-// 1. Pega aquí el enlace de tu pestaña "patio" publicado como CSV
+// ==================== SECCIÓN DE CONFIGURACIÓN DEL SCRIPT ====================
+// Pega tu enlace CSV publicado de Google Sheets entre las comillas de abajo:
 const URL_SHEETS_CSV = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
 
-// 2. URL de tu WebApp (Google Apps Script) para guardar datos en vivo
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
-// ===============================================================================
+// =============================================================================
 
-let db3D = {}; let selectedId3D = null;
-const COLORES = {
-  'A': { top: 'var(--a-top)', side: 'var(--a-side)' },
-  'B': { top: 'var(--b-top)', side: 'var(--b-side)' },
-  'C': { top: 'var(--c-full-top)', side: 'var(--c-full-side)' },
-  'D': { top: 'var(--d-top)', side: 'var(--d-side)' }
-};
+let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
+const COLORES = { 'A': 'var(--a-color)', 'B': 'var(--b-color)', 'C': 'var(--c-color)', 'D': 'var(--d-color)' };
 
 function switchTab(tabId, btn) {
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -187,24 +225,20 @@ function switchTab(tabId, btn) {
   btn.classList.add('active');
 }
 
-// CARGA INICIAL DE LA PLANILLA
 window.onload = () => {
   construirPatioFisico(); 
-  cargarDatosDesdePlanilla();
+  cargarDatosPermanentes();
+  setInterval(cargarDatosPermanentes, 10000); // Polling automático de refresco global cada 10 segundos
 };
 
-function cargarDatosDesdePlanilla() {
-  if(URL_SHEETS_CSV.includes("AQUÍ_PEGA")) {
-    console.log("Falta configurar la URL del CSV.");
-    return;
-  }
-  fetch(URL_SHEETS_CSV)
+function cargarDatosPermanentes() {
+  if(URL_SHEETS_CSV.includes("AQUÍ_PEGA")) return;
+  fetch(URL_SHEETS_CSV + "?t=" + new Date().getTime())
     .then(res => res.text())
     .then(csvText => {
       procesarCSV(csvText);
       actualizarMapa3D();
-      setupPopover3D();
-    }).catch(err => console.error("Error leyendo la planilla:", err));
+    }).catch(err => console.error("Error leyendo Excel Central:", err));
 }
 
 function procesarCSV(text) {
@@ -217,10 +251,11 @@ function procesarCSV(text) {
     const sigla = columnas[1]?.trim().toUpperCase();
     const cliente = columnas[2]?.trim();
     const alto = columnas[3]?.trim() || "2.50";
+    const estado = columnas[4]?.trim() || "FULL";
     
     if(ubicacion && sigla) {
       if(!db3D[ubicacion]) db3D[ubicacion] = [];
-      db3D[ubicacion].push({ sigla, cliente, alto });
+      db3D[ubicacion].push({ sigla, cliente, alto, estado });
     }
   }
 }
@@ -251,7 +286,7 @@ function crearCasillaBase3D(id, sizeClass, tipoLabel, cKey) {
   const slot = document.createElement('div'); slot.className = `slot-3d ${sizeClass}`;
   slot.id = `casilla-${id}`; slot.dataset.id = id; slot.dataset.tipo = tipoLabel; slot.dataset.ckey = cKey;
   slot.innerHTML = `<div class="slot-name-tag">${id.includes('-') ? 'Pos'+id.split('-')[1] : id}</div>`;
-  slot.addEventListener('click', () => abrirMando3D(id, tipoLabel));
+  slot.addEventListener('click', (e) => activarMóduloFlotante(e, id, tipoLabel));
   return slot;
 }
 
@@ -259,59 +294,74 @@ function actualizarMapa3D() {
   document.querySelectorAll('.slot-3d').forEach(slot => {
     const id = slot.dataset.id; const cKey = slot.dataset.ckey;
     const pila = db3D[id] || [];
-    
-    const viejoCont = slot.querySelector('.cube-container');
+    const viejoCont = slot.querySelector('.cube-stack-wrapper');
     if(viejoCont) viejoCont.remove();
     
     if(pila.length > 0) {
-      const cubeCont = document.createElement('div'); cubeCont.className = 'cube-container';
-      let alturaAcumuladaY = 0;
+      const stackWrapper = document.createElement('div'); stackWrapper.className = 'cube-stack-wrapper';
       pila.forEach((item, index) => {
-        const cube = document.createElement('div'); cube.className = `container-cube`;
-        let cajaAltoPx = item.alto === "2.20" ? 16 : 22;
-        cube.style.height = `${cajaAltoPx}px`;
-        cube.style.transform = `translateY(-${5 + alturaAcumuladaY}px)`;
-        cube.style.zIndex = (index + 1) * 10;
-        cube.style.setProperty('--top-color', COLORES[cKey].top);
-        cube.style.setProperty('--side-color', COLORES[cKey].side);
-        cube.innerHTML = `<div class="face top" style="height:10px;"></div><div class="face front" style="height:${cajaAltoPx}px; top:3px;">${item.sigla}</div>`;
-        cubeCont.appendChild(cube);
-        alturaAcumuladaY += (cajaAltoPx + 2);
+        const box = document.createElement('div'); box.className = 'container-box-3d';
+        box.style.height = item.alto === "2.20" ? '13px' : '17px';
+        box.style.backgroundColor = item.estado === "VACIO" ? 'var(--vacio-color)' : COLORES[cKey];
+        box.innerHTML = `<div class="box-face-top"></div><div class="box-face-front">${item.sigla}</div>`;
+        stackWrapper.appendChild(box);
       });
-      slot.appendChild(cubeCont);
+      slot.appendChild(stackWrapper);
     }
   });
 }
 
-function setupPopover3D() {
+function activarMóduloFlotante(e, id, tipoLabel) {
+  e.stopPropagation();
+  selectedId3D = id;
+  selectedTipoLabel3D = tipoLabel;
+  const pila = db3D[id] || [];
   const pop = document.getElementById('popover-mall');
-  document.querySelectorAll('.slot-3d').forEach(slot => {
-    slot.onmouseenter = () => {
-      const id = slot.dataset.id; const tipo = slot.dataset.tipo; const pila = db3D[id] || [];
-      document.getElementById('pop-title').innerHTML = `📦 Ubicación: <strong>${id}</strong> <span style="font-size:9px; color:#7F8C8D;">(${tipo})</span>`;
-      let html = '';
-      if(pila.length === 0) { html = `<span style="color:#95A5A6; font-style:italic;">Piso Disponible (Nivel 1)</span>`; }
-      else { for(let i=pila.length-1; i>=0; i--) { html += `<div style="background:#F2F4F4; padding:4px; border-radius:4px; margin-bottom:3px; border-left:3px solid var(--az-medio)"><strong>Piso ${i+1}:</strong> ${pila[i].sigla} (${pila[i].alto}m)<br>Línea: ${pila[i].cliente}</div>`; } }
-      document.getElementById('pop-body').innerHTML = html; pop.style.display = 'block';
-      const rect = slot.getBoundingClientRect(); pop.style.top = (rect.top + window.scrollY - pop.offsetHeight - 10) + 'px'; pop.style.left = (rect.left + window.scrollX - (pop.offsetWidth/2) + (rect.width/2)) + 'px';
-    };
-    slot.onmouseleave = () => { pop.style.display = 'none'; };
-  });
+  
+  document.getElementById('pop-title').innerHTML = `📦 Ubicación: <strong>${id}</strong> <span style="font-size:9px; color:#7F8C8D;">(${tipoLabel})</span>`;
+  
+  let html = '';
+  if(pila.length === 0) {
+    html = `<span style="color:#95A5A6; font-style:italic;">Casilla Libre (Piso Disponible)</span>`;
+  } else {
+    for(let i=pila.length-1; i>=0; i--) {
+      html += `<div style="background:#F2F4F4; padding:5px; border-radius:4px; margin-bottom:4px; border-left:4px solid ${pila[i].estado==='VACIO'?'#7F8C8D':'var(--az-medio)'}">
+                <strong>Piso ${i+1}:</strong> <span style="color:var(--az-oscuro); font-weight:bold;">${pila[i].sigla}</span><br>
+                Línea: ${pila[i].cliente} | <span style="font-weight:800; color:${pila[i].estado==='VACIO'?'#7F8C8D':'#27AE60'}">${pila[i].estado}</span> (${pila[i].alto}m)
+               </div>`;
+    }
+  }
+  
+  document.getElementById('pop-body').innerHTML = html;
+  pop.style.display = 'block';
+  
+  const rect = document.getElementById(`casilla-${id}`).getBoundingClientRect();
+  pop.style.top = (rect.top + window.scrollY - pop.offsetHeight - 8) + 'px';
+  pop.style.left = (rect.left + window.scrollX - (pop.offsetWidth/2) + (rect.width/2)) + 'px';
+  
+  document.getElementById('pop-mando-btn').onclick = () => {
+    pop.style.display = 'none';
+    abrirMando3D(selectedId3D, selectedTipoLabel3D);
+  };
 }
 
+function cerrarPopover(e) {
+  e.stopPropagation();
+  document.getElementById('popover-mall').style.display = 'none';
+}
+
+document.addEventListener('click', () => {
+  document.getElementById('popover-mall').style.display = 'none';
+});
+
 function conmutarFormularioOp(valor) {
-  if(valor === 'REUBICACION') {
-    document.getElementById('group-origen').style.display = 'block';
-    document.querySelector('.btn-save').innerText = "Confirmar Movimiento Interno";
-  } else {
-    document.getElementById('group-origen').style.display = 'none';
-    document.querySelector('.btn-save').innerText = "Apilar en Columna";
-  }
+  if(valor === 'REUBICACION') { document.getElementById('group-origen').style.display = 'block'; }
+  else { document.getElementById('group-origen').style.display = 'none'; }
 }
 
 function abrirMando3D(id, tipoLabel) {
-  selectedId3D = id; const pila = db3D[id] || [];
-  document.getElementById('modal-title').innerText = `Mando Sheets TOS — Casilla ${id}`;
+  const pila = db3D[id] || [];
+  document.getElementById('modal-title').innerText = `Mando de Patio — Ubicación ${id}`;
   document.getElementById('form-sigla').value = ''; document.getElementById('form-cliente').value = '';
   document.getElementById('form-origen-ant').value = '';
   document.getElementById('form-tipo-op').value = 'INGRESO';
@@ -325,42 +375,44 @@ function ejecutarMovimientoPatio() {
   const sigla = document.getElementById('form-sigla').value.trim().toUpperCase();
   const cliente = document.getElementById('form-cliente').value.trim() || "General";
   const alto = document.getElementById('form-alto-tipo').value;
+  const estado = document.getElementById('form-estado-carga').value;
+  const operador = document.getElementById('form-operador').value;
   const tipoOp = document.getElementById('form-tipo-op').value;
   const origenAnt = document.getElementById('form-origen-ant').value.trim().toUpperCase();
   
-  if(!sigla) { alert("Siglas requeridas"); return; }
+  if(!sigla) { alert("Debe introducir las siglas del contenedor obligatoriamente."); return; }
   
   if(!db3D[selectedId3D]) db3D[selectedId3D] = [];
-  db3D[selectedId3D].push({ sigla, cliente, alto });
+  db3D[selectedId3D].push({ sigla, cliente, alto, estado });
   actualizarMapa3D();
   
   const tBody = document.getElementById('bitacora-rows');
-  if(tBody.innerHTML.includes("Cargando datos")) tBody.innerHTML = '';
-  const nuevaFila = `<tr><td>${new Date().toLocaleString('es-CL')}</td><td style="color:var(--az-oscuro); font-weight:800;">${sigla}</td><td><span class="badge-mov" style="background:${tipoOp==='INGRESO'?'#27AE60':'#E67E22'}">${tipoOp}</span></td><td>${tipoOp==='REUBICACION'?origenAnt:'PORTERÍA'}</td><td style="color:#27AE60; font-weight:700;">${selectedId3D}</td><td>${cliente} (${alto}m)</td></tr>`;
+  if(tBody.innerHTML.includes("Sincronizando con el servidor")) tBody.innerHTML = '';
+  const nuevaFila = `<tr><td>${new Date().toLocaleString('es-CL')}</td><td style="color:var(--az-oscuro); font-weight:800;">${sigla}</td><td><span class="badge-mov" style="background:${tipoOp=='INGRESO'?'#27AE60':'#E67E22'}">${tipoOp}</span></td><td>${tipoOp==='REUBICACION'?origenAnt:'PORTERÍA'}</td><td style="color:#27AE60; font-weight:700;">${selectedId3D}</td><td><strong>${operador}</strong></td><td>${cliente} (${estado} - H: ${alto}m)</td></tr>`;
   tBody.innerHTML = nuevaFila + tBody.innerHTML;
 
   if(!URL_WEBAPP_SCRIPT.includes("AQUÍ_PEGA")) {
-    const payload = { action: "save", ubicacion: selectedId3D, sigla, cliente, alto, tipo: tipoOp, origen: origenAnt || "PORTERÍA" };
+    const payload = { action: "save", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, tipo: tipoOp, origen: origenAnt || "PORTERÍA" };
     fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
-      .then(() => console.log("Guardado en Google Sheets"))
-      .catch(err => console.error("Error enviando a script:", err));
+    .then(() => setTimeout(cargarDatosPermanentes, 800));
   }
-  
   cerrarModal();
 }
 
 function despacharTope3D() {
   if(db3D[selectedId3D] && db3D[selectedId3D].length > 0) {
     const unidad = db3D[selectedId3D].pop();
+    const operador = document.getElementById('form-operador').value;
     actualizarMapa3D();
     
     const tBody = document.getElementById('bitacora-rows');
-    const nuevaFila = `<tr><td>${new Date().toLocaleString('es-CL')}</td><td style="color:var(--az-oscuro); font-weight:800;">${unidad.sigla}</td><td><span class="badge-mov" style="background:#E74C3C">SALIDA</span></td><td>${selectedId3D}</td><td style="color:#E74C3C; font-weight:700;">DESPACHO</td><td>${unidad.cliente} (${unidad.alto}m)</td></tr>`;
+    const nuevaFila = `<tr><td>${new Date().toLocaleString('es-CL')}</td><td style="color:var(--az-oscuro); font-weight:800;">${unidad.sigla}</td><td><span class="badge-mov" style="background:#E74C3C">SALIDA</span></td><td>${selectedId3D}</td><td style="color:#E74C3C; font-weight:700;">DESPACHO</td><td><strong>${operador}</strong></td><td>${unidad.cliente} (${unidad.estado || 'FULL'})</td></tr>`;
     tBody.innerHTML = nuevaFila + tBody.innerHTML;
 
     if(!URL_WEBAPP_SCRIPT.includes("AQUÍ_PEGA")) {
-      const payload = { action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla };
-      fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) });
+      const payload = { action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador };
+      fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
+      .then(() => setTimeout(cargarDatosPermanentes, 800));
     }
     cerrarModal();
   }
