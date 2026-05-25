@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Control de Patio - CCTI Maipú</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root {
+  --az-oscuro: #1F3864;
+  --az-medio: #2E75B6;
+  --az-claro: #D6E4F0;
+  --gris-bg: #F4F6F9;
+  --gris-borde: #D1D5DB;
+  --txt-principal: #1F2937;
+  --color-a: #8E44AD;
+  --color-b: #2980B9;
+  --color-c-full: #27AE60;
+  --color-c-vacio: #16A085;
+  --color-c-retail: #2C3E50;
+  --color-d: #E67E22;
+  --vacio: #E5E7EB;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: var(--gris-bg); color: var(--txt-principal); padding-bottom: 60px; }
+.header { background: var(--az-oscuro); color: white; padding: 16px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header p { font-size: 12px; color: var(--az-claro); margin-top: 2px; }
+.main-container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
+.info-panel { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-around; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; }
+.legend-color { width: 16px; height: 16px; border-radius: 4px; }
+.layout-patio { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 20px; margin-bottom: 20px; }
+.block-section { background: white; border: 2px dashed #E5E7EB; padding: 15px; border-radius: 12px; position: relative; }
+.block-title { font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #F3F4F6; }
+.grid-a { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.grid-b { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.grid-c { display: grid; grid-template-columns: repeat(1, 1fr); gap: 6px; }
+.grid-d { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.slot { background: var(--vacio); border: 1px solid var(--gris-borde); border-radius: 6px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 6px; min-height: 65px; position: relative; transition: all 0.2s ease; }
+.slot:hover { transform: scale(1.03); box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10; }
+.slot-name { font-size: 11px; font-weight: 700; color: #4B5563; }
+.slot-desc { font-size: 9px; color: #9CA3AF; font-weight: 500; margin-top: 2px; }
+.stack-indicator { display: flex; gap: 3px; width: 100%; margin-top: 6px; }
+.level-bar { flex: 1; height: 6px; background: #BDC3C7; border-radius: 2px; }
+.slot.occupied-a { border-color: var(--color-a); background-color: #F5EEF8; }
+.slot.occupied-a .level-bar { background: var(--color-a); }
+.slot.occupied-b { border-color: var(--color-b); background-color: #EAF2F8; }
+.slot.occupied-b .level-bar { background: var(--color-b); }
+.slot.occupied-c-full { border-color: var(--color-c-full); background-color: #EAFAF1; }
+.slot.occupied-c-full .level-bar { background: var(--color-c-full); }
+.slot.occupied-c-vacio { border-color: var(--color-c-vacio); background-color: #E8F8F5; }
+.slot.occupied-c-vacio .level-bar { background: var(--color-c-vacio); }
+.slot.occupied-c-retail { border-color: var(--color-c-retail); background-color: #EBF5FB; }
+.slot.occupied-c-retail .level-bar { background: var(--color-c-retail); }
+.slot.occupied-d { border-color: var(--color-d); background-color: #FEF9E7; }
+.slot.occupied-d .level-bar { background: var(--color-d); }
+.layout-bottom { display: grid; grid-template-columns: 1fr 2.2fr; gap: 20px; margin-top: 20px; }
+.oficina-box { background: #EBEDEF; border: 2px solid var(--gris-borde); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-weight: 700; color: #566573; font-size: 16px; letter-spacing: 2px; min-height: 90px; text-transform: uppercase; }
+.popover { position: absolute; background: white; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 1px solid var(--gris-borde); padding: 12px; width: 260px; z-index: 1000; display: none; pointer-events: none; }
+.popover-title { font-size: 13px; font-weight: 700; color: var(--az-oscuro); border-bottom: 1px solid #F3F4F6; padding-bottom: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; }
+.popover-body { font-size: 11px; }
+.popover-level { background: #F3F4F6; padding: 4px 6px; border-radius: 4px; margin-bottom: 4px; border-left: 3px solid #9CA3AF; }
+.popover-level.active-lvl { border-left-color: var(--az-medio); background: #EBF5FB; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 20px; border-radius: 12px; width: 90%; max-width: 450px; }
+.modal-header { font-size: 16px; font-weight: 700; color: var(--az-oscuro); margin-bottom: 15px; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 11px; font-weight: 700; color: #4B5563; margin-bottom: 4px; text-transform: uppercase; }
+.form-control { width: 100%; padding: 10px; border: 1.5px solid var(--gris-borde); border-radius: 6px; font-size: 13px; outline: none; }
+.btn-row { display: flex; gap: 10px; margin-top: 15px; }
+.btn { flex: 1; padding: 12px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
+.btn-save { background: var(--az-medio); color: white; }
+.btn-cancel { background: #9CA3AF; color: white; }
+.btn-action { background: #EF4444; color: white; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>SISTEMA DE MANDO CENTRALIZADO</h1>
+  <p>CCTI S.A. — Layout Digital Fiel a Terreno (Maipú)</p>
+</div>
+<div class="main-container">
+  <div class="info-panel">
+    <div class="legend-item"><div class="legend-color" style="background:var(--color-a)"></div><span>Bloque A (40' Propio/Trasvasije/Arriendo)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--color-b)"></div><span>Bloque B (40' Solo Full)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--color-c-full)"></div><span>C1-C10 (20' Full)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--color-c-vacio)"></div><span>C11-C13 (Vacíos Arriendo)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--color-c-retail)"></div><span>C14-C17 (40' Falabella/Sod)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--color-d)"></div><span>Bloque D (Naviera / Copec)</span></div>
+  </div>
+  <div class="layout-patio">
+    <div class="block-section"><div class="block-title" style="color:var(--color-a)">◀ Bloque A (A1 - A12)</div><div class="grid-a" id="block-A"></div></div>
+    <div class="block-section"><div class="block-title" style="color:var(--color-b)">▲ Bloque B - Solo 40' Full (B1 - B10)</div><div class="grid-b" id="block-B"></div></div>
+    <div class="block-section"><div class="block-title" style="color:var(--color-c-full)">▶ Bloque C - Líneas de Distribución (C1 - C17)</div><div class="grid-c" id="block-C"></div></div>
+  </div>
+  <div class="layout-bottom">
+    <div class="block-section" style="margin-bottom: 0;"><div class="block-title" style="color:var(--color-d)">▼ Bloque X3 - D</div><div class="grid-d" id="block-D"></div></div>
+    <div class="oficina-box">🏢 Oficina Central CCTI — Control de Acceso Patio</div>
+  </div>
+</div>
+<div id="popover-mall" class="popover"><div class="popover-title" id="pop-title">Posición</div><div class="popover-body" id="pop-body"></div></div>
+<div id="modal-operacion" class="modal">
+  <div class="modal-content">
+    <div class="modal-header" id="modal-title">Operación en Posición</div>
+    <div id="form-ingreso">
+      <div class="form-group"><label>Número de Contenedor</label><input type="text" id="form-sigla" class="form-control" placeholder="TCLU1234567" style="text-transform:uppercase"></div>
+      <div class="form-group"><label>Configuración de Destino</label><input type="text" id="form-tamano" class="form-control" readonly style="background:#F3F4F6; font-weight:bold;"></div>
+      <div class="form-group"><label>Cliente / Operador</label><input type="text" id="form-cliente" class="form-control" placeholder="Ej: MSC / Sodimac / Falabella"></div>
+      <div class="form-group"><label>Ubicación Física</label><input type="text" id="form-nivel" class="form-control" readonly style="background:#F3F4F6;"></div>
+      <div class="btn-row"><button class="btn btn-save" onclick="guardarIngreso()">Confirmar Posición</button><button class="btn btn-cancel" onclick="cerrarModal()">Cancelar</button></div>
+    </div>
+    <div id="form-salida" style="display:none; margin-top:15px; border-top:2px solid #F3F4F6; padding-top:15px;"><p style="font-size:11px; margin-bottom:10px; font-weight:bold; color:#EF4444;">⚠️ Despachar la unidad que está al tope de la pila (LIFO):</p><button class="btn btn-action" onclick="despacharUnidad()">Dar Salida a Unidad Superior</button></div>
+  </div>
+</div>
+<script>
+let patioData = JSON.parse(localStorage.getItem('ccti_patio_real')) || {};
+let activeSlot = null;
+document.addEventListener("DOMContentLoaded", () => { renderBloques(); setupPopover(); });
+function renderBloques() {
+  const blockA = document.getElementById('block-A'); blockA.innerHTML = '';
+  for(let i=1; i<=12; i++) { createSlot(blockA, 'A'+i, "40' Específico", "occupied-a"); }
+  const blockB = document.getElementById('block-B'); blockB.innerHTML = '';
+  for(let i=1; i<=10; i++) { createSlot(blockB, 'B'+i, "40' Solo Full", "occupied-b"); }
+  const blockC = document.getElementById('block-C'); blockC.innerHTML = '';
+  for(let i=1; i<=17; i++) {
+    let desc = "20' Full"; let clase = "occupied-c-full";
+    if(i >= 11 && i <= 13) { desc = "Vacíos Arriendo"; clase = "occupied-c-vacio"; }
+    if(i >= 14 && i <= 17) { desc = "40' Falabella/Sod"; clase = "occupied-c-retail"; }
+    createSlot(blockC, 'C'+i, desc, clase);
+  }
+  const blockD = document.getElementById('block-D'); blockD.innerHTML = '';
+  createSlot(blockD, 'P3', "Naviera Devolución", "occupied-d");
+  createSlot(blockD, 'P4', "Naviera Devolución", "occupied-d");
+  createSlot(blockD, 'D3', "Zona Patio D", "occupied-d");
+  createSlot(blockD, 'D4', "Zona Copec", "occupied-d");
+}
+function createSlot(parent, name, desc, occupiedClass) {
+  const pila = patioData[name] || [];
+  const numNiveles = pila.length;
+  const isOccupied = numNiveles > 0;
+  let barsHtml = '';
+  for(let n = 0; n < numNiveles; n++) { barsHtml += `<div class="level-bar"></div>`; }
+  const slot = document.createElement('div');
+  slot.className = `slot ${isOccupied ? occupiedClass : ''}`;
+  slot.dataset.slot = name; slot.dataset.desc = desc; slot.dataset.clase = occupiedClass;
+  slot.innerHTML = `<div><div class="slot-name">${name}</div><div class="slot-desc">${desc}</div></div><div class="stack-indicator">${barsHtml}</div>`;
+  slot.addEventListener('click', () => abrirOperacion(name, desc));
+  parent.appendChild(slot);
+}
+function setupPopover() {
+  const pop = document.getElementById('popover-mall');
+  document.querySelectorAll('.slot').forEach(slot => {
+    slot.addEventListener('mouseenter', () => {
+      const name = slot.dataset.slot; const desc = slot.dataset.desc; const pila = patioData[name] || [];
+      document.getElementById('pop-title').innerHTML = `📍 Posición ${name} <span style="font-size:10px; color:#6B7280;">(${desc})</span>`;
+      let bodyHtml = '';
+      if(pila.length === 0) { bodyHtml = `<span style="color:#9CA3AF; font-style:italic;">Vacío — Disponible (Nivel 1)</span>`; }
+      else { for(let l = pila.length - 1; l >= 0; l--) { bodyHtml += `<div class="popover-level ${l === pila.length-1 ? 'active-lvl' : ''}"><strong>Piso ${l+1}:</strong> ${pila[l].sigla}<br><span style="color:#6B7280;">Cliente: ${pila[l].cliente}</span></div>`; } }
+      document.getElementById('pop-body').innerHTML = bodyHtml; pop.style.display = 'block';
+      const rect = slot.getBoundingClientRect(); pop.style.top = (rect.top + window.scrollY - pop.offsetHeight - 10) + 'px'; pop.style.left = (rect.left + window.scrollX - (pop.offsetWidth/2) + (rect.width/2)) + 'px';
+    });
+    slot.addEventListener('mouseleave', () => { pop.style.display = 'none'; });
+  });
+}
+function abrirOperacion(name, desc) {
+  activeSlot = name; const pila = patioData[name] || [];
+  document.getElementById('modal-title').innerText = `Ubicación Comercial — Casilla ${name}`;
+  document.getElementById('form-sigla').value = ''; document.getElementById('form-cliente').value = '';
+  document.getElementById('form-tamano').value = desc; document.getElementById('form-nivel').value = `Nivel de Altura: Piso ${pila.length + 1}`;
+  if(name.startsWith('C') && parseInt(name.substring(1)) >= 14) { document.getElementById('form-cliente').value = "Falabella / Sodimac"; }
+  if(name === 'P3' || name === 'P4') { document.getElementById('form-cliente').value = "Naviera Retorno"; }
+  document.getElementById('form-salida').style.display = pila.length > 0 ? 'block' : 'none';
+  if(pila.length >= 4) { alert("Atención: Altura máxima de 4 contenedores alcanzada."); document.getElementById('form-ingreso').style.display = 'none'; }
+  else { document.getElementById('form-ingreso').style.display = 'block'; }
+  document.getElementById('modal-operacion').style.display = 'flex';
+}
+function guardarIngreso() {
+  const sigla = document.getElementById('form-sigla').value.trim().toUpperCase(); const cliente = document.getElementById('form-cliente').value.trim();
+  if(!sigla) { alert("Debe ingresar las siglas del contenedor"); return; }
+  if(!patioData[activeSlot]) patioData[activeSlot] = [];
+  patioData[activeSlot].push({ sigla: sigla, cliente: cliente || "General", fecha: new Date().toLocaleString('es-CL') });
+  localStorage.setItem('ccti_patio_real', JSON.stringify(patioData)); cerrarModal(); renderBloques(); setupPopover();
+}
+function despacharUnidad() {
+  if(patioData[activeSlot] && patioData[activeSlot].length > 0) {
+    const despachado = patioData[activeSlot].pop(); alert(`Unidad ${despachado.sigla} retirada del Piso ${patioData[activeSlot].length + 1}`);
+    if(patioData[activeSlot].length === 0) delete patioData[activeSlot];
+    localStorage.setItem('ccti_patio_real', JSON.stringify(patioData)); cerrarModal(); renderBloques(); setupPopover();
+  }
+}
+function cerrarModal() { document.getElementById('modal-operacion').style.display = 'none'; }
+</script>
+</body>
+</html>
