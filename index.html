@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Control de Patio 3D - CCTI Maipú</title>
+<title>Control de Patio 3D Pro - CCTI Maipú</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -15,84 +15,111 @@
   --a-top: #A569BD; --a-side: #8E44AD;
   --b-top: #5DADE2; --b-side: #2980B9;
   --c-full-top: #58D68D; --c-full-side: #27AE60;
-  --c-vacio-top: #48C9B0; --c-vacio-side: #16A085;
-  --c-retail-top: #34495E; --c-retail-side: #2C3E50;
   --d-top: #F5B041; --d-side: #E67E22;
 }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: var(--gris-bg); color: var(--txt-principal); padding-bottom: 50px; overflow-x: auto; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: var(--gris-bg); color: var(--txt-principal); padding-bottom: 60px; overflow-x: auto; }
 .header { background: var(--az-oscuro); color: white; padding: 14px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 .header h1 { font-size: 18px; font-weight: 700; text-transform: uppercase; }
 .header p { font-size: 11px; color: var(--az-claro); }
 .main-container { min-width: 1200px; margin: 15px auto; padding: 0 20px; }
+
 .info-panel { background: white; border-radius: 8px; padding: 12px; margin-bottom: 25px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-around; font-size: 11px; font-weight: 700; }
 .legend-item { display: flex; align-items: center; gap: 6px; }
 .legend-color { width: 14px; height: 14px; border-radius: 3px; }
-.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 40px 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 40px; align-items: start; }
+
+.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 40px 20px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; align-items: start; }
 .column-block { display: flex; flex-direction: column; gap: 14px; }
 .block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 4px; }
 .lane-3d-row { display: flex; align-items: center; gap: 15px; }
 .lane-label { width: 35px; font-size: 11px; font-weight: 900; color: #7F8C8D; text-align: right; }
 .slots-3d-container { display: flex; gap: 20px; }
+
+/* MEDIDAS OPERATIVAS A ESCALA REAL */
 .slot-3d { position: relative; background: #BDC3C7; border: 1px solid #95A5A6; border-radius: 4px; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.slot-3d:hover { background: #A6ACAF; transform: scale(1.05); }
-.size-20 { width: 45px; height: 35px; }
-.size-40 { width: 90px; height: 35px; }
+.slot-3d:hover { background: #A6ACAF; transform: scale(1.04); }
+.size-20 { width: 60px; height: 38px; } /* Proporciones 7m largo x 4m ancho */
+.size-40 { width: 120px; height: 38px; } /* Exactamente el doble de largo */
 .slot-name-tag { position: absolute; bottom: 2px; right: 4px; font-size: 8px; font-weight: 800; color: #7F8C8D; }
-.cube-container { position: absolute; top: -6px; left: 2px; width: 90%; height: 90%; }
-.container-cube { position: absolute; width: 100%; height: 24px; transform-style: preserve-3d; transition: transform 0.3s; }
-.lvl-1 { transform: translateY(-5px); z-index: 10; }
-.lvl-2 { transform: translateY(-22px); z-index: 20; }
-.lvl-3 { transform: translateY(-39px); z-index: 30; }
-.lvl-4 { transform: translateY(-56px); z-index: 40; }
-.face { position: absolute; width: 100%; height: 100%; border: 1px solid rgba(255,255,255,0.3); font-size: 8px; font-weight: 700; color: white; display: flex; align-items: center; justify-content: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
-.face.front { background: var(--side-color); transform: skewY(-10deg); height: 16px; top: 4px; }
+
+/* CONTENEDORES CON VOLUMEN DINÁMICO 3D */
+.cube-container { position: absolute; top: -6px; left: 2px; width: 92%; height: 92%; }
+.container-cube { position: absolute; width: 100%; transform-style: preserve-3d; transition: transform 0.3s; }
+
+.face { position: absolute; width: 100%; height: 100%; border: 1px solid rgba(255,255,255,0.25); font-size: 9px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+.face.front { background: var(--side-color); transform: skewY(-10deg); top: 4px; }
 .face.top { background: var(--top-color); transform: translateY(-6px) skewX(25deg); height: 12px; }
-.popover { position: absolute; background: white; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); border: 1px solid var(--gris-borde); padding: 8px; width: 220px; z-index: 1000; display: none; pointer-events: none; font-size: 11px; }
+
+/* BITÁCORA EN VIVO */
+.bitacora-panel { background: white; border-radius: 10px; padding: 15px; margin-top: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--az-oscuro); }
+.bitacora-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; color: var(--az-oscuro); display: flex; align-items: center; gap: 6px; }
+.bitacora-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
+.bitacora-table th { background: #F2F4F4; padding: 8px; font-weight: 700; color: #5D6D7E; text-transform: uppercase; font-size: 10px; border-bottom: 2px solid #E5E7EB; }
+.bitacora-table td { padding: 8px; border-bottom: 1px solid #F2F4F4; font-weight: 600; }
+.badge-mov { padding: 2px 6px; border-radius: 4px; color: white; font-size: 9px; font-weight: bold; text-transform: uppercase; }
+
+.popover { position: absolute; background: white; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); border: 1px solid var(--gris-borde); padding: 8px; width: 240px; z-index: 1000; display: none; pointer-events: none; font-size: 11px; }
 .popover-title { font-size: 11px; font-weight: 700; color: var(--az-oscuro); border-bottom: 1px solid #EAECEE; padding-bottom: 3px; margin-bottom: 5px; }
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; justify-content: center; align-items: center; }
-.modal-content { background: white; padding: 18px; border-radius: 10px; width: 90%; max-width: 380px; }
+.modal-content { background: white; padding: 18px; border-radius: 10px; width: 90%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
 .modal-header { font-size: 14px; font-weight: 700; color: var(--az-oscuro); margin-bottom: 10px; }
 .form-group { margin-bottom: 8px; }
 .form-group label { display: block; font-size: 9px; font-weight: 700; color: #5D6D7E; margin-bottom: 2px; text-transform: uppercase; }
-.form-control { width: 100%; padding: 8px; border: 1.5px solid var(--gris-borde); border-radius: 5px; font-size: 13px; outline: none; }
+.form-control { width: 100%; padding: 7px; border: 1.5px solid var(--gris-borde); border-radius: 5px; font-size: 12px; outline: none; }
 .btn-row { display: flex; gap: 8px; margin-top: 12px; }
 .btn { flex: 1; padding: 10px; border: none; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; }
 .btn-save { background: var(--az-medio); color: white; }
 .btn-cancel { background: #95A5A6; color: white; }
 .btn-action { background: #E74C3C; color: white; }
-.bottom-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; margin-top: 25px; }
-.office-zone { background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 13px; font-weight: bold; color: #566573; min-height: 50px; text-transform: uppercase; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>CENTRO DE MANDO INTERACTIVO 3D CLOUD</h1>
-  <p>CCTI S.A. — Inventario en Tiempo Real Sincronizado Multiusuario (Maipú)</p>
+  <h1>SISTEMA OPERATIVO DE PATIO 3D PRO (TOS)</h1>
+  <p>CCTI S.A. — Distribución Escalada y Perímetros Reales (Maipú)</p>
 </div>
 
 <div class="main-container">
   <div class="info-panel">
-    <div class="legend-item"><div class="legend-color" style="background:var(--a-side)"></div><span>Bloque A (40' Específicos)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--b-side)"></div><span>Bloque B (40' Solo Full)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--c-full-side)"></div><span>C1-C10 (20' Full)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--c-vacio-side)"></div><span>C11-C13 (20' Vacíos)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--c-retail-side)"></div><span>C14-C17 (40' Retail)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--d-side)"></div><span>Bloque D (Naviera / Copec)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--a-side)"></div><span>Bloque A (A1-A11 | 40' Específicos)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--b-side)"></div><span>Bloque B (B6-B11 | 40' Full)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--c-full-side)"></div><span>Bloque C (C1-C11 | 20' Full)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--d-side)"></div><span>Zona X-D Perimetral (P1-P7 | 40' Vacíos)</span></div>
   </div>
 
   <div class="yard-perspective-container">
-    <div class="column-block"><div class="block-3d-title" style="color:var(--a-side)">◀ Bloque A (Fila Escala 40')</div><div id="render-A"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--b-side)">▲ Bloque B (Fila Escala 40' Full)</div><div id="render-B"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--c-full-side)">▶ Bloque C (Distribución Mixta 20'/40')</div><div id="render-C"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--a-side)">◀ Bloque A (A1 - A11)</div><div id="render-A"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--b-side)">▲ Bloque B (B6 - B11)</div><div id="render-B"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--c-full-side)">▶ Bloque C (C1 - C11)</div><div id="render-C"></div></div>
   </div>
 
-  <div class="bottom-layout">
+  <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; margin-top: 20px;">
     <div class="column-block" style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-      <div class="block-3d-title" style="color:var(--d-side)">▼ Bloque X3 - D</div>
-      <div id="render-D" style="display:flex; gap:15px; padding: 5px 0;"></div>
+      <div class="block-3d-title" style="color:var(--d-side)">▼ Perímetro de Vacíos Ocasionales (Zona X / D)</div>
+      <div id="render-D" style="display:flex; justify-content: space-between; padding: 5px 0;"></div>
     </div>
-    <div class="office-zone">🏢 Conexión Central — Nube Multiusuario CCTI Maipú</div>
+    <div style="background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; color: #566573; text-transform: uppercase; text-align:center; padding:10px;">
+      🏢 Oficina Central CCTI Maipú — Despacho Satelital en Tiempo Real
+    </div>
+  </div>
+
+  <div class="bitacora-panel">
+    <div class="bitacora-title">📋 Últimos 6 Registros de Patio (Control Operadores Reachstacker)</div>
+    <table class="bitacora-table">
+      <thead>
+        <tr>
+          <th>Hora/Fecha</th>
+          <th>Contenedor</th>
+          <th>Tipo Movimiento</th>
+          <th>Origen</th>
+          <th>Destino (Ubicación)</th>
+          <th>Operador / Detalles</th>
+        </tr>
+      </thead>
+      <tbody id="bitacora-rows">
+        <tr><td colspan="6" style="text-align:center; color:#95A5A6; font-style:italic;">Conectando con el servidor central...</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -100,18 +127,47 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 
 <div id="modal-operacion" class="modal">
   <div class="modal-content">
-    <div class="modal-header" id="modal-title">Operación</div>
-    <div id="form-ingreso">
-      <div class="form-group"><label>Siglas del Contenedor</label><input type="text" id="form-sigla" class="form-control" placeholder="MSCU1234567" style="text-transform:uppercase"></div>
-      <div class="form-group"><label>Línea / Operador</label><input type="text" id="form-cliente" class="form-control" placeholder="Ej: Medlog / Falabella / MSC"></div>
-      <div class="btn-row"><button class="btn btn-save" onclick="confirmarIngreso3D()">Apilar en Columna</button><button class="btn btn-cancel" onclick="cerrarModal()">Cancelar</button></div>
+    <div class="modal-header" id="modal-title">Operación Técnico-Logística</div>
+    
+    <div class="form-group">
+      <label>Tipo de Operación</label>
+      <select id="form-tipo-op" class="form-control" onchange="conmutarFormularioOp(this.value)">
+        <option value="INGRESO" selected>📥 Ingreso Nuevo de Contenedor</option>
+        <option value="REUBICACION">🔄 Reubicación / Movimiento Interno</option>
+      </select>
     </div>
-    <div id="form-salida" style="display:none; margin-top:10px; border-top:1px solid #EAECEE; padding-top:8px;"><button class="btn btn-action" onclick="despacharTope3D()">Despachar Contenedor Superior (Salida)</button></div>
+
+    <div id="form-ingreso">
+      <div class="form-group"><label>Siglas / Código Contenedor</label><input type="text" id="form-sigla" class="form-control" placeholder="TCLU1234567" style="text-transform:uppercase"></div>
+      <div class="form-group"><label>Línea / Operador</label><input type="text" id="form-cliente" class="form-control" placeholder="Ej: Medlog / MSC / CCTI Carga"></div>
+      
+      <div class="form-group">
+        <label>Altura del Contenedor (MTS)</label>
+        <select id="form-alto-tipo" class="form-control">
+          <option value="2.20">Estándar (2.20 mts alto)</option>
+          <option value="2.50" selected>High Cube (2.50 mts alto)</option>
+        </select>
+      </div>
+
+      <div id="group-origen" class="form-group" style="display:none;">
+        <label>Ubicación de Origen Anterior (Evita vueltas en falso)</label>
+        <input type="text" id="form-origen-ant" class="form-control" placeholder="Ej: Calle A4-2" style="text-transform:uppercase">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-save" onclick="ejecutarMovimientoPatio()">Confirmar Posición</button>
+        <button class="btn btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="form-salida" style="display:none; margin-top:10px; border-top:1px solid #EAECEE; padding-top:8px;">
+      <button class="btn btn-action" onclick="despacharTope3D()">Despachar Contenedor Superior (Salida)</button>
+    </div>
   </div>
 </div>
 
 <script>
-// --- CONFIGURACIÓN DE TU BASE DE DATOS EN LA NUBE ---
+// CONF. CENTRAL DE FIREBASE SINCRO
 const firebaseConfig = {
   apiKey: "AIzaSyAhvDpY8fNMmqDCnpdBkPhfkHLesi08H8I",
   authDomain: "ccti-patio-3d-bd303.firebaseapp.com",
@@ -122,9 +178,10 @@ const firebaseConfig = {
   appId: "1:313206395269:web:f76d5e29263836471fb4ec"
 };
 
-// Inicializamos el motor de Google
 firebase.initializeApp(firebaseConfig);
-const dbCloud = firebase.database().ref("patio_3d_ccti");
+const dbRoot = firebase.database().ref();
+const dbMap = dbRoot.child("patio_3d_ccti");
+const dbLog = dbRoot.child("patio_logs_ccti");
 
 let db3D = {}; 
 let selectedId3D = null;
@@ -132,37 +189,58 @@ let selectedId3D = null;
 const COLORES = {
   'A': { top: 'var(--a-top)', side: 'var(--a-side)' },
   'B': { top: 'var(--b-top)', side: 'var(--b-side)' },
-  'C-full': { top: 'var(--c-full-top)', side: 'var(--c-full-side)' },
-  'C-vacio': { top: 'var(--c-vacio-top)', side: 'var(--c-vacio-side)' },
-  'C-retail': { top: 'var(--c-retail-top)', side: 'var(--c-retail-side)' },
+  'C': { top: 'var(--c-full-top)', side: 'var(--c-full-side)' },
   'D': { top: 'var(--d-top)', side: 'var(--d-side)' }
 };
 
-// Escucha cambios globales en la nube en tiempo real
-dbCloud.on("value", (snapshot) => {
+// RECEPCIÓN MAPA REALTIME
+dbMap.on("value", (snapshot) => {
   db3D = snapshot.val() || {};
   construirPatio3D(); 
   setupPopover3D();
 });
 
-function construirPatio3D() {
-  const rA = document.getElementById('render-A'); rA.innerHTML = '';
-  for(let f=1; f<=12; f++) { rA.appendChild(crearCarril3D('A', f, 2, 'size-40', "40' Esp", 'A')); }
-
-  const rB = document.getElementById('render-B'); rB.innerHTML = '';
-  for(let f=1; f<=10; f++) { rB.appendChild(crearCarril3D('B', f, 2, 'size-40', "40' Full", 'B')); }
-
-  const rC = document.getElementById('render-C'); rC.innerHTML = '';
-  for(let f=1; f<=17; f++) {
-    let sizeClass = 'size-20'; let tipo = "20' Full"; let cKey = 'C-full';
-    if(f >= 11 && f <= 13) { tipo = "20' Vacío"; cKey = 'C-vacio'; }
-    if(f >= 14 && f <= 17) { sizeClass = 'size-40'; tipo = "40' Retail"; cKey = 'C-retail'; }
-    rC.appendChild(crearCarril3D('C', f, 3, sizeClass, tipo, cKey));
+// ESCUCHA HISTORIAL EN VIVO
+dbLog.limitToLast(6).on("value", (snapshot) => {
+  const data = snapshot.val() || {};
+  const rowsCont = document.getElementById('bitacora-rows');
+  rowsCont.innerHTML = '';
+  const listaOrdenada = Object.values(data).sort((a,b) => new Date(b.rawTime) - new Date(a.rawTime));
+  if(listaOrdenada.length === 0) {
+    rowsCont.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#95A5A6;">Sin registros de movimientos en el turno</td></tr>`;
+    return;
   }
+  listaOrdenada.forEach(log => {
+    let badgCol = log.tipo === 'INGRESO' ? '#27AE60' : (log.tipo === 'SALIDA' ? '#E74C3C' : '#E67E22');
+    rowsCont.innerHTML += `
+      <tr>
+        <td>${log.fecha.split(' ')[1] || log.fecha}</td>
+        <td style="color:var(--az-oscuro); font-weight:800;">${log.sigla}</td>
+        <td><span class="badge-mov" style="background:${badgCol}">${log.tipo}</span></td>
+        <td style="color:#7F8C8D;">${log.origen}</td>
+        <td style="color:#27AE60; font-weight:700;">${log.destino}</td>
+        <td>${log.cliente} (H: ${log.alto}m)</td>
+      </tr>
+    `;
+  });
+});
 
+function construirPatio3D() {
+  // BLOQUE A: Ajustado estrictamente de A1 a A11 (40 Pies)
+  const rA = document.getElementById('render-A'); rA.innerHTML = '';
+  for(let f=1; f<=11; f++) { rA.appendChild(crearCarril3D('A', f, 2, 'size-40', "40' Esp", 'A')); }
+
+  // BLOQUE B: Configurado partiendo desde B6 hasta B11 (40 Pies)
+  const rB = document.getElementById('render-B'); rB.innerHTML = '';
+  for(let f=6; f<=11; f++) { rB.appendChild(crearCarril3D('B', f, 2, 'size-40', "40' Full", 'B')); }
+
+  // BLOQUE C: Cortado estrictamente de C1 a C11 (20 Pies Escala 7m x 4m)
+  const rC = document.getElementById('render-C'); rC.innerHTML = '';
+  for(let f=1; f<=11; f++) { rC.appendChild(crearCarril3D('C', f, 3, 'size-20', "20' Full", 'C')); }
+
+  // ZONA PERIMETRAL DE VACÍOS (7 casillas de 40 pies fijas P1 a P7)
   const rD = document.getElementById('render-D'); rD.innerHTML = '';
-  const dPos = [{id:'P3', t:"Devolución"}, {id:'P4', t:"Devolución"}, {id:'D3', t:"Patio D"}, {id:'D4', t:"Copec"}];
-  dPos.forEach(p => { rD.appendChild(crearCasillaBase3D(p.id, 'size-40', p.t, 'D')); });
+  for(let p=1; p<=7; p++) { rD.appendChild(crearCasillaBase3D('P'+p, 'size-40', "40' Vacío Perímetro", 'D')); }
 }
 
 function crearCarril3D(letra, numFila, celdasPiso, sizeClass, tipoLabel, cKey) {
@@ -177,15 +255,27 @@ function crearCasillaBase3D(id, sizeClass, tipoLabel, cKey) {
   const pila = db3D[id] || [];
   const slot = document.createElement('div'); slot.className = `slot-3d ${sizeClass}`;
   slot.dataset.id = id; slot.dataset.tipo = tipoLabel; slot.dataset.ckey = cKey;
-  slot.innerHTML = `<div class="slot-name-tag">${id.includes('-') ? 'P'+id.split('-')[1] : id}</div>`;
+  slot.innerHTML = `<div class="slot-name-tag">${id.includes('-') ? 'Pos'+id.split('-')[1] : id}</div>`;
   
   if(pila.length > 0) {
     const cubeCont = document.createElement('div'); cubeCont.className = 'cube-container';
+    let alturaAcumuladaY = 0;
     pila.forEach((item, index) => {
-      const cube = document.createElement('div'); cube.className = `container-cube lvl-${index+1}`;
-      cube.style.setProperty('--top-color', COLORES[cKey].top); cube.style.setProperty('--side-color', COLORES[cKey].side);
-      cube.innerHTML = `<div class="face top"></div><div class="face front">${item.sigla}</div>`;
+      const cube = document.createElement('div'); cube.className = `container-cube`;
+      let cajaAltoPx = item.alto === "2.20" ? 16 : 21;
+      
+      cube.style.height = `${cajaAltoPx}px`;
+      cube.style.transform = `translateY(-${5 + alturaAcumuladaY}px)`;
+      cube.style.zIndex = (index + 1) * 10;
+      cube.style.setProperty('--top-color', COLORES[cKey].top);
+      cube.style.setProperty('--side-color', COLORES[cKey].side);
+      
+      cube.innerHTML = `
+        <div class="face top" style="height:10px;"></div>
+        <div class="face front" style="height:${cajaAltoPx}px; top:3px;">${item.sigla}</div>
+      `;
       cubeCont.appendChild(cube);
+      alturaAcumuladaY += (cajaAltoPx + 2);
     });
     slot.appendChild(cubeCont);
   }
@@ -200,8 +290,8 @@ function setupPopover3D() {
       const id = slot.dataset.id; const tipo = slot.dataset.tipo; const pila = db3D[id] || [];
       document.getElementById('pop-title').innerHTML = `📦 Ubicación: <strong>${id}</strong> <span style="font-size:9px; color:#7F8C8D;">(${tipo})</span>`;
       let html = '';
-      if(pila.length === 0) { html = `<span style="color:#95A5A6; font-style:italic;">Piso Libre — Sin Unidades</span>`; }
-      else { for(let i=pila.length-1; i>=0; i--) { html += `<div style="background:#F2F4F4; padding:4px; border-radius:4px; margin-bottom:3px; border-left:3px solid var(--az-medio)"><strong>Piso ${i+1}:</strong> ${pila[i].sigla}<br>Cliente: ${pila[i].cliente}</div>`; } }
+      if(pila.length === 0) { html = `<span style="color:#95A5A6; font-style:italic;">Piso Disponible (Nivel 1)</span>`; }
+      else { for(let i=pila.length-1; i>=0; i--) { html += `<div style="background:#F2F4F4; padding:4px; border-radius:4px; margin-bottom:3px; border-left:3px solid var(--az-medio)"><strong>Piso ${i+1}:</strong> ${pila[i].sigla} (${pila[i].alto}m)<br>Línea: ${pila[i].cliente}</div>`; } }
       document.getElementById('pop-body').innerHTML = html; pop.style.display = 'block';
       const rect = slot.getBoundingClientRect(); pop.style.top = (rect.top + window.scrollY - pop.offsetHeight - 10) + 'px'; pop.style.left = (rect.left + window.scrollX - (pop.offsetWidth/2) + (rect.width/2)) + 'px';
     });
@@ -209,37 +299,63 @@ function setupPopover3D() {
   });
 }
 
+function conmutarFormularioOp(valor) {
+  if(valor === 'REUBICACION') {
+    document.getElementById('group-origen').style.display = 'block';
+    document.querySelector('.btn-save').innerText = "Confirmar Movimiento Interno";
+  } else {
+    document.getElementById('group-origen').style.display = 'none';
+    document.querySelector('.btn-save').innerText = "Apilar en Columna";
+  }
+}
+
 function abrirMando3D(id, tipoLabel) {
   selectedId3D = id; const pila = db3D[id] || [];
-  document.getElementById('modal-title').innerText = `Mando Nube — Ubicación ${id} (${tipoLabel})`;
+  document.getElementById('modal-title').innerText = `Mando Nube TOS — Casilla ${id}`;
   document.getElementById('form-sigla').value = ''; document.getElementById('form-cliente').value = '';
-  if(id.startsWith('C') && parseInt(id.substring(1).split('-')[0]) >= 14) { document.getElementById('form-cliente').value = "Falabella / Sodimac"; }
-  if(id === 'P3' || id === 'P4') document.getElementById('form-cliente').value = "Naviera Retorno";
+  document.getElementById('form-origen-ant').value = '';
+  document.getElementById('form-tipo-op').value = 'INGRESO';
+  conmutarFormularioOp('INGRESO');
+  
   document.getElementById('form-salida').style.display = pila.length > 0 ? 'block' : 'none';
   if(pila.length >= 4) { alert("Altura máxima alcanzada."); document.getElementById('form-ingreso').style.display = 'none'; }
   else { document.getElementById('form-ingreso').style.display = 'block'; }
   document.getElementById('modal-operacion').style.display = 'flex';
 }
 
-function confirmarIngreso3D() {
+function ejecutarMovimientoPatio() {
   const sigla = document.getElementById('form-sigla').value.trim().toUpperCase();
   const cliente = document.getElementById('form-cliente').value.trim();
-  if(!sigla) { alert("Debe ingresar las siglas"); return; }
+  const alto = document.getElementById('form-alto-tipo').value;
+  const tipoOp = document.getElementById('form-tipo-op').value;
+  const origenAnt = document.getElementById('form-origen-ant').value.trim().toUpperCase();
+  
+  if(!sigla) { alert("Siglas requeridas"); return; }
+  if(tipoOp === 'REUBICACION' && !origenAnt) { alert("Especifique el origen para la grúa"); return; }
   
   if(!db3D[selectedId3D]) db3D[selectedId3D] = [];
-  db3D[selectedId3D].push({ sigla: sigla, cliente: cliente || "General", fecha: new Date().toLocaleString('es-CL') });
+  db3D[selectedId3D].push({ sigla: sigla, cliente: cliente || "General", alto: alto, fecha: new Date().toLocaleString('es-CL') });
   
-  dbCloud.set(db3D); 
-  cerrarModal();
+  dbLog.push({
+    fecha: new Date().toLocaleString('es-CL'), rawTime: new Date().toISOString(),
+    sigla: sigla, tipo: tipoOp,
+    origen: tipoOp === 'REUBICACION' ? origenAnt : 'PORTERÍA / ACCESO',
+    destino: selectedId3D, cliente: cliente || "General", alto: alto
+  });
+  
+  dbCloud.set(db3D); cerrarModal();
 }
 
 function despacharTope3D() {
   if(db3D[selectedId3D] && db3D[selectedId3D].length > 0) {
-    db3D[selectedId3D].pop();
+    const unidad = db3D[selectedId3D].pop();
+    dbLog.push({
+      fecha: new Date().toLocaleString('es-CL'), rawTime: new Date().toISOString(),
+      sigla: unidad.sigla, tipo: 'SALIDA', origen: selectedId3D, destino: 'DESPACHO EXTERNO',
+      cliente: unidad.cliente, alto: unidad.alto
+    });
     if(db3D[selectedId3D].length === 0) delete db3D[selectedId3D];
-    
-    dbCloud.set(db3D);
-    cerrarModal();
+    dbCloud.set(db3D); cerrarModal();
   }
 }
 function cerrarModal() { document.getElementById('modal-operacion').style.display = 'none'; }
