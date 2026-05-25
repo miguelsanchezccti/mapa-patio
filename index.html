@@ -44,7 +44,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .size-40 { width: 160px; height: 50px; } 
 .slot-name-tag { font-size: 9px; font-weight: 800; color: #7F8C8D; z-index: 1; pointer-events: none; }
 
-/* RECTANGULOS 3D LIMPIOS SIN TEXTO ENCIMA */
 .cube-stack-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column-reverse; justify-content: flex-start; padding: 2px; gap: 1px; pointer-events: none; }
 .container-box-3d { width: 100%; border-radius: 3px; position: relative; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.25); border: 1px solid rgba(0,0,0,0.2); overflow: hidden; }
 .box-face-top { height: 4px; background: rgba(255,255,255,0.3); width: 100%; }
@@ -61,7 +60,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .bitacora-table td { padding: 9px; border-bottom: 1px solid #F2F4F4; font-weight: 600; }
 .badge-mov { padding: 3px 6px; border-radius: 4px; color: white; font-size: 9px; font-weight: bold; }
 
-/* CUADRO FLOTANTE TÁCTIL DE INFORMACIÓN */
 .popover { position: absolute; background: white; border-radius: 8px; box-shadow: 0 6px 25px rgba(0,0,0,0.25); border: 1px solid var(--gris-borde); padding: 10px; width: 250px; z-index: 1000; display: none; font-size: 11px; }
 .popover-title { font-weight: 800; color: var(--az-oscuro); border-bottom: 1.5px solid #EAECEE; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
 .popover-close-btn { background: #E74C3C; color: white; border: none; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
@@ -208,10 +206,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 </div>
 
 <script>
-// ==================== CONFIGURACIÓN DE CONEXIÓN INTEGRADA DIRECTA ====================
-// El script de Google Apps Script se usa tanto para el mapa como para romper la caché CORS
+// ENLACE WEBAPP DE OPERACIONES FIJO Y CENTRALIZADO
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
-// =====================================================================================
 
 let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
 const COLORES = { 'A': 'var(--a-color)', 'B': 'var(--b-color)', 'C': 'var(--c-color)', 'D': 'var(--d-color)' };
@@ -226,12 +222,10 @@ function switchTab(tabId, btn) {
 window.onload = () => {
   construirPatioFisico(); 
   cargarDatosPermanentes();
-  // Consulta automática en segundo plano cada 5 segundos rompiendo caché
-  setInterval(cargarDatosPermanentes, 5000);
+  setInterval(cargarDatosPermanentes, 5000); // Polling automático cada 5 segundos
 };
 
 function cargarDatosPermanentes() {
-  // Apuntamos directo a tu script agregando un anti-caché dinámico por milisegundos
   var urlLimpia = URL_WEBAPP_SCRIPT + "?action=read&v=" + new Date().getTime();
   
   fetch(urlLimpia)
@@ -390,10 +384,12 @@ function ejecutarMovimientoPatio() {
   
   const payload = { action: "save", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, tipo: tipoOp, origen: origenAnt || "PORTERÍA" };
   
-  fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
+  cerrarModal();
+  
+  // SOLUCIÓN TÉCNICA: Enviamos el contenido en formato plano para saltar las restricciones CORS de Apps Script
+  fetch(URL_WEBAPP_SCRIPT, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
   .then(() => {
-    cerrarModal();
-    setTimeout(cargarDatosPermanentes, 500);
+    setTimeout(cargarDatosPermanentes, 1200);
   });
 }
 
@@ -404,10 +400,11 @@ function despacharTope3D() {
     
     const payload = { action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador };
     
-    fetch(URL_WEBAPP_SCRIPT, { method: "POST", body: JSON.stringify(payload) })
+    cerrarModal();
+    
+    fetch(URL_WEBAPP_SCRIPT, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
     .then(() => {
-      cerrarModal();
-      setTimeout(cargarDatosPermanentes, 500);
+      setTimeout(cargarDatosPermanentes, 1200);
     });
   }
 }
