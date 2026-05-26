@@ -44,14 +44,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .size-40 { width: 160px; height: 50px; } 
 .slot-name-tag { font-size: 9px; font-weight: 800; color: #7F8C8D; z-index: 1; pointer-events: none; }
 
+/* RECTANGULOS 3D SÓLIDOS Y LIMPIOS */
 .cube-stack-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column-reverse; justify-content: flex-start; padding: 2px; gap: 1px; pointer-events: none; }
 .container-box-3d { width: 100%; border-radius: 3px; position: relative; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.25); border: 1px solid rgba(0,0,0,0.2); overflow: hidden; }
 .box-face-top { height: 4px; background: rgba(255,255,255,0.3); width: 100%; }
 .box-face-front { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.6); padding: 0 2px; }
 
+/* ALERTA DE ALTURA MÁXIMA CRÍTICA */
+.max-stack-alert { position: absolute; top: 2px; left: 2px; background: #E74C3C; color: white; font-size: 8px; font-weight: 900; padding: 1px 3px; border-radius: 3px; z-index: 5; box-shadow: 0 1px 3px rgba(0,0,0,0.3); animation: parpadeo 1.5s infinite; }
+@keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
 .bottom-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-top: 20px; }
 @media(max-width: 768px) { .bottom-layout { grid-template-columns: 1fr; } }
-.office-zone { background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; color: #4D5656; text-transform: uppercase; text-align: center; padding: 15px; }
+.office-zone { background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; color: #4D5656; text-transform: uppercase; text-align: center; padding: 15px; position: relative; }
+
+/* LED EN VIVO DE RED SINO */
+.live-led { width: 8px; height: 8px; background-color: #2ECC71; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #2ECC71; }
 
 .history-card { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--az-oscuro); overflow-x: auto; }
 .history-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; color: var(--az-oscuro); }
@@ -106,7 +114,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
       <div class="block-3d-title" style="color:var(--d-color)">▼ Perímetro de Vacíos Ocasionales (Zona X / D)</div>
       <div id="render-D" style="display:flex; justify-content: space-between; gap:5px; padding: 5px 0;"></div>
     </div>
-    <div class="office-zone">🏢 Garita Central CCTI Maipú — Sincronización Portuaria Excel</div>
+    <div class="office-zone"><span class="live-led" id="sync-led"></span>🏢 Garita Central CCTI Maipú — Sincronización Portuaria Excel</div>
   </div>
 </div>
 
@@ -206,7 +214,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 </div>
 
 <script>
-// ENLACE WEBAPP DE OPERACIONES FIJO Y CENTRALIZADO
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
 
 let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
@@ -222,10 +229,13 @@ function switchTab(tabId, btn) {
 window.onload = () => {
   construirPatioFisico(); 
   cargarDatosPermanentes();
-  setInterval(cargarDatosPermanentes, 5000); // Polling automático cada 5 segundos
+  setInterval(cargarDatosPermanentes, 5000); 
 };
 
 function cargarDatosPermanentes() {
+  var led = document.getElementById("sync-led");
+  if(led) led.style.opacity = "0.3";
+  
   var urlLimpia = URL_WEBAPP_SCRIPT + "?action=read&v=" + new Date().getTime();
   
   fetch(urlLimpia)
@@ -234,7 +244,11 @@ function cargarDatosPermanentes() {
       db3D = jsonData.patio || {};
       actualizarMapa3D();
       actualizarHistorialVisual(jsonData.historial || []);
-    }).catch(err => console.error("Error sincronizando en red central:", err));
+      if(led) led.style.opacity = "1";
+    }).catch(err => {
+      console.error("Error en red:", err);
+      if(led) led.style.backgroundColor = "#E74C3C";
+    });
 }
 
 function actualizarHistorialVisual(historial) {
@@ -294,10 +308,20 @@ function actualizarMapa3D() {
   document.querySelectorAll('.slot-3d').forEach(slot => {
     const id = slot.dataset.id; const cKey = slot.dataset.ckey;
     const pila = db3D[id] || [];
+    
     const viejoCont = slot.querySelector('.cube-stack-wrapper');
     if(viejoCont) viejoCont.remove();
+    const viejaAlerta = slot.querySelector('.max-stack-alert');
+    if(viejaAlerta) viejaAlerta.remove();
     
     if(pila.length > 0) {
+      // Si la pila llega a 4 unidades, dispara la alerta visual en terreno
+      if(pila.length >= 4) {
+        const alertTag = document.createElement('div');
+        alertTag.className = 'max-stack-alert'; alertTag.innerText = pila.length + ' P';
+        slot.appendChild(alertTag);
+      }
+      
       const stackWrapper = document.createElement('div'); stackWrapper.className = 'cube-stack-wrapper';
       pila.forEach((item, index) => {
         const box = document.createElement('div'); box.className = 'container-box-3d';
@@ -386,10 +410,17 @@ function ejecutarMovimientoPatio() {
   
   cerrarModal();
   
-  // SOLUCIÓN TÉCNICA: Enviamos el contenido en formato plano para saltar las restricciones CORS de Apps Script
-  fetch(URL_WEBAPP_SCRIPT, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
-  .then(() => {
-    setTimeout(cargarDatosPermanentes, 1200);
+  // SOLUCIÓN FINAL: Codificación URL Form-Data para alimentar el e.parameter.data del Script de Google
+  var formBody = [];
+  formBody.push(encodeURIComponent("data") + "=" + encodeURIComponent(JSON.stringify(payload)));
+  
+  fetch(URL_WEBAPP_SCRIPT, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body: formBody.join("&")
+  }).then(() => {
+    setTimeout(cargarDatosPermanentes, 1000);
   });
 }
 
@@ -402,9 +433,16 @@ function despacharTope3D() {
     
     cerrarModal();
     
-    fetch(URL_WEBAPP_SCRIPT, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
-    .then(() => {
-      setTimeout(cargarDatosPermanentes, 1200);
+    var formBody = [];
+    formBody.push(encodeURIComponent("data") + "=" + encodeURIComponent(JSON.stringify(payload)));
+    
+    fetch(URL_WEBAPP_SCRIPT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+      body: formBody.join("&")
+    }).then(() => {
+      setTimeout(cargarDatosPermanentes, 1000);
     });
   }
 }
