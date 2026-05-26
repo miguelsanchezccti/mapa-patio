@@ -24,12 +24,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #E74C3C; transition: background .4s; flex-shrink: 0; }
 .sync-dot.ok { background: #27AE60; }
 .sync-dot.loading { background: #F39C12; animation: blink 1s infinite; }
-@keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
 
 .crane-alert-bar { display: none; background: #F1C40F; color: #203E50; font-size: 12px; font-weight: 800; text-align: center; padding: 11px; border-bottom: 3px solid #D4AC0D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulsoBarra 2s infinite; }
 @keyframes pulsoBarra { 0%, 100% { background: #F1C40F; } 50% { background: #F39C12; } }
 
-/* ESTRUCTURA FÍSICA INVERTIDA DESDE TU PERSPECTIVA SUR-NORTE */
 .layout-reference-container { max-width: 1450px; margin: 12px auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 10px; }
 .office-control-center { background: var(--az-oscuro); color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--az-claro); text-align: center; }
 .barriers-entrance { background: #34495E; color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border-right: 10px solid #E74C3C; }
@@ -50,7 +49,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .legend-item { display: flex; align-items: center; gap: 6px; }
 .legend-color { width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
 
-/* ORDEN PORTUARIO FIEL A TU REALIDAD CON PASILLOS DE TRÁNSITO */
 .yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 22px 14px; display: flex; justify-content: space-between; gap: 35px; overflow-x: auto; }
 .column-block { flex: 1; min-width: 290px; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.45); padding: 12px; border-radius: 8px; border: 1px dashed #BDC3C7; }
 .block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 5px; margin-bottom: 5px; text-align: center; }
@@ -195,7 +193,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
       <select id="form-operador" class="form-control" style="border-color:var(--az-medio);font-weight:bold">
         <option>Alexis Perez</option>
         <option>Claudio Araya</option>
-        <option>Joel Poppa</option>
+        <option value="Joel Poppa">Joel Poppa</option>
       </select>
     </div>
     <div id="form-ingreso">
@@ -240,7 +238,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 <div class="toast" id="toast"></div>
 
 <script>
-// CONEXIÓN DIRECTA CORREGIDA A TU NUEVO SCRIPT DE GOOGLE
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbwX7K5KlSUNL7zEF8Ccs8UE_O4Srlg2yanlc685XwUSdUnVxYIMY_0CPbiGQmd9RNz2/exec";
 
 let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = ""; let _pollingTimer = null;
@@ -277,7 +274,7 @@ window.onload = () => { construirPatioFisico(); iniciarPolling(); };
 function iniciarPolling() {
   if (_pollingTimer) clearInterval(_pollingTimer);
   cargarDatosPermanentes();
-  _pollingTimer = setInterval(cargarDatosPermanentes, 6000);
+  _pollingTimer = setInterval(cargarDatosPermanentes, 5000);
 }
 
 function cargarDatosPermanentes() {
@@ -365,7 +362,7 @@ function actualizarMapa3D() {
 function activarMóduloFlotante(e, id, tipoLabel) {
   e.stopPropagation(); selectedId3D = id; selectedTipoLabel3D = tipoLabel;
   const pila = db3D[id] || []; const pop = document.getElementById('popover-mall');
-  document.getElementById('pop-title').innerHTML = `📦 <strong>${id}</strong> <span style="font-size:9px;color:#7F8C8D">(${tipoLabel})</span>`;
+  document.getElementById('pop-title').innerHTML = `📦 <strong>${id}</strong> <span style="font-size:9px;color:#7F8C8D">(Fila ${tipoLabel})</span>`;
   
   if (!pila.length) {
     document.getElementById('pop-body').innerHTML = `<span style="color:#95A5A6;font-style:italic">Casilla Libre</span>`;
