@@ -18,13 +18,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .header h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 .header p { font-size: 11px; color: var(--az-claro); margin-top: 2px; }
 
-.crane-alert-bar { display: none; background: #F1C40F; color: #2C3E50; font-size: 12px; font-weight: 800; text-align: center; padding: 10px; border-bottom: 3px solid #D4AC0D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulsoBarra 2s infinite; }
+.crane-alert-bar { display: none; background: #F1C40F; color: #203E50; font-size: 12px; font-weight: 800; text-align: center; padding: 11px; border-bottom: 3px solid #D4AC0D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulsoBarra 2s infinite; }
 @keyframes pulsoBarra { 0%, 100% { background: #F1C40F; } 50% { background: #F39C12; } }
 
-/* INFRAESTRUCTURA REAL SUR-NORTE SEGÚN ORIENTACIÓN DE TU OFICINA CENTRAL */
+/* ESTRUCTURA FÍSICA INVERTIDA DESDE TU PERSPECTIVA DE BODEGA CENTRAL */
 .layout-reference-container { max-width: 1450px; margin: 12px auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 10px; }
 .office-control-center { background: var(--az-oscuro); color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--az-claro); text-align: center; }
-.barriers-entrance { background: #34495E; color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border-left: 10px solid #E74C3C; }
+.barriers-entrance { background: #34495E; color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border-right: 10px solid #E74C3C; }
 
 .nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); max-width: 1450px; margin: 0 auto; }
 .tab-btn { flex: 1; padding: 14px; text-align: center; border: none; background: none; font-size: 12px; font-weight: 800; color: #7F8C8D; cursor: pointer; transition: all 0.2s; }
@@ -37,10 +37,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .legend-item { display: flex; align-items: center; gap: 6px; }
 .legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
 
-/* VISTA INTEGRAL PORTUARIA CON PASILLOS LIBRES PARA TRÁNSITO DE LA REACHSTACKER */
-.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 25px 15px; display: flex; justify-content: space-between; gap: 30px; overflow-x: auto; }
-.column-block { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.4); padding: 10px; border-radius: 8px; border: 1px dashed #BDC3C7; }
-.block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 4px; margin-bottom: 5px; text-align: center; }
+/* REDISEÑO LOGÍSTICO: DISTRIBUCIÓN HORIZONTAL CON CALLES Y PASILLOS LIBRES PARA REACHSTACKER */
+.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 25px 15px; display: flex; justify-content: space-between; gap: 35px; overflow-x: auto; }
+.column-block { flex: 1; min-width: 290px; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.45); padding: 12px; border-radius: 8px; border: 1px dashed #BDC3C7; }
+.block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 5px; margin-bottom: 5px; text-align: center; }
 .lane-3d-row { display: flex; align-items: center; gap: 10px; }
 .lane-label { width: 30px; font-size: 11px; font-weight: 900; color: #566573; text-align: right; }
 .slots-3d-container { display: flex; gap: 12px; flex: 1; }
@@ -98,8 +98,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 </div>
 
 <div class="layout-reference-container">
-  <div class="office-control-center">🏢 USTED ESTÁ AQUÍ: Oficina de Control Central (Mirando al Norte)</div>
-  <div class="barriers-entrance">🚧 ABAJO A LA DERECHA: Barreras de Acceso / Entrada de Camiones</div>
+  <div class="office-control-center">🏢 VISTA OFICINA CENTRAL: Mirando al Norte desde la Ventana de Control</div>
+  <div class="barriers-entrance">🚧 INGRESO ABAJO A LA DERECHA: Barreras de Acceso de Camiones</div>
 </div>
 
 <div class="nav-tabs">
@@ -109,15 +109,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 
 <div id="tab-mapa" class="tab-content active">
   <div class="info-panel">
-    <div class="legend-item"><div class="legend-color" style="background:var(--c-color)"></div><span>Bloque C (20' Full) - Frente Izquierda</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full) - Centro</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Esp) - Derecha</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Fondo Perímetro / Bodegas)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--c-color)"></div><span>Bloque C (20' Full) - Lado Derecho</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full) - Lado Central</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Esp) - Lado Izquierdo</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Fondo Perímetro)</span></div>
     <div class="legend-item"><div class="legend-color" style="background:#7F8C8D"></div><span>Unidad VACÍA</span></div>
   </div>
 
   <div class="yard-perspective-container">
-    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ 3° Bloque A (40' Esp - Izquierda)</div><div id="render-A"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ 3° Bloque A (40' Especiales - Izquierda)</div><div id="render-A"></div></div>
     <div class="column-block"><div class="block-3d-title" style="color:var(--b-color)">▲ 2° Bloque B (40' Full - Centro)</div><div id="render-B"></div></div>
     <div class="column-block"><div class="block-3d-title" style="color:var(--c-color)">▶ 1° Bloque C (20' Full - Derecha / Barreras)</div><div id="render-C"></div></div>
   </div>
@@ -142,8 +142,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
           <th>Movimiento</th>
           <th>Origen</th>
           <th>Destino Real</th>
-          <th>Operador Reachstacker</th>
-          <th>Detalles de Carga</th>
+          <th>Operador</th>
+          <th>Detalles</th>
         </tr>
       </thead>
       <tbody id="bitacora-rows">
@@ -159,7 +159,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
     <button class="popover-close-btn" onclick="cerrarPopover(event)">Cerrar X</button>
   </div>
   <div id="pop-body"></div>
-  
   <button id="pop-reubicar-btn" class="btn-reubicar-directo">🔄 Reubicar Unidad Superior</button>
   <button id="pop-mando-btn" class="btn-mando">📥 Ingreso / Despacho Manual</button>
 </div>
@@ -167,7 +166,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 <div id="modal-operacion" class="modal">
   <div class="modal-content">
     <div class="modal-header" id="modal-title">Operación de Patio</div>
-    
     <div class="form-group">
       <label>Operador de Grúa Reachstacker</label>
       <select id="form-operador" class="form-control" style="border: 1.5px solid var(--az-medio); font-weight: bold;">
@@ -176,17 +174,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
         <option value="Joel Poppa">Joel Poppa</option>
       </select>
     </div>
-
     <div id="form-ingreso">
       <div class="form-group">
         <label>Siglas de Contenedor</label>
-        <input type="text" id="form-sigla" class="form-control" placeholder="Ej: OOLU190633-7" style="text-transform:uppercase; font-weight: 700; letter-spacing: 0.5px;">
+        <input type="text" id="form-sigla" class="form-control" placeholder="Ej: OOLU190633-7" style="text-transform:uppercase; font-weight: 700;">
       </div>
       <div class="form-group">
         <label>Línea / Cliente</label>
         <input type="text" id="form-cliente" class="form-control" placeholder="Ej: MSC / Cosco">
       </div>
-      
       <div class="form-group">
         <label>Estado de Carga (F/V)</label>
         <select id="form-estado-carga" class="form-control">
@@ -194,7 +190,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
           <option value="VACIO">VACIO (Disponible)</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Altura / Tipo</label>
         <select id="form-alto-tipo" class="form-control">
@@ -202,21 +197,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
           <option value="2.50" selected>High Cube (2.50m)</option>
         </select>
       </div>
-      
       <div style="display:flex; gap:10px; margin-top:15px;">
-        <button onclick="ejecutarIngresoManualPorteria()" style="flex:1; padding:11px; background:var(--az-medio); color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Confirmar Ingreso</button>
-        <button onclick="cerrarModal()" style="flex:1; padding:11px; background:#95A5A6; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Cancelar</button>
+        <button onclick="ejecutarIngresoManualPorteria()" style="flex:1; padding:11px; background:var(--az-medio); color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">Confirmar Ingreso</button>
+        <button onclick="cerrarModal()" style="flex:1; padding:11px; background:#95A5A6; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">Cancelar</button>
       </div>
     </div>
-    
     <div id="form-salida" style="display:none; margin-top:12px; border-top:2px dashed #EAECEE; padding-top:10px;">
-      <button onclick="despacharTope3D()" style="width:100%; padding:11px; background:#E74C3C; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Despachar a Cliente (Salida de Patio)</button>
+      <button onclick="despacharTope3D()" style="width:100%; padding:11px; background:#E74C3C; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">Despachar a Cliente (Salida)</button>
     </div>
   </div>
 </div>
 
 <script>
-const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
+// URL DE TU NUEVA IMPLEMENTACIÓN DE APPS SCRIPT SIN FILTROS REBOTADOS
+const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbwX7K5KlSUNL7zEF8Ccs8UE_O4Srlg2yanlc685XwUSdUnVxYIMY_0CPbiGQmd9RNz2/exec";
 
 let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
 let contenedorEnGrua = null; 
@@ -239,24 +233,14 @@ window.onload = () => {
 function cargarDatosPermanentes() {
   var led = document.getElementById("sync-led");
   if(led) led.style.opacity = "0.3";
-  
-  var urlLimpia = URL_WEBAPP_SCRIPT + "?prefix=procesarLecturaGlobalJSONP&_t=" + new Date().getTime();
-  var script = document.createElement("script");
-  script.src = urlLimpia;
-  document.body.appendChild(script);
-  script.onload = () => { script.remove(); };
+  ejecutarLlamadaInmune({ prefix: "procesarLecturaGlobalJSONP" });
 }
 
 window.procesarLecturaGlobalJSONP = function(jsonData) {
-  var led = document.getElementById("sync-led");
-  if (jsonData.error) {
-    console.error("Error devuelto por Apps Script:", jsonData.error);
-    if(led) led.style.backgroundColor = "#E74C3C";
-    return;
-  }
   db3D = jsonData.patio || {};
   actualizarMapa3D();
   actualizarHistorialVisual(jsonData.historial || []);
+  var led = document.getElementById("sync-led");
   if(led) { led.style.opacity = "1"; led.style.backgroundColor = "#2ECC71"; }
 };
 
@@ -264,7 +248,7 @@ function actualizarHistorialVisual(historial) {
   const tBody = document.getElementById('bitacora-rows');
   tBody.innerHTML = '';
   if(historial.length === 0) {
-    tBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#95A5A6;">Sin registros de movimientos en el turno</td></tr>`;
+    tBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#95A5A6;">Sin registros de movimientos</td></tr>`;
     return;
   }
   historial.forEach(log => {
@@ -340,7 +324,7 @@ function actualizarMapa3D() {
       }
       
       const stackWrapper = document.createElement('div'); stackWrapper.className = 'cube-stack-wrapper';
-      pila.forEach((item, index) => {
+      pila.forEach((item) => {
         const box = document.createElement('div'); box.className = 'container-box-3d';
         box.style.height = item.alto === "2.20" ? '13px' : '17px';
         box.style.backgroundColor = item.estado === "VACIO" ? 'var(--vacio-color)' : COLORES[cKey];
@@ -354,12 +338,11 @@ function actualizarMapa3D() {
 
 function activarMóduloFlotante(e, id, tipoLabel) {
   e.stopPropagation();
-  selectedId3D = id;
-  selectedTipoLabel3D = tipoLabel;
+  selectedId3D = id; selectedTipoLabel3D = tipoLabel;
   const pila = db3D[id] || [];
   const pop = document.getElementById('popover-mall');
   
-  document.getElementById('pop-title').innerHTML = `📦 Ubicación: <strong>${id}</strong> <span style="font-size:9px; color:#7F8C8D;">(${tipoLabel})</span>`;
+  document.getElementById('pop-title').innerHTML = `📦 Ubicación: <strong>${id}</strong>`;
   
   let html = '';
   if(pila.length === 0) {
@@ -370,7 +353,7 @@ function activarMóduloFlotante(e, id, tipoLabel) {
     for(let i=pila.length-1; i>=0; i--) {
       html += `<div style="background:#F2F4F4; padding:5px; border-radius:4px; margin-bottom:4px; border-left:4px solid ${pila[i].estado==='VACIO'?'#7F8C8D':'var(--az-medio)'}">
                 <strong>Piso ${i+1}:</strong> <span style="color:var(--az-oscuro); font-weight:bold;">${pila[i].sigla}</span><br>
-                Línea: ${pila[i].cliente} | <span style="font-weight:800; color:${pila[i].estado==='VACIO'?'#7F8C8D':'#27AE60'}">${pila[i].estado}</span> (${pila[i].alto}m)
+                ${pila[i].cliente} | <span style="font-weight:800;">${pila[i].estado}</span>
                </div>`;
     }
   }
@@ -383,8 +366,7 @@ function activarMóduloFlotante(e, id, tipoLabel) {
   pop.style.left = (rect.left + window.scrollX - (pop.offsetWidth/2) + (rect.width/2)) + 'px';
   
   document.getElementById('pop-reubicar-btn').onclick = (evt) => {
-    evt.stopPropagation();
-    pop.style.display = 'none';
+    evt.stopPropagation(); pop.style.display = 'none';
     levantarGanchoReachstacker(id);
   };
 
@@ -395,34 +377,28 @@ function activarMóduloFlotante(e, id, tipoLabel) {
 }
 
 function levantarGanchoReachstacker(origenId) {
-  const pila = db3D[origenId] || [];
-  if (pila.length === 0) return;
+  const pila = db3D[origenId] || []; if (pila.length === 0) return;
   const tope = pila[pila.length - 1];
   
   contenedorEnGrua = {
-    origen: origenId,
-    sigla: tope.sigla,
-    cliente: tope.cliente,
-    alto: tope.alto,
-    estado: tope.estado
+    origen: origenId, sigla: tope.sigla, cliente: tope.cliente, alto: tope.alto, estado: tope.estado
   };
   
-  document.getElementById('crane-sigla-tag').innerText = `${contenedorEnGrua.sigla} (desde Fila ${origenId})`;
+  document.getElementById('crane-sigla-tag').innerText = `${contenedorEnGrua.sigla} (Fila ${origenId})`;
   document.getElementById('crane-alert').style.display = 'block';
 }
 
 function completarDescargaReubicacionNube(destinoId) {
   if (!contenedorEnGrua) return;
   if (contenedorEnGrua.origen === destinoId) {
-    alert("Movimiento cancelado: El contenedor ya está en esta casilla.");
-    apagarAlertaGrua();
-    return;
+    alert("Movimiento cancelado: Es la misma casilla.");
+    apagarAlertaGrua(); return;
   }
 
-  var op = prompt("Confirme el operador que ejecuta el traslado:\n1. Alexis Perez\n2. Claudio Araya\n3. Joel Poppa", "Alexis Perez");
+  var op = prompt("Operador:\n1. Alexis Perez\n2. Claudio Araya\n3. Joel Poppa", "Alexis Perez");
   if (!op) { apagarAlertaGrua(); return; }
 
-  const payload = {
+  const params = {
     action: "save",
     tipo: "REUBICACION",
     origen: contenedorEnGrua.origen,
@@ -431,11 +407,12 @@ function completarDescargaReubicacionNube(destinoId) {
     cliente: contenedorEnGrua.cliente,
     alto: contenedorEnGrua.alto,
     estado: contenedorEnGrua.estado,
-    operador: op
+    operador: op,
+    prefix: "procesarLecturaGlobalJSONP"
   };
 
   apagarAlertaGrua();
-  enviarComandoTransaccionJSONP(payload);
+  ejecutarLlamadaInmune(params);
 }
 
 function apagarAlertaGrua() {
@@ -443,27 +420,26 @@ function apagarAlertaGrua() {
   document.getElementById('crane-alert').style.display = 'none';
 }
 
-function enviarComandoTransaccionJSONP(payload) {
-  var urlScript = URL_WEBAPP_SCRIPT + "?prefix=jsonpCallback&action=" + payload.action + "&tipo=" + (payload.tipo || "") + "&origen=" + (payload.origen || "") + "&ubicacion=" + payload.ubicacion + "&sigla=" + payload.sigla + "&cliente=" + encodeURIComponent(payload.cliente || "") + "&alto=" + payload.alto + "&estado=" + payload.estado + "&operador=" + encodeURIComponent(payload.operador || "") + "&_t=" + new Date().getTime();
+function ejecutarLlamadaInmune(params) {
+  let queryParts = [];
+  for (let key in params) {
+    queryParts.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
+  }
+  queryParts.push("_t=" + new Date().getTime());
+  
+  var urlCompleta = URL_WEBAPP_SCRIPT + "?" + queryParts.join("&");
   var script = document.createElement("script");
-  script.src = urlScript;
+  script.src = urlCompleta;
   document.body.appendChild(script);
   script.onload = () => { script.remove(); };
 }
 
-window.jsonpCallback = function(res) {
-  console.log("Servidor confirma movimiento exitoso:", res);
-  cargarDatosPermanentes();
-};
-
 function cerrarPopover(e) {
-  e.stopPropagation();
+  if(e) e.stopPropagation();
   document.getElementById('popover-mall').style.display = 'none';
 }
 
-document.addEventListener('click', () => {
-  document.getElementById('popover-mall').style.display = 'none';
-});
+document.addEventListener('click', () => { cerrarPopover(null); });
 
 function abrirMandoManual(id, tipoLabel) {
   const pila = db3D[id] || [];
@@ -481,20 +457,24 @@ function ejecutarIngresoManualPorteria() {
   const estado = document.getElementById('form-estado-carga').value;
   const operador = document.getElementById('form-operador').value;
   
-  if(!sigla) { alert("Introduzca las siglas de la unidad."); return; }
+  if(!sigla) { alert("Introduzca las siglas."); return; }
   
-  const payload = { action: "save", tipo: "INGRESO", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, origen: "PORTERÍA" };
+  const params = { 
+    action: "save", tipo: "INGRESO", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, origen: "PORTERÍA", prefix: "procesarLecturaGlobalJSONP" 
+  };
   cerrarModal();
-  enviarComandoTransaccionJSONP(payload);
+  ejecutarLlamadaInmune(params);
 }
 
 function despacharTope3D() {
   if(db3D[selectedId3D] && db3D[selectedId3D].length > 0) {
     const unidad = db3D[selectedId3D][db3D[selectedId3D].length - 1];
     const operador = document.getElementById('form-operador').value;
-    const payload = { action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador };
+    const params = { 
+      action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador, prefix: "procesarLecturaGlobalJSONP" 
+    };
     cerrarModal();
-    enviarComandoTransaccionJSONP(payload);
+    ejecutarLlamadaInmune(params);
   }
 }
 
