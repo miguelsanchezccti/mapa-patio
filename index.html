@@ -18,6 +18,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .header h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 .header p { font-size: 11px; color: var(--az-claro); margin-top: 2px; }
 
+.crane-alert-bar { display: none; background: #F1C40F; color: #2C3E50; font-size: 12px; font-weight: 800; text-align: center; padding: 10px; border-bottom: 3px solid #D4AC0D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulsoBarra 2s infinite; }
+@keyframes pulsoBarra { 0%, 100% { background: #F1C40F; } 50% { background: #F39C12; } }
+
 .nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); }
 .tab-btn { flex: 1; padding: 14px; text-align: center; border: none; background: none; font-size: 12px; font-weight: 800; color: #7F8C8D; cursor: pointer; transition: all 0.2s; }
 .tab-btn.active { color: var(--az-medio); border-bottom: 4px solid var(--az-medio); background: #F2F4F4; }
@@ -76,6 +79,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .form-control { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gris-borde); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--txt-principal); }
 .form-control:focus { border-color: var(--az-medio); outline: none; }
 .btn-mando { width: 100%; padding: 10px; background: var(--az-medio); color: white; border: none; font-weight: bold; border-radius: 5px; margin-top: 5px; cursor: pointer; }
+.btn-reubicar-directo { width: 100%; padding: 10px; background: #E67E22; color: white; border: none; font-weight: 800; border-radius: 5px; margin-top: 5px; cursor: pointer; text-transform: uppercase; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
@@ -83,6 +87,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 <div class="header">
   <h1>SISTEMA OPERATIVO DE PATIO 3D PRO (TOS)</h1>
   <p>CCTI S.A. — Distribución Portuaria y Trazabilidad Satelital (Maipú)</p>
+</div>
+
+<div id="crane-alert" class="crane-alert-bar">
+  🔄 EN MOVIMIENTO: Grúa cargada con <span id="crane-sigla-tag" style="text-decoration: underline; font-style: italic;"></span>. Pinche la casilla de destino en el mapa.
 </div>
 
 <div class="nav-tabs">
@@ -130,7 +138,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
         </tr>
       </thead>
       <tbody id="bitacora-rows">
-        <tr><td colspan="7" style="text-align:center; color:#95A5A6; text-transform:lowercase; font-style:italic;">sincronizando con el servidor central...</td></tr>
+        <tr><td colspan="7" style="text-align:center; color:#95A5A6; font-style:italic;">Sincronizando con el servidor central...</td></tr>
       </tbody>
     </table>
   </div>
@@ -142,21 +150,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
     <button class="popover-close-btn" onclick="cerrarPopover(event)">Cerrar X</button>
   </div>
   <div id="pop-body"></div>
-  <button id="pop-mando-btn" class="btn-mando">⚙️ Abrir Mando de Operación</button>
+  
+  <button id="pop-reubicar-btn" class="btn-reubicar-directo">🔄 Reubicar Unidad Superior</button>
+  <button id="pop-mando-btn" class="btn-mando">📥 Ingreso / Despacho Manual</button>
 </div>
 
 <div id="modal-operacion" class="modal">
   <div class="modal-content">
     <div class="modal-header" id="modal-title">Operación de Patio</div>
     
-    <div class="form-group">
-      <label>Tipo de Acción</label>
-      <select id="form-tipo-op" onchange="conmutarFormularioOp(this.value)" class="form-control" style="font-weight: bold;">
-        <option value="INGRESO" selected>📥 Ingreso Nuevo a Patio</option>
-        <option value="REUBICACION">🔄 Reubicación / Movimiento Interno</option>
-      </select>
-    </div>
-
     <div class="form-group">
       <label>Operador de Grúa Reachstacker</label>
       <select id="form-operador" class="form-control" style="border: 1.5px solid var(--az-medio); font-weight: bold;">
@@ -192,19 +194,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
         </select>
       </div>
       
-      <div id="group-origen" style="display:none;" class="form-group">
-        <label>Ubicación de Origen Anterior</label>
-        <input type="text" id="form-origen-ant" class="form-control" style="text-transform:uppercase" placeholder="Ej: C1-1">
-      </div>
-      
       <div style="display:flex; gap:10px; margin-top:15px;">
-        <button onclick="ejecutarMovimientoPatio()" style="flex:1; padding:11px; background:var(--az-medio); color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Confirmar Movimiento</button>
+        <button onclick="ejecutarIngresoManualPorteria()" style="flex:1; padding:11px; background:var(--az-medio); color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Confirmar Ingreso</button>
         <button onclick="cerrarModal()" style="flex:1; padding:11px; background:#95A5A6; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Cancelar</button>
       </div>
     </div>
     
     <div id="form-salida" style="display:none; margin-top:12px; border-top:2px dashed #EAECEE; padding-top:10px;">
-      <button onclick="despacharTope3D()" style="width:100%; padding:11px; background:#E74C3C; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Despachar Contenedor Superior (Salida)</button>
+      <button onclick="despacharTope3D()" style="width:100%; padding:11px; background:#E74C3C; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer; font-size:12px;">Despachar a Cliente (Salida de Patio)</button>
     </div>
   </div>
 </div>
@@ -213,6 +210,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
 
 let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
+let contenedorEnGrua = null; // Memoria virtual interna para el traslado sin teclear
+
 const COLORES = { 'A': 'var(--a-color)', 'B': 'var(--b-color)', 'C': 'var(--c-color)', 'D': 'var(--d-color)' };
 
 function switchTab(tabId, btn) {
@@ -225,27 +224,33 @@ function switchTab(tabId, btn) {
 window.onload = () => {
   construirPatioFisico(); 
   cargarDatosPermanentes();
-  setInterval(cargarDatosPermanentes, 5000); 
+  setInterval(cargarDatosPermanentes, 5000); // Sincronización automática de red cada 5 segundos
 };
 
 function cargarDatosPermanentes() {
   var led = document.getElementById("sync-led");
   if(led) led.style.opacity = "0.3";
   
-  var urlLimpia = URL_WEBAPP_SCRIPT + "?action=read&v=" + new Date().getTime();
-  
-  fetch(urlLimpia)
-    .then(res => res.json())
-    .then(jsonData => {
-      db3D = jsonData.patio || {};
-      actualizarMapa3D();
-      actualizarHistorialVisual(jsonData.historial || []);
-      if(led) { led.style.opacity = "1"; led.style.backgroundColor = "#2ECC71"; }
-    }).catch(err => {
-      console.error("Error en red:", err);
-      if(led) led.style.backgroundColor = "#E74C3C";
-    });
+  // LLAMADA LECTURA FORMATEADA PARA INTEGRACIÓN JSONP MULTI-CELULAR
+  var urlLimpia = URL_WEBAPP_SCRIPT + "?prefix=procesarLecturaGlobalJSONP&_t=" + new Date().getTime();
+  var script = document.createElement("script");
+  script.src = urlLimpia;
+  document.body.appendChild(script);
+  script.onload = () => { script.remove(); };
 }
+
+window.procesarLecturaGlobalJSONP = function(jsonData) {
+  var led = document.getElementById("sync-led");
+  if (jsonData.error) {
+    console.error("Error devuelto por Apps Script:", jsonData.error);
+    if(led) led.style.backgroundColor = "#E74C3C";
+    return;
+  }
+  db3D = jsonData.patio || {};
+  actualizarMapa3D();
+  actualizarHistorialVisual(jsonData.historial || []);
+  if(led) { led.style.opacity = "1"; led.style.backgroundColor = "#2ECC71"; }
+};
 
 function actualizarHistorialVisual(historial) {
   const tBody = document.getElementById('bitacora-rows');
@@ -296,8 +301,17 @@ function crearCasillaBase3D(id, sizeClass, tipoLabel, cKey) {
   const slot = document.createElement('div'); slot.className = `slot-3d ${sizeClass}`;
   slot.id = `casilla-${id}`; slot.dataset.id = id; slot.dataset.tipo = tipoLabel; slot.dataset.ckey = cKey;
   slot.innerHTML = `<div class="slot-name-tag">${id.includes('-') ? 'Pos'+id.split('-')[1] : id}</div>`;
-  slot.addEventListener('click', (e) => activarMóduloFlotante(e, id, tipoLabel));
+  slot.addEventListener('click', (e) => gestionarFlujoClicFila(e, id, tipoLabel));
   return slot;
+}
+
+function gestionarFlujoClicFila(e, id, tipoLabel) {
+  if (contenedorEnGrua) {
+    e.stopPropagation();
+    completarDescargaReubicacionNube(id);
+    return;
+  }
+  activarMóduloFlotante(e, id, tipoLabel);
 }
 
 function actualizarMapa3D() {
@@ -342,7 +356,9 @@ function activarMóduloFlotante(e, id, tipoLabel) {
   let html = '';
   if(pila.length === 0) {
     html = `<span style="color:#95A5A6; font-style:italic;">Casilla Libre (Piso Disponible)</span>`;
+    document.getElementById('pop-reubicar-btn').style.display = 'none';
   } else {
+    document.getElementById('pop-reubicar-btn').style.display = 'block';
     for(let i=pila.length-1; i>=0; i--) {
       html += `<div style="background:#F2F4F4; padding:5px; border-radius:4px; margin-bottom:4px; border-left:4px solid ${pila[i].estado==='VACIO'?'#7F8C8D':'var(--az-medio)'}">
                 <strong>Piso ${i+1}:</strong> <span style="color:var(--az-oscuro); font-weight:bold;">${pila[i].sigla}</span><br>
@@ -358,11 +374,81 @@ function activarMóduloFlotante(e, id, tipoLabel) {
   pop.style.top = (rect.top + window.scrollY - pop.offsetHeight - 8) + 'px';
   pop.style.left = (rect.left + window.scrollX - (pop.offsetWidth/2) + (rect.width/2)) + 'px';
   
+  document.getElementById('pop-reubicar-btn').onclick = (evt) => {
+    evt.stopPropagation();
+    pop.style.display = 'none';
+    levantarGanchoReachstacker(id);
+  };
+
   document.getElementById('pop-mando-btn').onclick = () => {
     pop.style.display = 'none';
-    abrirMando3D(selectedId3D, selectedTipoLabel3D);
+    abrirMandoManual(selectedId3D, selectedTipoLabel3D);
   };
 }
+
+// OPERACIÓN INTELIGENTE - PASO 1: Enganchar contenedor sin digitar
+function levantarGanchoReachstacker(origenId) {
+  const pila = db3D[origenId] || [];
+  if (pila.length === 0) return;
+  const tope = pila[pila.length - 1];
+  
+  contenedorEnGrua = {
+    origen: origenId,
+    sigla: tope.sigla,
+    cliente: tope.cliente,
+    alto: tope.alto,
+    estado: tope.estado
+  };
+  
+  document.getElementById('crane-sigla-tag').innerText = `${contenedorEnGrua.sigla} (desde Fila ${origenId})`;
+  document.getElementById('crane-alert').style.display = 'block';
+}
+
+// OPERACIÓN INTELIGENTE - PASO 2: Soltar en destino y forzar sincronización instantánea JSONP
+function completarDescargaReubicacionNube(destinoId) {
+  if (!contenedorEnGrua) return;
+  if (contenedorEnGrua.origen === destinoId) {
+    alert("Movimiento cancelado: El contenedor ya está en esta casilla.");
+    apagarAlertaGrua();
+    return;
+  }
+
+  var op = prompt("Confirme el operador que ejecuta el traslado:\n1. Alexis Perez\n2. Claudio Araya\n3. Joel Poppa", "Alexis Perez");
+  if (!op) { apaperAlertaGrua(); return; }
+
+  const payload = {
+    action: "save",
+    tipo: "REUBICACION",
+    origen: contenedorEnGrua.origen,
+    ubicacion: destinoId,
+    sigla: contenedorEnGrua.sigla,
+    cliente: contenedorEnGrua.cliente,
+    alto: contenedorEnGrua.alto,
+    estado: contenedorEnGrua.estado,
+    operador: op
+  };
+
+  apagarAlertaGrua();
+  enviarComandoTransaccionJSONP(payload);
+}
+
+function apagarAlertaGrua() {
+  contenedorEnGrua = null;
+  document.getElementById('crane-alert').style.display = 'none';
+}
+
+function enviarComandoTransaccionJSONP(payload) {
+  var urlScript = URL_WEBAPP_SCRIPT + "?prefix=jsonpCallback&data=" + encodeURIComponent(JSON.stringify(payload)) + "&_t=" + new Date().getTime();
+  var script = document.createElement("script");
+  script.src = urlScript;
+  document.body.appendChild(script);
+  script.onload = () => { script.remove(); };
+}
+
+window.jsonpCallback = function(res) {
+  console.log("Servidor confirma movimiento:", res);
+  cargarDatosPermanentes();
+};
 
 function cerrarPopover(e) {
   e.stopPropagation();
@@ -378,60 +464,36 @@ function conmutarFormularioOp(valor) {
   else { document.getElementById('group-origen').style.display = 'none'; }
 }
 
-function abrirMando3D(id, tipoLabel) {
+function abrirMandoManual(id, tipoLabel) {
   const pila = db3D[id] || [];
-  document.getElementById('modal-title').innerText = `Mando de Patio — Ubicación ${id}`;
-  document.getElementById('form-sigla').value = ''; document.getElementById('form-cliente').value = '';
-  document.getElementById('form-origen-ant').value = '';
-  document.getElementById('form-tipo-op').value = 'INGRESO';
-  conmutarFormularioOp('INGRESO');
-  
+  document.getElementById('modal-title').innerText = `Mando Manual — Ubicación ${id}`;
+  document.getElementById('form-sigla').value = ''; 
+  document.getElementById('form-cliente').value = '';
   document.getElementById('form-salida').style.display = pila.length > 0 ? 'block' : 'none';
   document.getElementById('modal-operacion').style.display = 'flex';
 }
 
-function enviarMovimientoNubeJSONP(payload) {
-  var urlJsonp = URL_WEBAPP_SCRIPT + "?prefix=jsonpCallback&data=" + encodeURIComponent(JSON.stringify(payload)) + "&_t=" + new Date().getTime();
-  var script = document.createElement("script");
-  script.src = urlJsonp;
-  document.body.appendChild(script);
-  script.onload = () => { script.remove(); };
-}
-
-window.jsonpCallback = function(response) {
-  console.log("Servidor Central CCTI confirma recepción:", response);
-  cargarDatosPermanentes();
-};
-
-function ejecutarMovimientoPatio() {
+function ejecutarIngresoManualPorteria() {
   const sigla = document.getElementById('form-sigla').value.trim().toUpperCase();
   const cliente = document.getElementById('form-cliente').value.trim() || "General";
   const alto = document.getElementById('form-alto-tipo').value;
   const estado = document.getElementById('form-estado-carga').value;
   const operador = document.getElementById('form-operador').value;
-  const tipoOp = document.getElementById('form-tipo-op').value;
-  const origenAnt = document.getElementById('form-origen-ant').value.trim().toUpperCase();
   
-  if(!sigla) { alert("Debe introducir las siglas del contenedor obligatoriamente."); return; }
+  if(!sigla) { alert("Introduzca las siglas de la unidad."); return; }
   
-  if(!db3D[selectedId3D]) db3D[selectedId3D] = [];
-  db3D[selectedId3D].push({ sigla, cliente, alto, estado });
-  actualizarMapa3D();
+  const payload = { action: "save", tipo: "INGRESO", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, origen: "PORTERÍA" };
   cerrarModal();
-
-  const payload = { action: "save", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, tipo: tipoOp, origen: origenAnt || "PORTERÍA" };
-  enviarMovimientoNubeJSONP(payload);
+  enviarComandoTransaccionJSONP(payload);
 }
 
 function despacharTope3D() {
   if(db3D[selectedId3D] && db3D[selectedId3D].length > 0) {
-    const unidad = db3D[selectedId3D].pop();
+    const unidad = db3D[selectedId3D][db3D[selectedId3D].length - 1];
     const operador = document.getElementById('form-operador').value;
-    actualizarMapa3D();
-    cerrarModal();
-    
     const payload = { action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador };
-    enviarMovimientoNubeJSONP(payload);
+    cerrarModal();
+    enviarComandoTransaccionJSONP(payload);
   }
 }
 
