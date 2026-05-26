@@ -18,10 +18,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .header h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 .header p { font-size: 11px; color: var(--az-claro); margin-top: 2px; }
 
+/* BARRA DE ALERTA DE GRÚA LLENA */
 .crane-alert-bar { display: none; background: #F1C40F; color: #2C3E50; font-size: 12px; font-weight: 800; text-align: center; padding: 10px; border-bottom: 3px solid #D4AC0D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulsoBarra 2s infinite; }
 @keyframes pulsoBarra { 0%, 100% { background: #F1C40F; } 50% { background: #F39C12; } }
 
-.nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); }
+/* DISEÑO ESCALA REAL: INFRAESTRUCTURA DE ENTRADA Y BARRERAS */
+.depot-entrance-zone { max-width: 1400px; margin: 12px auto; padding: 10px; background: #34495E; color: white; border-radius: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+.barrier-gate { padding: 6px 12px; background: #E74C3C; border: 2px dashed white; border-radius: 4px; text-transform: uppercase; }
+.office-20 { padding: 6px 12px; background: #3498DB; border: 1px solid white; border-radius: 4px; text-transform: uppercase; }
+.warehouses-line { display: flex; gap: 5px; }
+.wh-box { padding: 4px 8px; background: #7F8C8D; border-radius: 3px; font-size: 10px; border-bottom: 2px solid #566573; }
+
+.nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); max-width: 1400px; margin: 0 auto; }
 .tab-btn { flex: 1; padding: 14px; text-align: center; border: none; background: none; font-size: 12px; font-weight: 800; color: #7F8C8D; cursor: pointer; transition: all 0.2s; }
 .tab-btn.active { color: var(--az-medio); border-bottom: 4px solid var(--az-medio); background: #F2F4F4; }
 
@@ -32,6 +40,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 .legend-item { display: flex; align-items: center; gap: 6px; }
 .legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
 
+/* CONTENEDOR ORIENTADO SEGÚN EL ORDEN DE TERRENO REAL (C -> B -> A) */
 .yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 25px 15px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; overflow-x: auto; }
 @media(max-width: 900px) { .yard-perspective-container { grid-template-columns: 1fr; gap: 30px; } }
 
@@ -93,6 +102,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
   🔄 EN MOVIMIENTO: Grúa cargada con <span id="crane-sigla-tag" style="text-decoration: underline; font-style: italic;"></span>. Pinche la casilla de destino en el mapa.
 </div>
 
+<div class="depot-entrance-zone">
+  <div class="barrier-gate">🚧 Barreras de Acceso (Camiones / Chasis)</div>
+  <div class="office-20">🖨️ Oficina Control (20')</div>
+  <div class="warehouses-line">
+    <span style="align-self: center; margin-right: 5px; color:#BDC3C7;">Cierre Perimetral:</span>
+    <div class="wh-box">🔒 Bodega 1</div>
+    <div class="wh-box">🔒 Bodega 2</div>
+    <div class="wh-box">🔒 Bodega 3</div>
+    <div class="wh-box">🔒 Bodega 4</div>
+    <div class="wh-box">📦 Contenedor CARU</div>
+  </div>
+</div>
+
 <div class="nav-tabs">
   <button class="tab-btn active" onclick="switchTab('tab-mapa', this)">📦 MAPA INTERACTIVO 3D</button>
   <button class="tab-btn" onclick="switchTab('tab-historial', this)">📋 HISTORIAL DE MOVIMIENTOS</button>
@@ -100,17 +122,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 
 <div id="tab-mapa" class="tab-content active">
   <div class="info-panel">
-    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Específicos)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full)</span></div>
     <div class="legend-item"><div class="legend-color" style="background:var(--c-color)"></div><span>Bloque C (20' Full)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Perímetro 40')</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Específicos)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Perímetro / Bodegas)</span></div>
     <div class="legend-item"><div class="legend-color" style="background:#7F8C8D"></div><span>Unidad VACÍA (Cualquier Bloque)</span></div>
   </div>
 
   <div class="yard-perspective-container">
-    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ Bloque A (A1 - A11)</div><div id="render-A"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--b-color)">▲ Bloque B (B6 - B11)</div><div id="render-B"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--c-color)">▶ Bloque C (C1 - C11)</div><div id="render-C"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--c-color)">▶ 1° Bloque C (20' Full)</div><div id="render-C"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--b-color)">▲ 2° Bloque B (40' Full)</div><div id="render-B"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ 3° Bloque A (A1 - A11)</div><div id="render-A"></div></div>
   </div>
 
   <div class="bottom-layout">
@@ -210,7 +232,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbzZZ83SQIHlqPxTO_MnMeRic5s3m5sp-bDZODOHAFR5GWd4aDlF9JOhnwiIo9SNgGz2/exec";
 
 let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
-let contenedorEnGrua = null; // Memoria virtual interna para el traslado sin teclear
+let contenedorEnGrua = null; 
 
 const COLORES = { 'A': 'var(--a-color)', 'B': 'var(--b-color)', 'C': 'var(--c-color)', 'D': 'var(--d-color)' };
 
@@ -224,14 +246,13 @@ function switchTab(tabId, btn) {
 window.onload = () => {
   construirPatioFisico(); 
   cargarDatosPermanentes();
-  setInterval(cargarDatosPermanentes, 5000); // Sincronización automática de red cada 5 segundos
+  setInterval(cargarDatosPermanentes, 5000); 
 };
 
 function cargarDatosPermanentes() {
   var led = document.getElementById("sync-led");
   if(led) led.style.opacity = "0.3";
   
-  // LLAMADA LECTURA FORMATEADA PARA INTEGRACIÓN JSONP MULTI-CELULAR
   var urlLimpia = URL_WEBAPP_SCRIPT + "?prefix=procesarLecturaGlobalJSONP&_t=" + new Date().getTime();
   var script = document.createElement("script");
   script.src = urlLimpia;
@@ -386,7 +407,6 @@ function activarMóduloFlotante(e, id, tipoLabel) {
   };
 }
 
-// OPERACIÓN INTELIGENTE - PASO 1: Enganchar contenedor sin digitar
 function levantarGanchoReachstacker(origenId) {
   const pila = db3D[origenId] || [];
   if (pila.length === 0) return;
@@ -404,7 +424,6 @@ function levantarGanchoReachstacker(origenId) {
   document.getElementById('crane-alert').style.display = 'block';
 }
 
-// OPERACIÓN INTELIGENTE - PASO 2: Soltar en destino y forzar sincronización instantánea JSONP
 function completarDescargaReubicacionNube(destinoId) {
   if (!contenedorEnGrua) return;
   if (contenedorEnGrua.origen === destinoId) {
@@ -414,7 +433,7 @@ function completarDescargaReubicacionNube(destinoId) {
   }
 
   var op = prompt("Confirme el operador que ejecuta el traslado:\n1. Alexis Perez\n2. Claudio Araya\n3. Joel Poppa", "Alexis Perez");
-  if (!op) { apaperAlertaGrua(); return; }
+  if (!op) { apagarAlertaGrua(); return; }
 
   const payload = {
     action: "save",
@@ -458,11 +477,6 @@ function cerrarPopover(e) {
 document.addEventListener('click', () => {
   document.getElementById('popover-mall').style.display = 'none';
 });
-
-function conmutarFormularioOp(valor) {
-  if(valor === 'REUBICACION') { document.getElementById('group-origen').style.display = 'block'; }
-  else { document.getElementById('group-origen').style.display = 'none'; }
-}
 
 function abrirMandoManual(id, tipoLabel) {
   const pila = db3D[id] || [];
