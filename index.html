@@ -2,95 +2,55 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>TOS Sheets Pro - CCTI Maipú</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-:root {
-  --az-oscuro: #1F3864; --az-medio: #2E75B6; --az-claro: #D6E4F0;
-  --gris-bg: #EAECEE; --gris-borde: #BDC3C7; --txt-principal: #2C3E50;
-  --a-color: #8E44AD; --b-color: #2980B9; --c-color: #27AE60; --d-color: #E67E22;
-  --vacio-color: #7F8C8D;
-}
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: var(--gris-bg); color: var(--txt-principal); padding-bottom: 30px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}:root{  --az-oscuro:#1F3864;--az-medio:#2E75B6;--az-claro:#D6E4F0;  --gris-bg:#EAECEE;--gris-borde:#BDC3C7;--txt-principal:#2C3E50;  --a-color:#8E44AD;--b-color:#2980B9;--c-color:#27AE60;--d-color:#E67E22;  --vacio-color:#7F8C8D;}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--gris-bg);color:var(--txt-principal);padding-bottom:30px;position:relative;min-height:100vh}
 
-.header { background: var(--az-oscuro); color: white; padding: 14px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.header h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.header p { font-size: 11px; color: var(--az-claro); margin-top: 2px; }
+/* ── HEADER DE CONTROL ── */
+.header{background:var(--az-oscuro);color:#fff;padding:12px 16px;box-shadow:0 4px 10px rgba(0,0,0,.15)}.header-inner{display:flex;align-items:center;justify-content:space-between;max-width:1450px;margin:0 auto}.header-titles h1{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}.header-titles p{font-size:10px;color:var(--az-claro);margin-top:2px}.sync-badge{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border-radius:99px;padding:4px 10px;font-size:10px;color:#fff}.sync-dot{width:7px;height:7px;border-radius:50%;background:#E74C3C;transition:background .4s;flex-shrink:0}.sync-dot.ok{background:#27AE60}.sync-dot.loading{background:#F39C12;animation:blink 1s infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-.crane-alert-bar { display: none; background: #F1C40F; color: #203E50; font-size: 12px; font-weight: 800; text-align: center; padding: 11px; border-bottom: 3px solid #D4AC0D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulsoBarra 2s infinite; }
-@keyframes pulsoBarra { 0%, 100% { background: #F1C40F; } 50% { background: #F39C12; } }
+/* ── ORIENTACIÓN REAL DESDE TU VENTANA ── */
+.layout-reference-container{max-width:1450px;margin:12px auto;display:grid;grid-template-columns:1fr 1.5fr;gap:15px;padding:0 10px}.office-control-center{background:var(--az-oscuro);color:white;padding:12px;border-radius:8px;font-size:11px;font-weight:800;text-transform:uppercase;display:flex;align-items:center;justify-content:center;border:2px dashed var(--az-claro);text-align:center}.barriers-entrance{background:#34495E;color:white;padding:12px;border-radius:8px;font-size:11px;font-weight:800;text-transform:uppercase;display:flex;align-items:center;justify-content:center;border-right:10px solid #E74C3C}
 
-/* ESTRUCTURA FÍSICA INVERTIDA DESDE TU PERSPECTIVA DE BODEGA CENTRAL */
-.layout-reference-container { max-width: 1450px; margin: 12px auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 10px; }
-.office-control-center { background: var(--az-oscuro); color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--az-claro); text-align: center; }
-.barriers-entrance { background: #34495E; color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border-right: 10px solid #E74C3C; }
+/* ── TOAST FLOTANTE NOTIFICACIONES ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:#2C3E50;color:#fff;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}.toast.vis{opacity:1;transform:translateX(-50%) translateY(0)}.toast.ok-t{background:#27AE60}.toast.err-t{background:#E74C3C}
 
-.nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); max-width: 1450px; margin: 0 auto; }
-.tab-btn { flex: 1; padding: 14px; text-align: center; border: none; background: none; font-size: 12px; font-weight: 800; color: #7F8C8D; cursor: pointer; transition: all 0.2s; }
-.tab-btn.active { color: var(--az-medio); border-bottom: 4px solid var(--az-medio); background: #F2F4F4; }
+.nav-tabs{display:flex;background:#fff;border-bottom:2px solid var(--gris-borde);max-width:1450px;margin:0 auto}.tab-btn{flex:1;padding:13px 4px;text-align:center;border:none;background:none;font-size:12px;font-weight:800;color:#7F8C8D;cursor:pointer;transition:all .2s;border-bottom:3px solid transparent}.tab-btn.active{color:var(--az-medio);border-bottom-color:var(--az-medio);background:#F2F4F4}.tab-content{display:none;max-width:1450px;margin:15px auto;padding:0 10px}.tab-content.active{display:block}
 
-.tab-content { display: none; max-width: 1450px; margin: 15px auto; padding: 0 10px; }
-.tab-content.active { display: block; }
+.info-panel{background:#fff;border-radius:8px;padding:10px 14px;margin-bottom:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);display:flex;flex-wrap:wrap;justify-content:space-around;gap:10px;font-size:11px;font-weight:700}.legend-item{display:flex;align-items:center;gap:6px}.legend-color{width:13px;height:13px;border-radius:3px;border:1px solid rgba(0,0,0,.1)}
 
-.info-panel { background: white; border-radius: 8px; padding: 12px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; font-size: 11px; font-weight: 700; }
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
+/* ── DISEÑO DE FILAS CON PASILLOS LIBRES PARA LA GRÚA ── */
+.yard-perspective-container{background:#D5DBDB;border:2px solid var(--gris-borde);border-radius:12px;padding:22px 14px;display:flex;justify-content:space-between;gap:35px;overflow-x:auto}.column-block{flex:1;min-width:290px;display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,0.45);padding:12px;border-radius:8px;border:1px dashed #BDC3C7}.block-3d-title{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--az-oscuro);border-bottom:2px solid var(--gris-borde);padding-bottom:5px;margin-bottom:5px;text-align:center}.lane-3d-row{display:flex;align-items:center;gap:10px}.lane-label{width:28px;font-size:10px;font-weight:900;color:#566573;text-align:right;flex-shrink:0}.slots-3d-container{display:flex;gap:12px;flex:1}
 
-/* REDISEÑO LOGÍSTICO: DISTRIBUCIÓN HORIZONTAL CON CALLES Y PASILLOS LIBRES PARA REACHSTACKER */
-.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 25px 15px; display: flex; justify-content: space-between; gap: 35px; overflow-x: auto; }
-.column-block { flex: 1; min-width: 290px; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.45); padding: 12px; border-radius: 8px; border: 1px dashed #BDC3C7; }
-.block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 5px; margin-bottom: 5px; text-align: center; }
-.lane-3d-row { display: flex; align-items: center; gap: 10px; }
-.lane-label { width: 30px; font-size: 11px; font-weight: 900; color: #566573; text-align: right; }
-.slots-3d-container { display: flex; gap: 12px; flex: 1; }
+/* ── CASILLAS E ISOMETRÍA LIMPIA ── */
+.slot-3d{position:relative;background:#BDC3C7;border:1px solid #95A5A6;border-radius:5px;cursor:pointer;transition:transform .15s,background .15s;box-shadow:inset 0 2px 4px rgba(0,0,0,.12);display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px}.slot-3d:hover{transform:scale(1.02);background:#A6ACAF}.size-20{width:85px;height:50px}.size-40{width:160px;height:50px}.slot-name-tag{font-size:8px;font-weight:800;color:#7F8C8D;z-index:1;pointer-events:none;user-select:none}.cube-stack-wrapper{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column-reverse;padding:2px;gap:1px;pointer-events:none}.container-box-3d{width:100%;border-radius:3px;display:flex;flex-direction:column;box-shadow:0 2px 4px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.15);overflow:hidden}.box-face-top{height:4px;background:rgba(255,255,255,.3)}.box-face-front{flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff;text-shadow:1px 1px 2px rgba(0,0,0,.6);padding:0 2px}
 
-.slot-3d { position: relative; background: #BDC3C7; border: 1px solid #95A5A6; border-radius: 5px; cursor: pointer; transition: transform 0.2s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.15); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; }
-.slot-3d:hover { transform: scale(1.02); background: #A6ACAF; }
-.size-20 { width: 85px; height: 50px; } 
-.size-40 { width: 160px; height: 50px; } 
-.slot-name-tag { font-size: 9px; font-weight: 800; color: #7F8C8D; z-index: 1; pointer-events: none; }
+.bottom-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-top:18px}.zona-d-wrap{background:#fff;padding:12px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.05)}.office-zone{background:#BDC3C7;border:2px solid #95A5A6;border-radius:8px;display:flex;justify-content:center;align-items:center;font-size:11px;font-weight:700;color:#4D5656;text-transform:uppercase;text-align:center;padding:14px;min-height:80px}
 
-.cube-stack-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column-reverse; justify-content: flex-start; padding: 2px; gap: 1px; pointer-events: none; }
-.container-box-3d { width: 100%; border-radius: 3px; position: relative; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.25); border: 1px solid rgba(0,0,0,0.2); overflow: hidden; }
-.box-face-top { height: 4px; background: rgba(255,255,255,0.3); width: 100%; }
-.box-face-front { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.6); padding: 0 2px; }
+/* ── BITÁCORA Y HISTORIAL ── */
+.bitacora-table{width:100%;border-collapse:collapse;font-size:11px;text-align:left;min-width:650px}.bitacora-table th{background:#F2F4F4;padding:9px 10px;font-weight:700;color:#5D6D7E;text-transform:uppercase;border-bottom:2px solid #E5E7EB;white-space:nowrap}.bitacora-table td{padding:8px 10px;border-bottom:1px solid #F8F9FA;font-weight:600;vertical-align:middle}.bitacora-table tr:hover td{background:#FAFBFC}.badge-mov{padding:3px 7px;border-radius:4px;color:#fff;font-size:9px;font-weight:700;display:inline-block}
 
-.max-stack-alert { position: absolute; top: 2px; left: 2px; background: #E74C3C; color: white; font-size: 8px; font-weight: 900; padding: 1px 3px; border-radius: 3px; z-index: 5; box-shadow: 0 1px 3px rgba(0,0,0,0.3); animation: parpadeo 1.5s infinite; }
-@keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+/* ── POPOVER Y MODALES MÓVILES ── */
+.popover{position:absolute;background:#fff;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.2);border:1px solid var(--gris-borde);padding:10px;width:245px;z-index:1000;font-size:11px}.popover-title{font-weight:800;color:#1F3864;border-bottom:1.5px solid #EAECEE;padding-bottom:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}.popover-close-btn{background:#E74C3C;color:#fff;border:none;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;cursor:pointer}.pop-piso{background:#F2F4F4;padding:5px;border-radius:4px;margin-bottom:4px;border-left:4px solid var(--az-medio)}
 
-.bottom-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-top: 20px; }
-@media(max-width: 768px) { .bottom-layout { grid-template-columns: 1fr; } }
-.office-zone { background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; color: #4D5656; text-transform: uppercase; text-align: center; padding: 15px; position: relative; }
-.live-led { width: 8px; height: 8px; background-color: #2ECC71; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #2ECC71; }
-
-.history-card { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--az-oscuro); overflow-x: auto; }
-.history-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; color: var(--az-oscuro); }
-.bitacora-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; min-width: 650px; }
-.bitacora-table th { background: #F2F4F4; padding: 10px; font-weight: 700; color: #5D6D7E; text-transform: uppercase; border-bottom: 2px solid #E5E7EB; }
-.bitacora-table td { padding: 9px; border-bottom: 1px solid #F2F4F4; font-weight: 600; }
-.badge-mov { padding: 3px 6px; border-radius: 4px; color: white; font-size: 9px; font-weight: bold; }
-
-.popover { position: absolute; background: white; border-radius: 8px; box-shadow: 0 6px 25px rgba(0,0,0,0.25); border: 1px solid var(--gris-borde); padding: 10px; width: 250px; z-index: 1000; display: none; font-size: 11px; }
-.popover-title { font-weight: 800; color: var(--az-oscuro); border-bottom: 1.5px solid #EAECEE; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-.popover-close-btn { background: #E74C3C; color: white; border: none; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
-
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; padding: 10px; }
-.modal-content { background: white; padding: 20px; border-radius: 10px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-.modal-header { font-size: 14px; font-weight: 800; color: var(--az-oscuro); margin-bottom: 12px; text-transform: uppercase; border-bottom: 1px solid #EAECEE; padding-bottom: 6px; }
-.form-group { margin-bottom: 10px; }
-.form-group label { display: block; font-size: 10px; font-weight: 700; color: #5D6D7E; margin-bottom: 3px; text-transform: uppercase; }
-.form-control { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gris-borde); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--txt-principal); }
-.form-control:focus { border-color: var(--az-medio); outline: none; }
-.btn-mando { width: 100%; padding: 10px; background: var(--az-medio); color: white; border: none; font-weight: bold; border-radius: 5px; margin-top: 5px; cursor: pointer; }
-.btn-reubicar-directo { width: 100%; padding: 10px; background: #E67E22; color: white; border: none; font-weight: 800; border-radius: 5px; margin-top: 5px; cursor: pointer; text-transform: uppercase; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.modal{display:none;position:absolute;top:0;left:0;width:100%;min-height:100%;background:rgba(0,0,0,.5);z-index:2000;padding:55px 10px 30px}.modal.active{display:flex}.modal-content{background:#fff;padding:18px;border-radius:10px;width:100%;max-width:420px;margin:0 auto;box-shadow:0 12px 30px rgba(0,0,0,.2);max-height:85vh;overflow-y:auto}.modal-header{font-size:13px;font-weight:800;color:var(--az-oscuro);margin-bottom:12px;text-transform:uppercase;border-bottom:1px solid #EAECEE;padding-bottom:6px}.form-group{margin-bottom:10px}.form-group label{display:block;font-size:10px;font-weight:700;color:#5D6D7E;margin-bottom:3px;text-transform:uppercase}.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--gris-borde);border-radius:6px;font-size:12px;font-weight:600;color:var(--txt-principal)}.btn-row{display:flex;gap:8px;margin-top:14px}.btn-confirmar{flex:1;padding:11px;background:var(--az-medio);color:#fff;font-weight:700;border:none;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px}.btn-cancelar{flex:1;padding:11px;background:#95A5A6;color:#fff;font-weight:700;border:none;border-radius:6px;cursor:pointer;font-size:12px}.btn-despachar{width:100%;padding:11px;background:#E74C3C;color:#fff;font-weight:700;border:none;border-radius:6px;cursor:pointer;font-size:12px;margin-top:12px}.sigla-error{color:#E74C3C;font-size:10px;margin-top:3px;display:none}.sep-despacho{border:none;border-top:2px dashed #EAECEE;margin:12px 0 0;display:none}.spinner{display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>SISTEMA OPERATIVO DE PATIO 3D PRO (TOS)</h1>
-  <p>CCTI S.A. — Distribución Portuaria y Trazabilidad Satelital (Maipú)</p>
+  <div class="header-inner">
+    <div class="header-titles">
+      <h1>Sistema Operativo de Patio 3D — TOS Maipú</h1>
+      <p>CCTI S.A. — Distribución Portuaria y Trazabilidad Satelital</p>
+    </div>
+    <div class="sync-badge">
+      <div class="sync-dot loading" id="sync-dot"></div>
+      <span id="sync-label">Conectando...</span>
+    </div>
+  </div>
 </div>
 
 <div id="crane-alert" class="crane-alert-bar">
@@ -103,31 +63,31 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
 </div>
 
 <div class="nav-tabs">
-  <button class="tab-btn active" onclick="switchTab('tab-mapa', this)">📦 MAPA INTERACTIVO 3D</button>
-  <button class="tab-btn" onclick="switchTab('tab-historial', this)">📋 HISTORIAL DE MOVIMIENTOS</button>
+  <button class="tab-btn active" onclick="switchTab('tab-mapa',this)">📦 Mapa Interactivo 3D</button>
+  <button class="tab-btn" onclick="switchTab('tab-historial',this)">📋 Historial de Movimientos</button>
 </div>
 
 <div id="tab-mapa" class="tab-content active">
   <div class="info-panel">
-    <div class="legend-item"><div class="legend-color" style="background:var(--c-color)"></div><span>Bloque C (20' Full) - Lado Derecho</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full) - Lado Central</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Esp) - Lado Izquierdo</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Fondo Perímetro)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:#7F8C8D"></div><span>Unidad VACÍA</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Esp - Izquierda)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full - Centro)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--c-color)"></div><span>Bloque C (20' Full - Derecha)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Perímetro / Bodegas)</span></div>
+    <div class="legend-item"><div class="legend-color" style="background:var(--vacio-color)"></div><span>Unidad VACÍA</span></div>
   </div>
 
   <div class="yard-perspective-container">
-    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ 3° Bloque A (40' Especiales - Izquierda)</div><div id="render-A"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--b-color)">▲ 2° Bloque B (40' Full - Centro)</div><div id="render-B"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--c-color)">▶ 1° Bloque C (20' Full - Derecha / Barreras)</div><div id="render-C"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ 3° Bloque A (40' Especiales)</div><div id="render-A"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--b-color)">▲ 2° Bloque B (40' Full)</div><div id="render-B"></div></div>
+    <div class="column-block"><div class="block-3d-title" style="color:var(--c-color)">▶ 1° Bloque C (20' Full)</div><div id="render-C"></div></div>
   </div>
 
   <div class="bottom-layout">
-    <div class="column-block" style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-      <div class="block-3d-title" style="color:var(--d-color)">▼ Zona X-D: Fondo Perímetro Técnico (Fila de Bodegas fijas y Caru)</div>
-      <div id="render-D" style="display:flex; justify-content: space-between; gap:5px; padding: 5px 0;"></div>
+    <div class="zona-d-wrap">
+      <div class="block-3d-title" style="color:var(--d-color);margin-bottom:8px">▼ Zona X-D: Fondo Perímetro Técnico (Fila de Bodegas fijas y Caru)</div>
+      <div id="render-D" style="display:flex;flex-wrap:wrap;gap:8px;padding:4px 0"></div>
     </div>
-    <div class="office-zone"><span class="live-led" id="sync-led"></span>🏢 Servidor CCTI Maipú — Sincronización Cruzada al Segundo</div>
+    <div class="office-zone">🏢 Garita Central CCTI Maipú<br><small style="font-weight:400;font-size:10px;margin-top:4px;display:block">Sincronización Inmediata Google Sheets</small></div>
   </div>
 </div>
 
@@ -137,26 +97,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
     <table class="bitacora-table">
       <thead>
         <tr>
-          <th>Hora/Fecha</th>
-          <th>Contenedor</th>
-          <th>Movimiento</th>
-          <th>Origen</th>
-          <th>Destino Real</th>
-          <th>Operador</th>
-          <th>Detalles</th>
+          <th>Hora/Fecha</th><th>Contenedor</th><th>Movimiento</th>
+          <th>Origen</th><th>Destino Real</th><th>Operador</th><th>Detalles</th>
         </tr>
       </thead>
       <tbody id="bitacora-rows">
-        <tr><td colspan="7" style="text-align:center; color:#95A5A6; font-style:italic;">Sincronizando con el servidor central...</td></tr>
+        <tr><td colspan="7" style="text-align:center;color:#95A5A6;font-style:italic;padding:20px">Cargando datos del patio...</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<div id="popover-mall" class="popover">
+<div id="popover-mall" class="popover" style="display:none">
   <div class="popover-title">
     <span id="pop-title">Ubicación</span>
-    <button class="popover-close-btn" onclick="cerrarPopover(event)">Cerrar X</button>
+    <button class="popover-close-btn" onclick="cerrarPopover(event)">✕ Cerrar</button>
   </div>
   <div id="pop-body"></div>
   <button id="pop-reubicar-btn" class="btn-reubicar-directo">🔄 Reubicar Unidad Superior</button>
@@ -168,16 +123,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
     <div class="modal-header" id="modal-title">Operación de Patio</div>
     <div class="form-group">
       <label>Operador de Grúa Reachstacker</label>
-      <select id="form-operador" class="form-control" style="border: 1.5px solid var(--az-medio); font-weight: bold;">
-        <option value="Alexis Perez">Alexis Perez</option>
-        <option value="Claudio Araya">Claudio Araya</option>
-        <option value="Joel Poppa">Joel Poppa</option>
+      <select id="form-operador" class="form-control" style="border-color:var(--az-medio);font-weight:bold">
+        <option>Alexis Perez</option>
+        <option>Claudio Araya</option>
+        <option>Joel Poppa</option>
       </select>
     </div>
     <div id="form-ingreso">
       <div class="form-group">
-        <label>Siglas de Contenedor</label>
-        <input type="text" id="form-sigla" class="form-control" placeholder="Ej: OOLU190633-7" style="text-transform:uppercase; font-weight: 700;">
+        <label>Siglas de Contenedor <span style="color:#E74C3C">*</span></label>
+        <input type="text" id="form-sigla" class="form-control"
+          placeholder="Ej: OOLU190633-7" style="text-transform:uppercase;font-weight:700;letter-spacing:.5px"
+          autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
+          oninput="this.value=this.value.toUpperCase(); validarSigla(this.value)">
+        <div class="sigla-error" id="sigla-error">Formato inválido. Ejemplo: OOLU190633-7</div>
       </div>
       <div class="form-group">
         <label>Línea / Cliente</label>
@@ -187,7 +146,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
         <label>Estado de Carga (F/V)</label>
         <select id="form-estado-carga" class="form-control">
           <option value="FULL">FULL (Cargado)</option>
-          <option value="VACIO">VACIO (Disponible)</option>
+          <option value="VACIO">VACÍO (Disponible)</option>
         </select>
       </div>
       <div class="form-group">
@@ -197,42 +156,63 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial
           <option value="2.50" selected>High Cube (2.50m)</option>
         </select>
       </div>
-      <div style="display:flex; gap:10px; margin-top:15px;">
-        <button onclick="ejecutarIngresoManualPorteria()" style="flex:1; padding:11px; background:var(--az-medio); color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">Confirmar Ingreso</button>
-        <button onclick="cerrarModal()" style="flex:1; padding:11px; background:#95A5A6; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">Cancelar</button>
+      <div class="btn-row">
+        <button id="btn-confirmar" class="btn-confirmar" onclick="ejecutarIngresoManualPorteria()">Confirmar Ingreso</button>
+        <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
       </div>
-    </div>
-    <div id="form-salida" style="display:none; margin-top:12px; border-top:2px dashed #EAECEE; padding-top:10px;">
-      <button onclick="despacharTope3D()" style="width:100%; padding:11px; background:#E74C3C; color:white; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">Despachar a Cliente (Salida)</button>
+      <hr class="sep-despacho" id="sep-despacho">
+      <button id="btn-despachar" class="btn-despachar" style="display:none" onclick="despacharTope3D()">
+        🚛 Despachar a Cliente (Salida de Patio)
+      </button>
     </div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-// URL DE TU NUEVA IMPLEMENTACIÓN DE APPS SCRIPT SIN FILTROS REBOTADOS
+// ENLACE A TU NUEVO SCRIPT GS PUBLICADO DE FORMA CORRECTA
 const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbwX7K5KlSUNL7zEF8Ccs8UE_O4Srlg2yanlc685XwUSdUnVxYIMY_0CPbiGQmd9RNz2/exec";
 
-let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = "";
+let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = ""; let _pollingTimer = null;
 let contenedorEnGrua = null; 
 
-const COLORES = { 'A': 'var(--a-color)', 'B': 'var(--b-color)', 'C': 'var(--c-color)', 'D': 'var(--d-color)' };
+const COLORES = { A:'var(--a-color)', B:'var(--b-color)', C:'var(--c-color)', D:'var(--d-color)' };
+const ISO_REGEX = /^[A-Z]{3,4}\s?\d{6,7}-?\d$/;
+
+function showToast(msg, tipo='', ms=2800) {
+  const t = document.getElementById('toast'); t.textContent = msg;
+  t.className = 'toast ' + (tipo ? tipo+'-t' : '') + ' vis';
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('vis'), ms);
+}
+
+function setSyncState(estado) {
+  const dot = document.getElementById('sync-dot'); const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + estado;
+  lbl.textContent = estado === 'ok' ? 'Sincronizado' : estado === 'loading' ? 'Actualizando...' : 'Sin conexión';
+}
+
+document.addEventListener('click', e => {
+  const pop = document.getElementById('popover-mall');
+  if (pop.style.display === 'block' && !pop.contains(e.target)) cerrarPopover();
+});
 
 function switchTab(tabId, btn) {
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active'); btn.classList.add('active');
 }
 
-window.onload = () => {
-  construirPatioFisico(); 
+window.onload = () => { construirPatioFisico(); iniciarPolling(); };
+
+function iniciarPolling() {
+  if (_pollingTimer) clearInterval(_pollingTimer);
   cargarDatosPermanentes();
-  setInterval(cargarDatosPermanentes, 5000); 
-};
+  _pollingTimer = setInterval(cargarDatosPermanentes, 6000);
+}
 
 function cargarDatosPermanentes() {
-  var led = document.getElementById("sync-led");
-  if(led) led.style.opacity = "0.3";
+  setSyncState('loading');
   ejecutarLlamadaInmune({ prefix: "procesarLecturaGlobalJSONP" });
 }
 
@@ -240,52 +220,44 @@ window.procesarLecturaGlobalJSONP = function(jsonData) {
   db3D = jsonData.patio || {};
   actualizarMapa3D();
   actualizarHistorialVisual(jsonData.historial || []);
-  var led = document.getElementById("sync-led");
-  if(led) { led.style.opacity = "1"; led.style.backgroundColor = "#2ECC71"; }
+  setSyncState('ok');
 };
 
 function actualizarHistorialVisual(historial) {
-  const tBody = document.getElementById('bitacora-rows');
-  tBody.innerHTML = '';
-  if(historial.length === 0) {
-    tBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#95A5A6;">Sin registros de movimientos</td></tr>`;
+  const tbody = document.getElementById('bitacora-rows');
+  if (!historial.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#95A5A6;font-style:italic;padding:20px">Sin registros en este turno</td></tr>`;
     return;
   }
-  historial.forEach(log => {
-    let badgCol = log.tipo === 'INGRESO' ? '#27AE60' : (log.tipo === 'SALIDA' ? '#E74C3C' : '#E67E22');
-    tBody.innerHTML += `
-      <tr>
-        <td>${log.fecha}</td>
-        <td style="color:var(--az-oscuro); font-weight:800;">${log.sigla}</td>
-        <td><span class="badge-mov" style="background:${badgCol}">${log.tipo}</span></td>
-        <td style="color:#7F8C8D;">${log.origen}</td>
-        <td style="color:#27AE60; font-weight:700;">${log.destino}</td>
-        <td><strong>${log.operador}</strong></td>
-        <td>${log.detalles}</td>
-      </tr>
-    `;
-  });
+  const badgeColor = { INGRESO:'#27AE60', SALIDA:'#E74C3C', REUBICACION:'#E67E22' };
+  tbody.innerHTML = historial.map(log => `
+    <tr>
+      <td style="white-space:nowrap">${log.fecha}</td>
+      <td style="color:var(--az-oscuro);font-weight:800">${log.sigla}</td>
+      <td><span class="badge-mov" style="background:${badgeColor[log.tipo]||'#7F8C8D'}">${log.tipo}</span></td>
+      <td style="color:#7F8C8D">${log.origen||'—'}</td>
+      <td style="color:#27AE60;font-weight:700">${log.destino||'—'}</td>
+      <td><strong>${log.operador}</strong></td>
+      <td>${log.detalles||''}</td>
+    </tr>`).join('');
 }
 
 function construirPatioFisico() {
   const rA = document.getElementById('render-A'); rA.innerHTML = '';
-  for(let f=1; f<=11; f++) { rA.appendChild(crearCarril3D('A', f, 2, 'size-40', "40' Esp", 'A')); }
-
+  for (let f = 1; f <= 11; f++) rA.appendChild(crearCarril3D('A', f, 2, 'size-40', "40' Esp", 'A'));
   const rB = document.getElementById('render-B'); rB.innerHTML = '';
-  for(let f=6; f<=11; f++) { rB.appendChild(crearCarril3D('B', f, 2, 'size-40', "40' Full", 'B')); }
-
+  for (let f = 6; f <= 11; f++) rB.appendChild(crearCarril3D('B', f, 2, 'size-40', "40' Full", 'B'));
   const rC = document.getElementById('render-C'); rC.innerHTML = '';
-  for(let f=1; f<=11; f++) { rC.appendChild(crearCarril3D('C', f, 3, 'size-20', "20' Full", 'C')); }
-
+  for (let f = 1; f <= 11; f++) rC.appendChild(crearCarril3D('C', f, 3, 'size-20', "20' Full", 'C'));
   const rD = document.getElementById('render-D'); rD.innerHTML = '';
-  for(let p=1; p<=7; p++) { rD.appendChild(crearCasillaBase3D('P'+p, 'size-40', "40' Perímetro", 'D')); }
+  for (let p = 1; p <= 7; p++) rD.appendChild(crearCasillaBase3D('P' + p, 'size-40', "40' Perímetro", 'D'));
 }
 
 function crearCarril3D(letra, numFila, celdasPiso, sizeClass, tipoLabel, cKey) {
   const row = document.createElement('div'); row.className = 'lane-3d-row';
   row.innerHTML = `<div class="lane-label">${letra}${numFila}</div>`;
   const cont = document.createElement('div'); cont.className = 'slots-3d-container';
-  for(let c=1; c<=celdasPiso; c++) { cont.appendChild(crearCasillaBase3D(`${letra}${numFila}-${c}`, sizeClass, tipoLabel, cKey)); }
+  for (let c = 1; c <= celdasPiso; c++) cont.appendChild(crearCasillaBase3D(`${letra}${numFila}-${c}`, sizeClass, tipoLabel, cKey));
   row.appendChild(cont); return row;
 }
 
@@ -299,186 +271,140 @@ function crearCasillaBase3D(id, sizeClass, tipoLabel, cKey) {
 
 function gestionarFlujoClicFila(e, id, tipoLabel) {
   if (contenedorEnGrua) {
-    e.stopPropagation();
-    completarDescargaReubicacionNube(id);
-    return;
+    e.stopPropagation(); completarDescargaReubicacionNube(id); return;
   }
   activarMóduloFlotante(e, id, tipoLabel);
 }
 
 function actualizarMapa3D() {
   document.querySelectorAll('.slot-3d').forEach(slot => {
-    const id = slot.dataset.id; const cKey = slot.dataset.ckey;
-    const pila = db3D[id] || [];
-    
-    const viejoCont = slot.querySelector('.cube-stack-wrapper');
-    if(viejoCont) viejoCont.remove();
-    const viejaAlerta = slot.querySelector('.max-stack-alert');
-    if(viejaAlerta) viejaAlerta.remove();
-    
-    if(pila.length > 0) {
-      if(pila.length >= 4) {
-        const alertTag = document.createElement('div');
-        alertTag.className = 'max-stack-alert'; alertTag.innerText = pila.length + ' P';
-        slot.appendChild(alertTag);
-      }
-      
-      const stackWrapper = document.createElement('div'); stackWrapper.className = 'cube-stack-wrapper';
-      pila.forEach((item) => {
-        const box = document.createElement('div'); box.className = 'container-box-3d';
-        box.style.height = item.alto === "2.20" ? '13px' : '17px';
-        box.style.backgroundColor = item.estado === "VACIO" ? 'var(--vacio-color)' : COLORES[cKey];
-        box.innerHTML = `<div class="box-face-top"></div><div class="box-face-front"></div>`;
-        stackWrapper.appendChild(box);
-      });
-      slot.appendChild(stackWrapper);
-    }
+    const id = slot.dataset.id; const cKey = slot.dataset.ckey; const pila = db3D[id] || [];
+    const old = slot.querySelector('.cube-stack-wrapper'); if (old) old.remove();
+    if (!pila.length) return;
+    const wrapper = document.createElement('div'); wrapper.className = 'cube-stack-wrapper';
+    pila.forEach(item => {
+      const box = document.createElement('div'); box.className = 'container-box-3d';
+      box.style.height = item.alto === '2.20' ? '13px' : '17px';
+      box.style.backgroundColor = item.estado === 'VACIO' ? 'var(--vacio-color)' : COLORES[cKey];
+      box.innerHTML = `<div class="box-face-top"></div><div class="box-face-front"></div>`;
+      wrapper.appendChild(box);
+    });
+    slot.appendChild(wrapper);
   });
 }
 
 function activarMóduloFlotante(e, id, tipoLabel) {
-  e.stopPropagation();
-  selectedId3D = id; selectedTipoLabel3D = tipoLabel;
-  const pila = db3D[id] || [];
-  const pop = document.getElementById('popover-mall');
+  e.stopPropagation(); selectedId3D = id; selectedTipoLabel3D = tipoLabel;
+  const pila = db3D[id] || []; const pop = document.getElementById('popover-mall');
+  document.getElementById('pop-title').innerHTML = `📦 <strong>${id}</strong> <span style="font-size:9px;color:#7F8C8D">(${tipoLabel})</span>`;
   
-  document.getElementById('pop-title').innerHTML = `📦 Ubicación: <strong>${id}</strong>`;
-  
-  let html = '';
-  if(pila.length === 0) {
-    html = `<span style="color:#95A5A6; font-style:italic;">Casilla Libre (Piso Disponible)</span>`;
+  if (!pila.length) {
+    document.getElementById('pop-body').innerHTML = `<span style="color:#95A5A6;font-style:italic">Casilla Libre</span>`;
     document.getElementById('pop-reubicar-btn').style.display = 'none';
   } else {
     document.getElementById('pop-reubicar-btn').style.display = 'block';
-    for(let i=pila.length-1; i>=0; i--) {
-      html += `<div style="background:#F2F4F4; padding:5px; border-radius:4px; margin-bottom:4px; border-left:4px solid ${pila[i].estado==='VACIO'?'#7F8C8D':'var(--az-medio)'}">
-                <strong>Piso ${i+1}:</strong> <span style="color:var(--az-oscuro); font-weight:bold;">${pila[i].sigla}</span><br>
-                ${pila[i].cliente} | <span style="font-weight:800;">${pila[i].estado}</span>
-               </div>`;
-    }
+    document.getElementById('pop-body').innerHTML = [...pila].reverse().map((item, i) => `
+      <div class="pop-piso" style="border-left-color:${item.estado==='VACIO'?'#7F8C8D':'var(--az-medio)'}">
+        <strong>Piso ${pila.length - i}:</strong> <span style="color:var(--az-oscuro);font-weight:800">${item.sigla}</span><br>
+        ${item.cliente} | <span style="font-weight:800;color:${item.estado==='VACIO'?'#7F8C8D':'#27AE60'}">${item.estado}</span>
+      </div>`).join('');
   }
   
-  document.getElementById('pop-body').innerHTML = html;
-  pop.style.display = 'block';
-  
-  const rect = document.getElementById(`casilla-${id}`).getBoundingClientRect();
-  pop.style.top = (rect.top + window.scrollY - pop.offsetHeight - 8) + 'px';
-  pop.style.left = (rect.left + window.scrollX - (pop.offsetWidth/2) + (rect.width/2)) + 'px';
-  
   document.getElementById('pop-reubicar-btn').onclick = (evt) => {
-    evt.stopPropagation(); pop.style.display = 'none';
-    levantarGanchoReachstacker(id);
+    evt.stopPropagation(); cerrarPopover(); levantarGanchoReachstacker(id);
   };
-
-  document.getElementById('pop-mando-btn').onclick = () => {
-    pop.style.display = 'none';
-    abrirMandoManual(selectedId3D, selectedTipoLabel3D);
-  };
+  document.getElementById('pop-mando-btn').onclick = () => { cerrarPopover(); abrirMando3D(id, tipoLabel); };
+  
+  pop.style.visibility = 'hidden'; pop.style.display = 'block';
+  const rect = document.getElementById(`casilla-${id}`).getBoundingClientRect();
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  const scrollX = window.scrollX || document.documentElement.scrollLeft;
+  let top = rect.top + scrollY - pop.offsetHeight - 10;
+  let left = rect.left + scrollX + rect.width / 2 - pop.offsetWidth / 2;
+  if (top < scrollY + 10) top = rect.bottom + scrollY + 10;
+  if (left < 8) left = 8;
+  pop.style.top = top + 'px'; pop.style.left = left + 'px'; pop.style.visibility = 'visible';
 }
 
 function levantarGanchoReachstacker(origenId) {
-  const pila = db3D[origenId] || []; if (pila.length === 0) return;
+  const pila = db3D[origenId] || []; if (!pila.length) return;
   const tope = pila[pila.length - 1];
-  
-  contenedorEnGrua = {
-    origen: origenId, sigla: tope.sigla, cliente: tope.cliente, alto: tope.alto, estado: tope.estado
-  };
-  
+  contenedorEnGrua = { origen: origenId, sigla: tope.sigla, cliente: tope.cliente, alto: tope.alto, estado: tope.estado };
   document.getElementById('crane-sigla-tag').innerText = `${contenedorEnGrua.sigla} (Fila ${origenId})`;
   document.getElementById('crane-alert').style.display = 'block';
 }
 
 function completarDescargaReubicacionNube(destinoId) {
   if (!contenedorEnGrua) return;
-  if (contenedorEnGrua.origen === destinoId) {
-    alert("Movimiento cancelado: Es la misma casilla.");
-    apagarAlertaGrua(); return;
-  }
-
+  if (contenedorEnGrua.origen === destinoId) { alert("Movimiento cancelado: Es la misma casilla."); apagarAlertaGrua(); return; }
   var op = prompt("Operador:\n1. Alexis Perez\n2. Claudio Araya\n3. Joel Poppa", "Alexis Perez");
   if (!op) { apagarAlertaGrua(); return; }
 
+  setSyncState('loading');
   const params = {
-    action: "save",
-    tipo: "REUBICACION",
-    origen: contenedorEnGrua.origen,
-    ubicacion: destinoId,
-    sigla: contenedorEnGrua.sigla,
-    cliente: contenedorEnGrua.cliente,
-    alto: contenedorEnGrua.alto,
-    estado: contenedorEnGrua.estado,
-    operador: op,
-    prefix: "procesarLecturaGlobalJSONP"
+    action: "save", tipo: "REUBICACION", origen: contenedorEnGrua.origen, ubicacion: destinoId,
+    sigla: contenedorEnGrua.sigla, cliente: contenedorEnGrua.cliente, alto: contenedorEnGrua.alto, estado: contenedorEnGrua.estado, operador: op,
+    prefix: "procesarTransaccionJSONP"
   };
-
-  apagarAlertaGrua();
-  ejecutarLlamadaInmune(params);
+  apagarAlertaGrua(); ejecutarLlamadaInmune(params);
 }
 
-function apagarAlertaGrua() {
-  contenedorEnGrua = null;
-  document.getElementById('crane-alert').style.display = 'none';
-}
+function apagarAlertaGrua() { contenedorEnGrua = null; document.getElementById('crane-alert').style.display = 'none'; }
 
 function ejecutarLlamadaInmune(params) {
   let queryParts = [];
-  for (let key in params) {
-    queryParts.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
-  }
-  queryParts.push("_t=" + new Date().getTime());
-  
-  var urlCompleta = URL_WEBAPP_SCRIPT + "?" + queryParts.join("&");
-  var script = document.createElement("script");
-  script.src = urlCompleta;
-  document.body.appendChild(script);
-  script.onload = () => { script.remove(); };
+  for (let key in params) queryParts.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
+  var urlCompleta = URL_WEBAPP_SCRIPT + "?" + queryParts.join("&") + "&_t=" + Date.now();
+  var script = document.createElement("script"); script.src = urlCompleta;
+  document.body.appendChild(script); script.onload = () => { script.remove(); };
 }
 
-function cerrarPopover(e) {
-  if(e) e.stopPropagation();
-  document.getElementById('popover-mall').style.display = 'none';
-}
+window.procesarTransaccionJSONP = function(res) {
+  showToast('✓ Movimiento guardado', 'ok'); cargarDatosPermanentes();
+};
 
-document.addEventListener('click', () => { cerrarPopover(null); });
+function cerrarPopover(e) { if (e) e.stopPropagation(); selectedId3D = null; document.getElementById('popover-mall').style.display = 'none'; }
 
-function abrirMandoManual(id, tipoLabel) {
-  const pila = db3D[id] || [];
+function abrirMando3D(id, tipoLabel) {
+  selectedId3D = id; const pila = db3D[id] || [];
   document.getElementById('modal-title').innerText = `Mando Manual — Ubicación ${id}`;
-  document.getElementById('form-sigla').value = ''; 
-  document.getElementById('form-cliente').value = '';
-  document.getElementById('form-salida').style.display = pila.length > 0 ? 'block' : 'none';
-  document.getElementById('modal-operacion').style.display = 'flex';
+  document.getElementById('form-sigla').value = ''; document.getElementById('form-cliente').value = '';
+  document.getElementById('sigla-error').style.display = 'none';
+  const tieneContenido = pila.length > 0;
+  document.getElementById('sep-despacho').style.display = tieneContenido ? 'block' : 'none';
+  document.getElementById('btn-despachar').style.display = tieneContenido ? 'block' : 'none';
+  document.getElementById('modal-operacion').classList.add('active');
+}
+
+function cerrarModal() { document.getElementById('modal-operacion').classList.remove('active'); }
+
+function validarSigla(val) {
+  const clean = val.replace(/\s+/g, ''); const ok = clean.length === 0 || ISO_REGEX.test(clean);
+  document.getElementById('sigla-error').style.display = ok ? 'none' : 'block'; return ok;
 }
 
 function ejecutarIngresoManualPorteria() {
-  const sigla = document.getElementById('form-sigla').value.trim().toUpperCase();
-  const cliente = document.getElementById('form-cliente').value.trim() || "General";
+  const sigla = document.getElementById('form-sigla').value.trim().toUpperCase().replace(/\s+/g,'');
+  const cliente = document.getElementById('form-cliente').value.trim() || 'General';
   const alto = document.getElementById('form-alto-tipo').value;
   const estado = document.getElementById('form-estado-carga').value;
   const operador = document.getElementById('form-operador').value;
-  
-  if(!sigla) { alert("Introduzca las siglas."); return; }
-  
-  const params = { 
-    action: "save", tipo: "INGRESO", ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, origen: "PORTERÍA", prefix: "procesarLecturaGlobalJSONP" 
-  };
-  cerrarModal();
-  ejecutarLlamadaInmune(params);
+  if (!sigla || !ISO_REGEX.test(sigla)) { showToast('⚠ Sigla inválida', 'err'); return; }
+
+  setSyncState('loading');
+  const params = { action: 'save', tipo: 'INGRESO', ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, origen: 'PORTERÍA', prefix: 'procesarTransaccionJSONP' };
+  cerrarModal(); ejecutarLlamadaInmune(params);
 }
 
 function despacharTope3D() {
-  if(db3D[selectedId3D] && db3D[selectedId3D].length > 0) {
-    const unidad = db3D[selectedId3D][db3D[selectedId3D].length - 1];
-    const operador = document.getElementById('form-operador').value;
-    const params = { 
-      action: "delete", ubicacion: selectedId3D, sigla: unidad.sigla, operador: operador, prefix: "procesarLecturaGlobalJSONP" 
-    };
-    cerrarModal();
-    ejecutarLlamadaInmune(params);
-  }
-}
+  if (!db3D[selectedId3D] || !db3D[selectedId3D].length) return;
+  const unidad = db3D[selectedId3D][db3D[selectedId3D].length - 1];
+  const operador = document.getElementById('form-operador').value;
 
-function cerrarModal() { document.getElementById('modal-operacion').style.display = 'none'; }
+  setSyncState('loading');
+  const params = { action: 'delete', ubicacion: selectedId3D, sigla: unidad.sigla, operador, prefix: 'procesarTransaccionJSONP' };
+  cerrarModal(); ejecutarLlamadaInmune(params);
+}
 </script>
 </body>
 </html>
