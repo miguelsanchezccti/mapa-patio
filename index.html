@@ -4,473 +4,528 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>TOS Sheets Pro - CCTI Maipú</title>
+<title>TOS CCTI — Depósito Maipú</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-:root {
-  --az-oscuro: #1F3864; --az-medio: #2E75B6; --az-claro: #D6E4F0;
-  --gris-bg: #EAECEE; --gris-borde: #BDC3C7; --txt-principal: #2C3E50;
-  --a-color: #8E44AD; --b-color: #2980B9; --c-color: #27AE60; --d-color: #E67E22;
-  --vacio-color: #7F8C8D;
+:root{
+  --bg:#0f1117;--surface:#161b24;--surface2:#1e2535;--border:#252f42;
+  --accent:#00c8ff;--green:#00e676;--red:#ff4d6d;--amber:#f0a500;
+  --text:#e8f0f8;--text2:#6b82a0;--text3:#3a4f6a;
+  --sans:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
 }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: var(--gris-bg); color: var(--txt-principal); padding-bottom: 30px; position: relative; min-height: 100vh; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;}
 
-.header { background: var(--az-oscuro); color: white; padding: 14px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.header-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1450px; margin: 0 auto; }
-.header-titles h1 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.header-titles p { font-size: 10px; color: var(--az-claro); margin-top: 2px; }
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
+.hdr-logo{font-family:var(--mono);font-size:16px;font-weight:600;letter-spacing:3px;color:var(--accent);}
+.hdr-sub{font-size:10px;letter-spacing:1.5px;color:var(--text2);text-transform:uppercase;margin-top:2px;}
+.clk{font-family:var(--mono);font-size:12px;color:var(--text2);text-align:right;}
 
-.sync-badge { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; padding: 4px 10px; font-size: 10px; color: #fff; white-space: nowrap; }
-.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #E74C3C; transition: background .4s; flex-shrink: 0; }
-.sync-dot.ok { background: #27AE60; }
-.sync-dot.loading { background: #F39C12; animation: blink 1s infinite; }
-@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+.stats-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;gap:14px;overflow-x:auto;}
+.stat{display:flex;flex-direction:column;gap:1px;flex-shrink:0;}
+.stat-val{font-family:var(--mono);font-size:18px;font-weight:600;}
+.stat-lbl{font-size:9px;letter-spacing:1px;color:var(--text2);text-transform:uppercase;}
 
-.crane-alert-bar { display: none; background: #F1C40F; color: #203E50; font-size: 12px; font-weight: 800; text-align: center; padding: 11px; border-bottom: 3px solid #D4AC0D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulsoBarra 2s infinite; }
-@keyframes pulsoBarra { 0%, 100% { background: #F1C40F; } 50% { background: #F39C12; } }
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);}
+.tab{flex:1;padding:10px 8px;text-align:center;font-size:11px;font-weight:600;letter-spacing:.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .15s;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 
-.layout-reference-container { max-width: 1450px; margin: 12px auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 10px; }
-.office-control-center { background: var(--az-oscuro); color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--az-claro); text-align: center; }
-.barriers-entrance { background: #34495E; color: white; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; border-right: 10px solid #E74C3C; }
+.pane{display:none;}.pane.active{display:block;}
 
-.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px); background: #2C3E50; color: #fff; padding: 9px 18px; border-radius: 99px; font-size: 12px; font-weight: 600; z-index: 9999; opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
-.toast.vis { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.ok-t { background: #27AE60; }
-.toast.err-t { background: #E74C3C; }
+/* ── MAPA ─────────────────────────────── */
+.map-scroll{overflow-x:auto;padding:14px;}
+.map-frame{display:inline-flex;flex-direction:column;align-items:center;min-width:340px;}
 
-.nav-tabs { display: flex; background: white; border-bottom: 2px solid var(--gris-borde); max-width: 1450px; margin: 0 auto; }
-.tab-btn { flex: 1; padding: 14px; text-align: center; border: none; background: none; font-size: 12px; font-weight: 800; color: #7F8C8D; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; }
-.tab-btn.active { color: var(--az-medio); border-bottom-color: var(--az-medio); background: #F2F4F4; }
+/* norte label */
+.norte{font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:6px;}
 
-.tab-content { display: none; max-width: 1450px; margin: 15px auto; padding: 0 10px; }
-.tab-content.active { display: block; }
+/* contenedor de los 3 bloques en columnas */
+.bloques-row{display:flex;align-items:stretch;gap:0;}
 
-.info-panel { background: white; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; font-size: 11px; font-weight: 700; }
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-color { width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
+/* lane vertical entre bloques */
+.lane-v{
+  width:28px;display:flex;align-items:center;justify-content:center;
+  writing-mode:vertical-lr;font-size:8px;color:var(--text3);letter-spacing:1px;
+  border-left:1px dashed var(--border);border-right:1px dashed var(--border);
+  background:rgba(0,200,255,.03);
+}
 
-.yard-perspective-container { background: #D5DBDB; border: 2px solid var(--gris-borde); border-radius: 12px; padding: 22px 14px; display: flex; justify-content: space-between; gap: 35px; overflow-x: auto; }
-.column-block { flex: 1; min-width: 290px; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.45); padding: 12px; border-radius: 8px; border: 1px dashed #BDC3C7; }
-.block-3d-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--az-oscuro); border-bottom: 2px solid var(--gris-borde); padding-bottom: 5px; margin-bottom: 5px; text-align: center; }
-.lane-3d-row { display: flex; align-items: center; gap: 10px; }
-.lane-label { width: 28px; font-size: 10px; font-weight: 900; color: #566573; text-align: right; flex-shrink: 0; }
-.slots-3d-container { display: flex; gap: 12px; flex: 1; }
+/* un bloque = columna de posiciones */
+.bloque-col{display:flex;flex-direction:column;align-items:stretch;}
+.bloque-header{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text2);
+  text-transform:uppercase;text-align:center;padding:4px 2px;border-bottom:1px solid var(--border);}
+.bloque-stat{font-size:8px;color:var(--text3);text-align:center;padding:2px;}
 
-.slot-3d { position: relative; background: #BDC3C7; border: 1px solid #95A5A6; border-radius: 5px; cursor: pointer; transition: transform .15s, background .15s; box-shadow: inset 0 2px 4px rgba(0,0,0,.12); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; }
-.slot-3d:hover { transform: scale(1.02); background: #A6ACAF; }
-.size-20 { width: 85px; height: 50px; } 
-.size-40 { width: 160px; height: 50px; } 
-.slot-name-tag { font-size: 8px; font-weight: 800; color: #7F8C8D; z-index: 1; pointer-events: none; user-select: none; }
+/* posicion = fila de pisos */
+.posicion{display:flex;align-items:center;margin-bottom:2px;}
+.pos-lbl{font-size:8px;color:var(--text3);width:18px;text-align:right;margin-right:3px;flex-shrink:0;}
 
-.cube-stack-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column-reverse; padding: 2px; gap: 1px; pointer-events: none; }
-.container-box-3d { width: 100%; border-radius: 3px; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,.22); border: 1px solid rgba(0,0,0,.15); overflow: hidden; }
-.box-face-top { height: 4px; background: rgba(255,255,255,0.3); width: 100%; }
-.box-face-front { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.6); padding: 0 2px; }
+/* pisos de una posicion */
+.pisos-row{display:flex;gap:2px;}
 
-.max-stack-alert { position: absolute; top: 2px; left: 2px; background: #E74C3C; color: white; font-size: 8px; font-weight: 900; padding: 1px 3px; border-radius: 3px; z-index: 5; box-shadow: 0 1px 3px rgba(0,0,0,0.3); animation: parpadeo 1.5s infinite; }
-@keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+/* celda de un contenedor */
+.cell{
+  width:30px;height:22px;border-radius:3px;border:1px solid var(--border);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:6px;font-weight:600;transition:all .1s;
+  background:var(--surface2);color:var(--text3);flex-shrink:0;overflow:hidden;
+}
+.cell:hover{border-color:var(--accent);transform:scale(1.08);z-index:5;}
+.cell.ocu{border-color:rgba(255,255,255,.2);}
 
-.bottom-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 18px; margin-top: 18px; }
-@media(max-width: 768px) { .bottom-layout { grid-template-columns: 1fr; } }
-.zona-d-wrap { background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,.05); }
-.office-zone { background: #BDC3C7; border: 2px solid #95A5A6; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 700; color: #4D5656; text-transform: uppercase; text-align: center; padding: 14px; min-height: 80px; }
+/* piso labels encabezado */
+.piso-headers{display:flex;gap:2px;justify-content:center;margin-bottom:3px;}
+.piso-h{width:30px;text-align:center;font-size:7px;color:var(--text3);}
 
-.history-card { background: white; border-radius: 10px; padding: 14px; box-shadow: 0 4px 12px rgba(0,0,0,.07); border-top: 4px solid var(--az-oscuro); overflow-x: auto; }
-.history-title { font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; color: var(--az-oscuro); }
-.bitacora-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; min-width: 650px; }
-.bitacora-table th { background: #F2F4F4; padding: 9px 10px; font-weight: 700; color: #5D6D7E; text-transform: uppercase; border-bottom: 2px solid #E5E7EB; white-space: nowrap; }
-.bitacora-table td { padding: 8px 10px; border-bottom: 1px solid #F8F9FA; font-weight: 600; vertical-align: middle; }
+/* espacio vacío (B no tiene todas las posiciones) */
+.cell-phantom{width:30px;height:22px;flex-shrink:0;}
 
-.popover { position: absolute; background: white; border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,.2); border: 1px solid var(--gris-borde); padding: 10px; width: 245px; z-index: 1000; font-size: 11px; }
-.popover-title { font-weight: 800; color: var(--az-oscuro); border-bottom: 1.5px solid #EAECEE; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-.popover-close-btn { background: #E74C3C; color: white; border: none; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; cursor: pointer; }
-.pop-piso { background: #F2F4F4; padding: 5px; border-radius: 4px; margin-bottom: 4px; border-left: 4px solid var(--az-medio); }
+/* FONDO y ENTRADA labels */
+.yard-label{font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;text-align:center;padding:4px;}
 
-.modal { display: none; position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; background: rgba(0,0,0,.5); z-index: 2000; padding: 55px 10px 30px; }
-.modal.active { display: flex; }
-.modal-content { background: #fff; padding: 18px; border-radius: 10px; width: 100%; max-width: 420px; margin: 0 auto; box-shadow: 0 12px 30px rgba(0,0,0,.2); max-height: 85vh; overflow-y: auto; }
-.modal-header { font-size: 13px; font-weight: 800; color: var(--az-oscuro); margin-bottom: 12px; text-transform: uppercase; border-bottom: 1px solid #EAECEE; padding-bottom: 6px; }
-.form-group { margin-bottom: 10px; }
-.form-group label { display: block; font-size: 10px; font-weight: 700; color: #5D6D7E; margin-bottom: 3px; text-transform: uppercase; }
-.form-control { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gris-borde); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--txt-principal); }
-.btn-row { display: flex; gap: 8px; margin-top: 14px; }
-.btn-confirmar { flex: 1; padding: 11px; background: var(--az-medio); color: white; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.btn-cancelar { flex: 1; padding: 11px; background:#95A5A6; color: white; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; }
-.btn-despachar { width: 100%; padding: 11px; background: #E74C3C; color: white; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 12px; }
-.btn-reubicar-directo { width: 100%; padding: 10px; background: #E67E22; color: white; border: none; font-weight: 800; border-radius: 5px; margin-top: 5px; cursor: pointer; text-transform: uppercase; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.btn-mando { width: 100%; padding: 10px; background: var(--az-medio); color: white; border: none; font-weight: bold; border-radius: 5px; margin-top: 5px; cursor: pointer; }
-.sigla-error { color: #E74C3C; font-size: 10px; margin-top: 3px; display: none; }
-.sep-despacho { border: none; border-top: 2px dashed #EAECEE; margin: 12px 0 0; display: none; }
-.spinner { display: inline-block; width: 11px; height: 11px; border: 2px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.ingreso-box{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:10px 20px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;
+  min-width:340px;
+}
+.ing-txt{font-size:11px;color:var(--text2);}
+.oficina{font-size:11px;color:var(--accent);font-family:var(--mono);}
+
+.legend{display:flex;gap:8px;flex-wrap:wrap;padding:8px 14px;border-top:1px solid var(--border);}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2);}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+
+/* ── MODAL ────────────────────────────── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px 14px 0 0;padding:20px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.modal-pos{font-size:11px;color:var(--text2);margin-bottom:14px;font-family:var(--mono);}
+.fld{margin-bottom:11px;}
+.fld label{display:block;font-size:10px;letter-spacing:1px;color:var(--text2);text-transform:uppercase;margin-bottom:4px;}
+.fld input,.fld select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 11px;color:var(--text);font-family:var(--sans);font-size:13px;}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--accent);}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ocu-info{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px;}
+.ocu-cont{font-family:var(--mono);font-size:14px;font-weight:600;margin-bottom:4px;}
+.ocu-det{font-size:11px;color:var(--text2);line-height:1.7;}
+.btn-row{display:flex;gap:8px;margin-top:14px;}
+.btn{padding:11px;border-radius:8px;border:1px solid;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;flex:1;transition:all .15s;}
+.btn-ok{background:rgba(0,200,255,.1);border-color:rgba(0,200,255,.3);color:var(--accent);}
+.btn-sal{background:rgba(255,77,109,.1);border-color:rgba(255,77,109,.3);color:var(--red);}
+.btn-cancel{background:none;border-color:var(--border);color:var(--text2);flex:0;padding:11px 14px;}
+
+/* ── HISTORIAL ────────────────────────── */
+.hist-item{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 14px;border-bottom:1px solid var(--border);font-size:11px;}
+.hist-accion{font-weight:700;font-family:var(--mono);font-size:10px;}
+.hist-info{color:var(--text2);margin-top:1px;}
+.hist-time{font-size:10px;color:var(--text3);flex-shrink:0;margin-left:8px;}
+
+/* ── BUSCAR ───────────────────────────── */
+.search-wrap{padding:14px;}
+.search-inp{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;margin-bottom:12px;}
+.search-inp:focus{outline:none;border-color:var(--accent);}
+.s-result{background:var(--surface2);border-left:3px solid;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:opacity .15s;}
+.s-result:hover{opacity:.85;}
+.s-cont{font-family:var(--mono);font-size:13px;font-weight:600;}
+.s-det{font-size:11px;color:var(--text2);margin-top:2px;}
+
+.sync-bar{padding:7px 14px;font-size:10px;color:var(--text3);display:flex;align-items:center;gap:6px;border-top:1px solid var(--border);}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.sync-dot.ok{background:var(--green);}
+.sync-dot.spin{background:var(--amber);animation:blink .8s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-inner">
-    <div class="header-titles">
-      <h1>Sistema Operativo de Patio 3D — TOS Maipú</h1>
-      <p>CCTI S.A. — Distribución Portuaria y Trazabilidad Satelital</p>
+<div class="hdr">
+  <div><div class="hdr-logo">CCTI</div><div class="hdr-sub">TOS — Depósito Maipú</div></div>
+  <div class="clk" id="clk">--:--:--<br><span style="font-size:10px;color:var(--text3)" id="clk-f"></span></div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-val" style="color:var(--red)" id="s-oc">0</div><div class="stat-lbl">Ocupados</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--green)" id="s-disp">0</div><div class="stat-lbl">Disponibles</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--amber)" id="s-full">0</div><div class="stat-lbl">Full</div></div>
+  <div class="stat"><div class="stat-val" style="color:#c084fc" id="s-vac">0</div><div class="stat-lbl">Vacío</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--accent)" id="s-tot">0</div><div class="stat-lbl">Total pos.</div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="setTab('mapa',this)">🗺 Mapa</div>
+  <div class="tab" onclick="setTab('buscar',this)">🔍 Buscar</div>
+  <div class="tab" onclick="setTab('hist',this)">📋 Historial</div>
+  <div class="tab" onclick="setTab('cfg',this)">⚙ Config</div>
+</div>
+
+<!-- MAPA -->
+<div class="pane active" id="pane-mapa">
+  <div class="map-scroll">
+    <div class="map-frame">
+      <div class="norte">↑ Norte — fondo del depósito</div>
+      <div class="bloques-row" id="bloques-row"></div>
+      <div style="font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;text-align:center;padding:5px;">↓ Sur — entrada</div>
+      <div class="ingreso-box">
+        <div class="ing-txt">🚛 Ingreso / Salida de camiones</div>
+        <div class="oficina">🏢 Oficina</div>
+      </div>
     </div>
-    <div class="sync-badge">
-      <div class="sync-dot loading" id="sync-dot"></div>
-      <span id="sync-label">Conectando...</span>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--surface2);border:1px solid var(--border);"></div>Disponible</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1565C0;"></div>MAERSK</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#AD1457;"></div>ONE</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#2E7D32;"></div>UASC</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#E65100;"></div>Hapag-Lloyd</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#C62828;"></div>OOCL</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#4527A0;"></div>CMA CGM</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#00695C;"></div>MSC</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#37474F;"></div>Otros</div>
+    <div class="leg-item" style="margin-left:8px;font-size:10px;color:var(--text3);">● punto blanco = VACÍO</div>
+  </div>
+</div>
+
+<!-- BUSCAR -->
+<div class="pane" id="pane-buscar">
+  <div class="search-wrap">
+    <input type="text" class="search-inp" placeholder="Buscar contenedor... ej: OOLU190633" style="text-transform:uppercase" oninput="buscar(this.value)">
+    <div id="search-res"><div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">Ingresa 2 o más caracteres</div></div>
+  </div>
+</div>
+
+<!-- HISTORIAL -->
+<div class="pane" id="pane-hist">
+  <div id="hist-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos aún</div></div>
+  <div style="padding:12px;">
+    <button onclick="exportCSV()" style="width:100%;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.25);color:var(--accent);font-family:var(--sans);font-size:12px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">⬇ Exportar CSV</button>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="pane" id="pane-cfg">
+  <div style="padding:14px;">
+    <div class="fld"><label>Google Sheets — Apps Script URL</label>
+      <input type="text" id="cfg-s" placeholder="https://script.google.com/macros/s/..." style="font-size:11px;font-family:var(--mono);">
     </div>
-  </div>
-</div>
-
-<div id="crane-alert" class="crane-alert-bar">
-  🔄 EN MOVIMIENTO: Grúa cargada con <span id="crane-sigla-tag" style="text-decoration: underline; font-style: italic;"></span>. Pinche la casilla de destino en el mapa.
-</div>
-
-<div class="layout-reference-container">
-  <div class="office-control-center">🏢 VISTA OFICINA CENTRAL: Mirando al Norte desde la Ventana de Control</div>
-  <div class="barriers-entrance">🚧 INGRESO ABAJO A LA DERECHA: Barreras de Acceso de Camiones</div>
-</div>
-
-<div class="nav-tabs">
-  <button class="tab-btn active" onclick="switchTab('tab-mapa',this)">📦 Mapa Interactivo 3D</button>
-  <button class="tab-btn" onclick="switchTab('tab-historial',this)">📋 Historial de Movimientos</button>
-</div>
-
-<div id="tab-mapa" class="tab-content active">
-  <div class="info-panel">
-    <div class="legend-item"><div class="legend-color" style="background:var(--a-color)"></div><span>Bloque A (40' Esp - Izquierda)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--b-color)"></div><span>Bloque B (40' Full - Centro)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--c-color)"></div><span>Bloque C (20' Full - Derecha)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--d-color)"></div><span>Zona X-D (Perímetro / Bodegas)</span></div>
-    <div class="legend-item"><div class="legend-color" style="background:var(--vacio-color)"></div><span>Unidad VACÍA</span></div>
-  </div>
-
-  <div class="yard-perspective-container">
-    <div class="column-block"><div class="block-3d-title" style="color:var(--a-color)">◀ 3° Bloque A (40' Especiales)</div><div id="render-A"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--b-color)">▲ 2° Bloque B (40' Full)</div><div id="render-B"></div></div>
-    <div class="column-block"><div class="block-3d-title" style="color:var(--c-color)">▶ 1° Bloque C (20' Full)</div><div id="render-C"></div></div>
-  </div>
-
-  <div class="bottom-layout">
-    <div class="zona-d-wrap">
-      <div class="block-3d-title" style="color:var(--d-color);margin-bottom:8px">▼ Zona X-D: Fondo Perímetro Técnico (Fila de Bodegas fijas y Caru)</div>
-      <div id="render-D" style="display:flex;flex-wrap:wrap;gap:8px;padding:4px 0"></div>
-    </div>
-    <div class="office-zone">🏢 Garita Central CCTI Maipú<br><small style="font-weight:400;font-size:10px;margin-top:4px;display:block">Sincronización Inmediata Google Sheets</small></div>
-  </div>
-</div>
-
-<div id="tab-historial" class="tab-content">
-  <div class="history-card">
-    <div class="history-title">📋 Registro Técnico de Control de Operadores</div>
-    <table class="bitacora-table">
-      <thead>
-        <tr>
-          <th>Hora/Fecha</th><th>Contenedor</th><th>Movimiento</th>
-          <th>Origen</th><th>Destino Real</th><th>Operador</th><th>Detalles</th>
-        </tr>
-      </thead>
-      <tbody id="bitacora-rows">
-        <tr><td colspan="7" style="text-align:center;color:#95A5A6;font-style:italic;padding:20px">Cargando datos del patio...</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div id="popover-mall" class="popover" style="display:none">
-  <div class="popover-title">
-    <span id="pop-title">Ubicación</span>
-    <button class="popover-close-btn" onclick="cerrarPopover(event)">✕ Cerrar</button>
-  </div>
-  <div id="pop-body"></div>
-  <button id="pop-reubicar-btn" class="btn-reubicar-directo">🔄 Reubicar Unidad Superior</button>
-  <button id="pop-mando-btn" class="btn-mando">📥 Ingreso / Despacho Manual</button>
-</div>
-
-<div id="modal-operacion" class="modal">
-  <div class="modal-content">
-    <div class="modal-header" id="modal-title">Operación de Patio</div>
-    <div class="form-group">
-      <label>Operador de Grúa Reachstacker</label>
-      <select id="form-operador" class="form-control" style="border-color:var(--az-medio);font-weight:bold">
-        <option>Alexis Perez</option>
-        <option>Claudio Araya</option>
-        <option value="Joel Poppa">Joel Poppa</option>
-      </select>
-    </div>
-    <div id="form-ingreso">
-      <div class="form-group">
-        <label>Siglas de Contenedor <span style="color:#E74C3C">*</span></label>
-        <input type="text" id="form-sigla" class="form-control"
-          placeholder="Ej: OOLU190633-7" style="text-transform:uppercase;font-weight:700;letter-spacing:.5px"
-          autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
-          oninput="this.value=this.value.toUpperCase(); validarSigla(this.value)">
-        <div class="sigla-error" id="sigla-error">Formato inválido. Ejemplo: OOLU190633-7</div>
-      </div>
-      <div class="form-group">
-        <label>Línea / Cliente</label>
-        <input type="text" id="form-cliente" class="form-control" placeholder="Ej: MSC / Cosco">
-      </div>
-      <div class="form-group">
-        <label>Estado de Carga (F/V)</label>
-        <select id="form-estado-carga" class="form-control">
-          <option value="FULL">FULL (Cargado)</option>
-          <option value="VACIO">VACÍO (Disponible)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Altura / Tipo</label>
-        <select id="form-alto-tipo" class="form-control">
-          <option value="2.20">Estándar (2.20m)</option>
-          <option value="2.50" selected>High Cube (2.50m)</option>
-        </select>
-      </div>
-      <div class="btn-row">
-        <button id="btn-confirmar" class="btn-confirmar" onclick="ejecutarIngresoManualPorteria()">Confirmar Ingreso</button>
-        <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
-      </div>
-      <hr class="sep-despacho" id="sep-despacho">
-      <button id="btn-despachar" class="btn-despachar" style="display:none" onclick="despacharTope3D()">
-        🚛 Despachar a Cliente (Salida de Patio)
-      </button>
+    <button onclick="guardarCfg()" style="width:100%;background:rgba(0,200,255,.1);border:1px solid rgba(0,200,255,.3);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">✓ Guardar</button>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+      <button onclick="if(confirm('¿Resetear todo el estado del patio?')){estado={};historial=[];guardarLocal();buildYard();renderHist();}" style="width:100%;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.25);color:var(--red);font-family:var(--sans);font-size:12px;font-weight:600;padding:10px;border-radius:8px;cursor:pointer;">⚠ Resetear patio</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span id="sync-msg">Sin configurar</span></div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="m-title"></div>
+    <div class="modal-pos"  id="m-pos"></div>
+    <div id="m-body"></div>
+    <div class="btn-row" id="m-btns"></div>
+  </div>
+</div>
 
 <script>
-const URL_WEBAPP_SCRIPT = "https://script.google.com/macros/s/AKfycbwX7K5KlSUNL7zEF8Ccs8UE_O4Srlg2yanlc685XwUSdUnVxYIMY_0CPbiGQmd9RNz2/exec";
+// ═══ ESTRUCTURA DEL DEPÓSITO ══════════════════════
+// Bloques como columnas norte-sur
+// Posición 1 = sur (entrada), 14 = norte (fondo)
+// Bloque B solo tiene posiciones 6-11
 
-let db3D = {}; let selectedId3D = null; let selectedTipoLabel3D = ""; let _pollingTimer = null;
-let contenedorEnGrua = null; 
+var BLOQUES = [
+  {id:'A', nombre:'Bloque A', posMin:1, posMax:14, pisos:3},
+  {id:'B', nombre:'Bloque B', posMin:6, posMax:11, pisos:3},
+  {id:'C', nombre:'Bloque C', posMin:1, posMax:14, pisos:3}
+];
 
-const COLORES = { A:'var(--a-color)', B:'var(--b-color)', C:'var(--c-color)', D:'var(--d-color)' };
-const ISO_REGEX = /^[A-Z]{3,4}\s?\d{6,7}-?\d$/;
-
-function showToast(msg, tipo='', ms=2800) {
-  const t = document.getElementById('toast'); t.textContent = msg;
-  t.className = 'toast ' + (tipo ? tipo+'-t' : '') + ' vis';
-  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('vis'), ms);
-}
-
-function setSyncState(estado) {
-  const dot = document.getElementById('sync-dot'); const lbl = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + estado;
-  lbl.textContent = estado === 'ok' ? 'Sincronizado' : estado === 'loading' ? 'Actualizando...' : 'Sin conexión';
-}
-
-document.addEventListener('click', e => {
-  const pop = document.getElementById('popover-mall');
-  if (pop.style.display === 'block' && !pop.contains(e.target)) cerrarPopover();
-});
-
-function switchTab(tabId, btn) {
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active'); btn.classList.add('active');
-}
-
-window.onload = () => { construirPatioFisico(); iniciarPolling(); };
-
-function iniciarPolling() {
-  if (_pollingTimer) clearInterval(_pollingTimer);
-  cargarDatosPermanentes();
-  _pollingTimer = setInterval(cargarDatosPermanentes, 5000);
-}
-
-function cargarDatosPermanentes() {
-  setSyncState('loading');
-  ejecutarLlamadaInmune({ prefix: "procesarLecturaGlobalJSONP" });
-}
-
-window.procesarLecturaGlobalJSONP = function(jsonData) {
-  db3D = jsonData.patio || {};
-  actualizarMapa3D();
-  actualizarHistorialVisual(jsonData.historial || []);
-  setSyncState('ok');
+var LINEAS = ['MAERSK','ONE','OOCL','Hapag-Lloyd','UASC','CMA CGM','MSC','Otros'];
+var COLORES = {
+  MAERSK:{bg:'#1565C0',txt:'#B3D4F5'},
+  ONE:{bg:'#AD1457',txt:'#F9C4D8'},
+  UASC:{bg:'#2E7D32',txt:'#B8E0BA'},
+  'Hapag-Lloyd':{bg:'#E65100',txt:'#FFD0B0'},
+  OOCL:{bg:'#C62828',txt:'#FFBBBB'},
+  'CMA CGM':{bg:'#4527A0',txt:'#D1C8F5'},
+  MSC:{bg:'#00695C',txt:'#A7DDD6'},
+  Otros:{bg:'#37474F',txt:'#CFD8DC'}
 };
+var OPERADORES=['Alexis Perez','Joel Popa','Victor Ramirez','Claudio Araya'];
 
-function actualizarHistorialVisual(historial) {
-  const tbody = document.getElementById('bitacora-rows');
-  if (!historial.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#95A5A6;font-style:italic;padding:20px">Sin registros en este turno</td></tr>`;
-    return;
-  }
-  const badgeColor = { INGRESO:'#27AE60', SALIDA:'#E74C3C', REUBICACION:'#E67E22' };
-  tbody.innerHTML = historial.map(log => `
-    <tr>
-      <td style="white-space:nowrap">${log.fecha}</td>
-      <td style="color:var(--az-oscuro);font-weight:800">${log.sigla}</td>
-      <td><span class="badge-mov" style="background:${badgeColor[log.tipo]||'#7F8C8D'}">${log.tipo}</span></td>
-      <td style="color:#7F8C8D">${log.origen||'—'}</td>
-      <td style="color:#27AE60;font-weight:700">${log.destino||'—'}</td>
-      <td><strong>${log.operador}</strong></td>
-      <td>${log.detalles||''}</td>
-    </tr>`).join('');
-}
+// ═══ ESTADO ═══════════════════════════════════════
+var estado   = JSON.parse(localStorage.getItem('ccti_dep_estado')||'{}');
+var historial= JSON.parse(localStorage.getItem('ccti_dep_hist')  ||'[]');
+var SCRIPT_URL = localStorage.getItem('ccti_dep_script')||'';
+var celdaActual = null;
 
-function construirPatioFisico() {
-  const rA = document.getElementById('render-A'); rA.innerHTML = '';
-  for (let f = 1; f <= 11; f++) rA.appendChild(crearCarril3D('A', f, 2, 'size-40', "40' Esp", 'A'));
-  const rB = document.getElementById('render-B'); rB.innerHTML = '';
-  for (let f = 6; f <= 11; f++) rB.appendChild(crearCarril3D('B', f, 2, 'size-40', "40' Full", 'B'));
-  const rC = document.getElementById('render-C'); rC.innerHTML = '';
-  for (let f = 1; f <= 11; f++) rC.appendChild(crearCarril3D('C', f, 3, 'size-20', "20' Full", 'C'));
-  const rD = document.getElementById('render-D'); rD.innerHTML = '';
-  for (let p = 1; p <= 7; p++) rD.appendChild(crearCasillaBase3D('P' + p, 'size-40', "40' Perímetro", 'D'));
-}
+function key(b,p,pi){ return b+'-'+String(p).padStart(2,'0')+'-P'+pi; }
 
-function crearCarril3D(letra, numFila, celdasPiso, sizeClass, tipoLabel, cKey) {
-  const row = document.createElement('div'); row.className = 'lane-3d-row';
-  row.innerHTML = `<div class="lane-label">${letra}${numFila}</div>`;
-  const cont = document.createElement('div'); cont.className = 'slots-3d-container';
-  for (let c = 1; c <= celdasPiso; c++) cont.appendChild(crearCasillaBase3D(`${letra}${numFila}-${c}`, sizeClass, tipoLabel, cKey));
-  row.appendChild(cont); return row;
-}
+// ═══ RELOJ ════════════════════════════════════════
+(function tick(){
+  var n=new Date(), pad=x=>String(x).padStart(2,'0');
+  var el=document.getElementById('clk');
+  if(el) el.childNodes[0].textContent=pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
+  var fe=document.getElementById('clk-f');
+  if(fe){var d=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];fe.textContent=d[n.getDay()]+' '+n.getDate()+' '+m[n.getMonth()];}
+  setTimeout(tick,1000);
+})();
 
-function crearCasillaBase3D(id, sizeClass, tipoLabel, cKey) {
-  const slot = document.createElement('div'); slot.className = `slot-3d ${sizeClass}`;
-  slot.id = `casilla-${id}`; slot.dataset.id = id; slot.dataset.tipo = tipoLabel; slot.dataset.ckey = cKey;
-  slot.innerHTML = `<div class="slot-name-tag">${id.includes('-') ? 'Pos'+id.split('-')[1] : id}</div>`;
-  slot.addEventListener('click', (e) => gestionarFlujoClicFila(e, id, tipoLabel));
-  return slot;
-}
+// ═══ BUILD MAPA ═══════════════════════════════════
+function buildYard(){
+  var row = document.getElementById('bloques-row');
+  row.innerHTML='';
 
-function gestionarFlujoClicFila(e, id, tipoLabel) {
-  if (contenedorEnGrua) {
-    e.stopPropagation(); completarDescargaReubicacionNube(id); return;
-  }
-  activarMóduloFlotante(e, id, tipoLabel);
-}
+  // Posiciones máximas globales para alinear todos los bloques
+  var POS_MAX = 14; // todos los bloques se alinean de 1 a 14
 
-function actualizarMapa3D() {
-  document.querySelectorAll('.slot-3d').forEach(slot => {
-    const id = slot.dataset.id; const cKey = slot.dataset.ckey; const pila = db3D[id] || [];
-    const old = slot.querySelector('.cube-stack-wrapper'); if (old) old.remove();
-    if (!pila.length) return;
-    const wrapper = document.createElement('div'); wrapper.className = 'cube-stack-wrapper';
-    pila.forEach(item => {
-      const box = document.createElement('div'); box.className = 'container-box-3d';
-      box.style.height = item.alto === '2.20' ? '13px' : '17px';
-      box.style.backgroundColor = item.estado === 'VACIO' ? 'var(--vacio-color)' : COLORES[cKey];
-      box.innerHTML = `<div class="box-face-top"></div><div class="box-face-front"></div>`;
-      wrapper.appendChild(box);
-    });
-    slot.appendChild(wrapper);
+  BLOQUES.forEach(function(bl,bi){
+    if(bi>0){
+      var lane=document.createElement('div');
+      lane.className='lane-v';
+      lane.textContent='pasillo reachstacker';
+      row.appendChild(lane);
+    }
+
+    var col=document.createElement('div');
+    col.className='bloque-col';
+
+    // Header del bloque
+    var hdr=document.createElement('div');
+    hdr.className='bloque-header';
+    hdr.textContent='Bloque '+bl.id;
+    col.appendChild(hdr);
+
+    var st=document.createElement('div');
+    st.className='bloque-stat';
+    st.id='bst-'+bl.id;
+    st.textContent='—';
+    col.appendChild(st);
+
+    // Piso labels (P3 P2 P1)
+    var pisoHdr=document.createElement('div');
+    pisoHdr.className='piso-headers';
+    pisoHdr.style.marginLeft='21px';
+    for(var pi=bl.pisos;pi>=1;pi--){
+      var ph=document.createElement('div');
+      ph.className='piso-h'; ph.textContent='P'+pi;
+      pisoHdr.appendChild(ph);
+    }
+    col.appendChild(pisoHdr);
+
+    // Posiciones de 14 → 1 (norte arriba, sur abajo)
+    for(var pos=POS_MAX; pos>=1; pos--){
+      var prow=document.createElement('div');
+      prow.className='posicion';
+
+      var plbl=document.createElement('div');
+      plbl.className='pos-lbl';
+      plbl.textContent=pos;
+      prow.appendChild(plbl);
+
+      var pisos=document.createElement('div');
+      pisos.className='pisos-row';
+
+      var enBloque = (pos >= bl.posMin && pos <= bl.posMax);
+
+      for(var pi=bl.pisos;pi>=1;pi--){
+        if(!enBloque){
+          var ph2=document.createElement('div');
+          ph2.className='cell-phantom';
+          pisos.appendChild(ph2);
+        } else {
+          var k=key(bl.id,pos,pi);
+          var cell=document.createElement('div');
+          cell.className='cell';
+          cell.id='cell-'+k;
+          cell.dataset.key=k;
+          cell.dataset.bloque=bl.id;
+          cell.dataset.pos=pos;
+          cell.dataset.piso=pi;
+          var d=estado[k];
+          if(d){
+            cell.classList.add('ocu');
+            var col2=COLORES[d.linea]||COLORES.Otros;
+            cell.style.background=col2.bg;
+            cell.style.borderColor='rgba(255,255,255,.2)';
+            var span=document.createElement('span');
+            span.style.cssText='color:'+col2.txt+';font-size:6px;font-weight:600;text-align:center;line-height:1.1;overflow:hidden;max-width:28px;';
+            span.textContent=d.cont.substring(0,6);
+            cell.appendChild(span);
+            if(!d.full){
+              var dot=document.createElement('div');
+              dot.style.cssText='position:absolute;top:2px;right:2px;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5);';
+              cell.appendChild(dot);
+            }
+          }
+          cell.addEventListener('click',function(){ abrirModal(this); });
+          pisos.appendChild(cell);
+        }
+      }
+      prow.appendChild(pisos);
+      col.appendChild(prow);
+    }
+    row.appendChild(col);
   });
+
+  updateStats();
 }
 
-function activarMóduloFlotante(e, id, tipoLabel) {
-  e.stopPropagation(); selectedId3D = id; selectedTipoLabel3D = tipoLabel;
-  const pila = db3D[id] || []; const pop = document.getElementById('popover-mall');
-  document.getElementById('pop-title').innerHTML = `📦 <strong>${id}</strong> <span style="font-size:9px;color:#7F8C8D">(Fila ${tipoLabel})</span>`;
-  
-  if (!pila.length) {
-    document.getElementById('pop-body').innerHTML = `<span style="color:#95A5A6;font-style:italic">Casilla Libre</span>`;
-    document.getElementById('pop-reubicar-btn').style.display = 'none';
+function updateStats(){
+  var oc=0,full=0,vac=0,tot=0;
+  BLOQUES.forEach(function(bl){
+    var bOc=0,bTot=(bl.posMax-bl.posMin+1)*bl.pisos;
+    tot+=bTot;
+    for(var p=bl.posMin;p<=bl.posMax;p++) for(var pi=1;pi<=bl.pisos;pi++){
+      var d=estado[key(bl.id,p,pi)];
+      if(d){oc++;bOc++;if(d.full)full++;else vac++;}
+    }
+    var el=document.getElementById('bst-'+bl.id);
+    if(el) el.textContent=bOc+'/'+bTot;
+  });
+  document.getElementById('s-oc').textContent=oc;
+  document.getElementById('s-disp').textContent=tot-oc;
+  document.getElementById('s-full').textContent=full;
+  document.getElementById('s-vac').textContent=vac;
+  document.getElementById('s-tot').textContent=tot;
+}
+
+// ═══ MODAL ════════════════════════════════════════
+function abrirModal(cell){
+  celdaActual=cell.dataset.key;
+  var b=cell.dataset.bloque,p=cell.dataset.pos,pi=cell.dataset.piso;
+  document.getElementById('m-title').textContent='Bloque '+b+' · Posición '+p+' · Piso '+pi;
+  document.getElementById('m-pos').textContent=celdaActual;
+  var d=estado[celdaActual];
+  var body=document.getElementById('m-body');
+  var btns=document.getElementById('m-btns');
+  if(d){
+    var c2=COLORES[d.linea]||COLORES.Otros;
+    body.innerHTML='<div class="ocu-info" style="border-left:3px solid '+c2.bg+';">'
+      +'<div class="ocu-cont" style="color:'+c2.txt+';">'+d.cont+'</div>'
+      +'<div class="ocu-det">Línea: '+d.linea+'<br>Estado: <b>'+(d.full?'FULL 📦':'VACÍO ◻')+'</b><br>Operador: '+d.op+'<br><span style="font-size:10px;color:var(--text3);">'+d.ts+'</span></div>'
+      +'</div>'
+      +'<div class="fld"><label>N° Contenedor</label><input type="text" id="m-cont" value="'+d.cont+'" style="text-transform:uppercase;font-family:var(--mono)"></div>'
+      +'<div class="fld-row">'
+      +'<div class="fld"><label>Línea</label><select id="m-linea">'+LINEAS.map(l=>'<option value="'+l+'"'+(l===d.linea?' selected':'')+'>'+l+'</option>').join('')+'</select></div>'
+      +'<div class="fld"><label>Estado</label><select id="m-full"><option value="1"'+(d.full?' selected':'')+'>FULL</option><option value="0"'+(!d.full?' selected':'')+'>VACÍO</option></select></div>'
+      +'</div>'
+      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPERADORES.map(o=>'<option value="'+o+'"'+(o===d.op?' selected':'')+'>'+o+'</option>').join('')+'</select></div>';
+    btns.innerHTML='<button class="btn btn-ok" onclick="confirmar()">✓ Actualizar</button>'
+      +'<button class="btn btn-sal" onclick="vaciar()">↑ Despachar</button>'
+      +'<button class="btn btn-cancel" onclick="cerrarModal()">✕</button>';
   } else {
-    document.getElementById('pop-reubicar-btn').style.display = 'block';
-    document.getElementById('pop-body').innerHTML = [...pila].reverse().map((item, i) => `
-      <div class="pop-piso" style="border-left-color:${item.estado==='VACIO'?'#7F8C8D':'var(--az-medio)'}">
-        <strong>Piso ${pila.length - i}:</strong> <span style="color:var(--az-oscuro);font-weight:800">${item.sigla}</span><br>
-        ${item.cliente} | <span style="font-weight:800;color:${item.estado==='VACIO'?'#7F8C8D':'#27AE60'}">${item.estado}</span>
-      </div>`).join('');
+    body.innerHTML='<div class="fld"><label>N° Contenedor</label><input type="text" id="m-cont" placeholder="OOLU190633-7" style="text-transform:uppercase;font-family:var(--mono)"></div>'
+      +'<div class="fld-row">'
+      +'<div class="fld"><label>Línea / Cliente</label><select id="m-linea">'+LINEAS.map(l=>'<option value="'+l+'">'+l+'</option>').join('')+'</select></div>'
+      +'<div class="fld"><label>Estado</label><select id="m-full"><option value="1">FULL</option><option value="0">VACÍO</option></select></div>'
+      +'</div>'
+      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPERADORES.map(o=>'<option value="'+o+'">'+o+'</option>').join('')+'</select></div>';
+    btns.innerHTML='<button class="btn btn-ok" onclick="confirmar()">📥 Ingresar</button>'
+      +'<button class="btn btn-cancel" onclick="cerrarModal()">✕ Cancelar</button>';
   }
-  
-  document.getElementById('pop-reubicar-btn').onclick = (evt) => {
-    evt.stopPropagation(); cerrarPopover(); levantarGanchoReachstacker(id);
-  };
-  document.getElementById('pop-mando-btn').onclick = () => { cerrarPopover(); abrirMando3D(id, tipoLabel); };
-  
-  pop.style.visibility = 'hidden'; pop.style.display = 'block';
-  const rect = document.getElementById(`casilla-${id}`).getBoundingClientRect();
-  const scrollY = window.scrollY || document.documentElement.scrollTop;
-  const scrollX = window.scrollX || document.documentElement.scrollLeft;
-  let top = rect.top + scrollY - pop.offsetHeight - 10;
-  let left = rect.left + scrollX + rect.width / 2 - pop.offsetWidth / 2;
-  if (top < scrollY + 10) top = rect.bottom + scrollY + 10;
-  if (left < 8) left = 8;
-  pop.style.top = top + 'px'; pop.style.left = left + 'px'; pop.style.visibility = 'visible';
+  document.getElementById('overlay').classList.add('open');
+}
+function cerrarModal(){ document.getElementById('overlay').classList.remove('open'); }
+
+async function confirmar(){
+  var cont=(document.getElementById('m-cont').value||'').trim().toUpperCase();
+  if(!cont){alert('Ingresa el número de contenedor');return;}
+  var linea=document.getElementById('m-linea').value;
+  var full=document.getElementById('m-full').value==='1';
+  var op=document.getElementById('m-op').value;
+  var ts=new Date().toLocaleString('es-CL');
+  var prev=estado[celdaActual];
+  estado[celdaActual]={cont,linea,full,op,ts};
+  historial.unshift({pos:celdaActual,cont,linea,full,op,ts,accion:prev?'ACTUALIZA':'INGRESO'});
+  guardarLocal();cerrarModal();buildYard();renderHist();
+  await syncSheets({pos:celdaActual,cont,linea,full,op,ts,accion:prev?'ACTUALIZA':'INGRESO'});
 }
 
-function levantarGanchoReachstacker(origenId) {
-  const pila = db3D[origenId] || []; if (!pila.length) return;
-  const tope = pila[pila.length - 1];
-  contenedorEnGrua = { origen: origenId, sigla: tope.sigla, cliente: tope.cliente, alto: tope.alto, estado: tope.estado };
-  document.getElementById('crane-sigla-tag').innerText = `${contenedorEnGrua.sigla} (Fila ${origenId})`;
-  document.getElementById('crane-alert').style.display = 'block';
+async function vaciar(){
+  if(!confirm('¿Despachar esta posición?'))return;
+  var d=estado[celdaActual];
+  if(d){var ts=new Date().toLocaleString('es-CL');historial.unshift({pos:celdaActual,cont:d.cont,linea:d.linea,full:d.full,op:d.op,ts,accion:'SALIDA'});await syncSheets({pos:celdaActual,cont:d.cont,linea:d.linea,full:d.full,op:d.op,ts,accion:'SALIDA'});}
+  delete estado[celdaActual];
+  guardarLocal();cerrarModal();buildYard();renderHist();
 }
 
-function completarDescargaReubicacionNube(destinoId) {
-  if (!contenedorEnGrua) return;
-  if (contenedorEnGrua.origen === destinoId) { alert("Movimiento cancelado: Es la misma casilla."); apagarAlertaGrua(); return; }
-  var op = prompt("Operador:\n1. Alexis Perez\n2. Claudio Araya\n3. Joel Poppa", "Alexis Perez");
-  if (!op) { apagarAlertaGrua(); return; }
-
-  setSyncState('loading');
-  const params = {
-    action: "save", tipo: "REUBICACION", origen: contenedorEnGrua.origen, ubicacion: destinoId,
-    sigla: contenedorEnGrua.sigla, cliente: contenedorEnGrua.cliente, alto: contenedorEnGrua.alto, estado: contenedorEnGrua.estado, operador: op,
-    prefix: "procesarTransaccionJSONP"
-  };
-  apagarAlertaGrua(); ejecutarLlamadaInmune(params);
+// ═══ HISTORIAL ════════════════════════════════════
+function renderHist(){
+  var el=document.getElementById('hist-list');
+  if(!historial.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos</div>';return;}
+  var ac={INGRESO:'var(--green)',SALIDA:'var(--red)',ACTUALIZA:'var(--amber)'};
+  el.innerHTML=historial.slice(0,60).map(h=>
+    '<div class="hist-item"><div><div class="hist-accion" style="color:'+( ac[h.accion]||'var(--text2)')+';">'+h.accion+'</div>'
+    +'<div class="hist-info">'+h.cont+' · '+h.pos+'</div>'
+    +'<div style="font-size:10px;color:var(--text3);">'+h.linea+' · '+(h.full?'FULL':'VACÍO')+' · '+h.op+'</div></div>'
+    +'<div class="hist-time">'+(h.ts.split(',')[1]||h.ts)+'</div></div>'
+  ).join('');
 }
 
-function apagarAlertaGrua() { contenedorEnGrua = null; document.getElementById('crane-alert').style.display = 'none'; }
-
-function ejecutarLlamadaInmune(params) {
-  let queryParts = [];
-  for (let key in params) queryParts.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
-  var urlCompleta = URL_WEBAPP_SCRIPT + "?" + queryParts.join("&") + "&_t=" + Date.now();
-  var script = document.createElement("script"); script.src = urlCompleta;
-  document.body.appendChild(script); script.onload = () => { script.remove(); };
+// ═══ BUSCAR ═══════════════════════════════════════
+function buscar(val){
+  val=val.trim().toUpperCase();
+  var el=document.getElementById('search-res');
+  if(val.length<2){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">Ingresa 2+ caracteres</div>';return;}
+  var res=Object.keys(estado).filter(k=>estado[k].cont.includes(val)||estado[k].linea.toUpperCase().includes(val));
+  if(!res.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">No encontrado</div>';return;}
+  el.innerHTML=res.map(k=>{
+    var d=estado[k],c2=COLORES[d.linea]||COLORES.Otros;
+    return '<div class="s-result" style="border-left-color:'+c2.bg+';" onclick="irAPos(\''+k+'\')">'
+      +'<div class="s-cont" style="color:'+c2.txt+';">'+d.cont+'</div>'
+      +'<div class="s-det">'+k+' · '+d.linea+' · '+(d.full?'FULL':'VACÍO')+'</div>'
+      +'<div style="font-size:10px;color:var(--text3);">Op: '+d.op+' · '+d.ts+'</div>'
+      +'</div>';
+  }).join('');
 }
 
-window.procesarTransaccionJSONP = function(res) {
-  showToast('✓ Movimiento guardado', 'ok'); cargarDatosPermanentes();
-};
-
-function cerrarPopover(e) { if (e) e.stopPropagation(); selectedId3D = null; document.getElementById('popover-mall').style.display = 'none'; }
-
-function abrirMando3D(id, tipoLabel) {
-  selectedId3D = id; const pila = db3D[id] || [];
-  document.getElementById('modal-title').innerText = `Mando Manual — Ubicación ${id}`;
-  document.getElementById('form-sigla').value = ''; document.getElementById('form-cliente').value = '';
-  document.getElementById('sigla-error').style.display = 'none';
-  const tieneContenido = pila.length > 0;
-  document.getElementById('sep-despacho').style.display = tieneContenido ? 'block' : 'none';
-  document.getElementById('btn-despachar').style.display = tieneContenido ? 'block' : 'none';
-  document.getElementById('modal-operacion').classList.add('active');
+function irAPos(k){
+  setTab('mapa',document.querySelector('.tab'));
+  setTimeout(function(){
+    var cell=document.getElementById('cell-'+k);
+    if(cell){cell.scrollIntoView({behavior:'smooth',block:'center'});cell.style.boxShadow='0 0 0 3px var(--accent)';setTimeout(()=>cell.style.boxShadow='',2000);}
+  },200);
 }
 
-function cerrarModal() { document.getElementById('modal-operacion').classList.remove('active'); }
-
-function validarSigla(val) {
-  const clean = val.replace(/\s+/g, ''); const ok = clean.length === 0 || ISO_REGEX.test(clean);
-  document.getElementById('sigla-error').style.display = ok ? 'none' : 'block'; return ok;
+// ═══ EXPORT ═══════════════════════════════════════
+function exportCSV(){
+  var rows=[['Posición','Bloque','Pos','Piso','Contenedor','Línea','Estado','Operador','Fecha/Hora']];
+  Object.keys(estado).forEach(k=>{var d=estado[k],p=k.split('-');rows.push([k,p[0],p[1],p[2],d.cont,d.linea,d.full?'FULL':'VACÍO',d.op,d.ts]);});
+  var csv='data:text/csv;charset=utf-8,\uFEFF'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');
+  var a=document.createElement('a');a.href=encodeURI(csv);a.download='CCTI_Deposito_'+new Date().toISOString().split('T')[0]+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 
-function ejecutarIngresoManualPorteria() {
-  const sigla = document.getElementById('form-sigla').value.trim().toUpperCase().replace(/\s+/g,'');
-  const cliente = document.getElementById('form-cliente').value.trim() || 'General';
-  const alto = document.getElementById('form-alto-tipo').value;
-  const estado = document.getElementById('form-estado-carga').value;
-  const operador = document.getElementById('form-operador').value;
-  if (!sigla || !ISO_REGEX.test(sigla)) { showToast('⚠ Sigla inválida', 'err'); return; }
-
-  setSyncState('loading');
-  const params = { action: 'save', tipo: 'INGRESO', ubicacion: selectedId3D, sigla, cliente, alto, estado, operador, origen: 'PORTERÍA', prefix: 'procesarTransaccionJSONP' };
-  cerrarModal(); ejecutarLlamadaInmune(params);
+// ═══ SYNC ═════════════════════════════════════════
+async function syncSheets(data){
+  if(!SCRIPT_URL)return;
+  setSyncDot('spin','Sincronizando...');
+  try{await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});setSyncDot('ok','Sync · '+new Date().toTimeString().slice(0,5));}
+  catch(e){setSyncDot('err','Error sync');}
 }
+function setSyncDot(t,m){document.getElementById('sync-dot').className='sync-dot '+t;document.getElementById('sync-msg').textContent=m;}
 
-function despacharTope3D() {
-  if (!db3D[selectedId3D] || !db3D[selectedId3D].length) return;
-  const unidad = db3D[selectedId3D][db3D[selectedId3D].length - 1];
-  const operador = document.getElementById('form-operador').value;
+// ═══ LOCAL ════════════════════════════════════════
+function guardarLocal(){localStorage.setItem('ccti_dep_estado',JSON.stringify(estado));localStorage.setItem('ccti_dep_hist',JSON.stringify(historial.slice(0,200)));}
 
-  setSyncState('loading');
-  const params = { action: 'delete', ubicacion: selectedId3D, sigla: unidad.sigla, operador, prefix: 'procesarTransaccionJSONP' };
-  cerrarModal(); ejecutarLlamadaInmune(params);
+// ═══ CONFIG ═══════════════════════════════════════
+function guardarCfg(){SCRIPT_URL=document.getElementById('cfg-s').value.trim();localStorage.setItem('ccti_dep_script',SCRIPT_URL);setSyncDot('ok','Google Sheets configurado');alert('Guardado ✓');}
+
+// ═══ TABS ═════════════════════════════════════════
+function setTab(id,btn){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('pane-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
 }
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){setTab(this.textContent.toLowerCase().includes('map')?'mapa':this.textContent.toLowerCase().includes('bus')?'buscar':this.textContent.toLowerCase().includes('his')?'hist':'cfg',this);}));
+
+// ═══ INIT ═════════════════════════════════════════
+document.getElementById('cfg-s').value=SCRIPT_URL;
+if(SCRIPT_URL)setSyncDot('ok','Google Sheets configurado');
+buildYard();renderHist();
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
 </script>
 </body>
 </html>
