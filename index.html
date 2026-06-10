@@ -31,7 +31,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .pane{display:none;}.pane.active{display:block;}
 
-/* ══ MAPA ══════════════════════════════════════════ */
+/* ══ MAPA Y CONTENEDOR ═════════════════════════════ */
 .map-scroll{overflow-x:auto;padding:16px;}
 .map-frame{display:inline-flex;flex-direction:column;align-items:center;gap:6px;}
 .norte-lbl{font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;}
@@ -46,7 +46,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 .bloque-col{display:flex;flex-direction:column;}
 .bloque-hdr{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text2);text-transform:uppercase;text-align:center;padding:5px 4px;border-bottom:1px solid var(--border);}
-.bloque-st{font-size:9px;color:var(--text3);text-align:center;padding:2px;margin-bottom:4px;}
 
 .piso-hdrs{display:flex;gap:3px;margin-left:24px;margin-bottom:4px;}
 .piso-h{width:48px;text-align:center;font-size:8px;color:var(--text2);font-weight:bold;}
@@ -55,15 +54,16 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .pos-lbl{font-size:8px;color:var(--text3);width:22px;text-align:right;margin-right:3px;flex-shrink:0;font-family:var(--mono);}
 .pisos-row{display:flex;gap:3px;}
 
+/* CELDA CON HOVER/TOOLTIP MEJORADO */
 .cell{
   width:48px;height:42px;border-radius:5px;
   border:1px solid var(--border);
   cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;
   font-size:7px;font-weight:600;transition:all .12s;
   background:var(--surface2);color:var(--text3);
-  flex-shrink:0;overflow:hidden;position:relative;gap:1px;
+  flex-shrink:0;overflow:visible;position:relative;gap:1px;
 }
-.cell:hover{border-color:var(--accent);transform:scale(1.06);z-index:5;box-shadow:0 0 8px rgba(0,200,255,.2);}
+.cell:hover{border-color:var(--accent);transform:scale(1.06);z-index:50;box-shadow:0 0 8px rgba(0,200,255,.2);}
 .cell.ocu{border-color:rgba(255,255,255,.2);}
 
 .cell-height-badge {
@@ -72,7 +72,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   right: 3px;
   font-size: 7px;
   font-family: var(--mono);
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   padding: 1px 3px;
   border-radius: 3px;
   color: var(--accent);
@@ -85,6 +85,43 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   color:var(--orange) !important;
 }
 
+/* 💻 REQUERIMIENTO COMPLEMENTADO: CSS Tooltip flotante al pasar el puntero del mouse */
+.cell-tooltip {
+  visibility: hidden;
+  width: 160px;
+  background: #11151c;
+  color: var(--text);
+  text-align: left;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 10px;
+  position: absolute;
+  z-index: 999;
+  bottom: 125%; 
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  font-size: 10px;
+  font-family: var(--sans);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.cell-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--accent) transparent transparent transparent;
+}
+.cell:hover .cell-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
 .cell-gap{width:48px;height:42px;flex-shrink:0;}
 
 .ingreso-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;min-width:360px;}
@@ -94,7 +131,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .legend{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--border);}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2);}
 .leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
-.leg-esp{width:12px;height:12px;border-radius:3px;border:2px dashed var(--orange);flex-shrink:0;}
 
 /* ══ MODAL ═════════════════════════════════════════ */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:flex-end;justify-content:center;}
@@ -108,7 +144,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .modal-title{font-size:15px;font-weight:700;margin-bottom:3px;}
 .modal-pos{font-size:11px;color:var(--text2);margin-bottom:12px;font-family:var(--mono);}
 
-/* VENTANA INFORMATIVA DE LA PILA */
 .pila-info-box {
   background: rgba(0, 200, 255, 0.05);
   border: 1px dashed var(--accent);
@@ -123,7 +158,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   margin-bottom: 4px;
   text-transform: uppercase;
   font-size: 10px;
-  letter-spacing: 0.5px;
 }
 
 .pila-container {
@@ -157,7 +191,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 .fld{margin-bottom:10px;}
 .fld label{display:block;font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text2);text-transform:uppercase;margin-bottom:4px;}
-.fld input,.fld select,.fld textarea{
+.fld input,.fld select{
   width:100%;background:var(--surface);border:1px solid var(--border);
   border-radius:6px;padding:8px 10px;color:var(--text);
   font-family:var(--sans);font-size:13px;
@@ -180,7 +214,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .btn-mv{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,0.2);color:var(--amber);}
 .btn-cancel{background:none;border-color:var(--border);color:var(--text2);flex:0;padding:9px 14px;}
 
-/* PANEL DE MOVIMIENTO INTERNO ENTRE PILAS */
 .panel-mv-box {
   background: rgba(240,165,0,0.04);
   border: 1px solid rgba(240,165,0,0.2);
@@ -246,7 +279,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="leg-item"><div class="leg-dot" style="background:#C62828;"></div>OOCL</div>
     <div class="leg-item"><div class="leg-dot" style="background:#4527A0;"></div>CMA CGM</div>
     <div class="leg-item"><div class="leg-dot" style="background:#00695C;"></div>MSC</div>
-    <div class="leg-item" style="color:var(--text3);font-size:10px;">● punto = VACÍO | [N°] = Contenedores en la pila</div>
+    <div class="leg-item" style="color:var(--text3);font-size:10px;">● punto = VACÍO | [N°] = Contenedores en la pila | 🖲️ Pasa el mouse para ver el detalle</div>
   </div>
 </div>
 
@@ -293,9 +326,9 @@ var MAX_ALTURA = 4;
 
 var LINEAS = ['MAERSK','ONE','OOCL','Hapag-Lloyd','UASC','CMA CGM','MSC','Otros'];
 var COLS = {
-  MAERSK:{bg:'#1565C0',txt:'#B3D4F5'}, ONE:{bg:'#AD1457',txt:'#F9C4D8'}, UASC:{bg:'#2E7D32',txt:'#B8E0BA'},
-  'Hapag-Lloyd':{bg:'#E65100',txt:'#FFD0B0'}, OOCL:{bg:'#C62828',txt:'#FFBBBB'}, 'CMA CGM':{bg:'#4527A0',txt:'#D1C8F5'},
-  MSC:{bg:'#00695C',txt:'#A7DDD6'}, Otros:{bg:'#37474F',txt:'#CFD8DC'}
+  MAERSK:{bg:#1565C0,txt:#B3D4F5}, ONE:{bg:#AD1457,txt:#F9C4D8}, UASC:{bg:#2E7D32,txt:#B8E0BA},
+  'Hapag-Lloyd':{bg:#E65100,txt:#FFD0B0}, OOCL:{bg:#C62828,txt:#FFBBBB}, 'CMA CGM':{bg:#4527A0,txt:#D1C8F5'},
+  MSC:{bg:#00695C,txt:#A7DDD6}, Otros:{bg:#37474F',txt:'#CFD8DC'}
 };
 var OPS = ['Alexis Perez','Joel Popa','Victor Ramirez','Claudio Araya'];
 
@@ -369,10 +402,25 @@ function buildYard(){
 
           var topContenedor = null;
           var alturaOcupada = 0;
+          
+          // 💻 REQUERIMIENTO COMPLEMENTADO: Generación de la información de Tooltip para mouseover en tiempo real
+          var tooltipHTML = `<div class="cell-tooltip"><b>📍 ${bpf.replace('-F',' F')}</b><hr style="border:0;border-top:1px solid var(--border);margin:4px 0;">`;
+          var tieneContenedoresTooltip = false;
+
           for(var p=1; p<=MAX_ALTURA; p++) {
             var d = estado[generarLlavePila(bpf, p)];
-            if(d) { topContenedor = d; alturaOcupada++; }
+            if(d) { 
+              topContenedor = d; 
+              alturaOcupada++; 
+              tieneContenedoresTooltip = true;
+              tooltipHTML += `⚡ P${p}: ${d.cont} [${d.linea}]<br>`;
+            }
           }
+          
+          if(!tieneContenedoresTooltip) {
+            tooltipHTML += `<span style="color:var(--text3)">Pila Disponible</span>`;
+          }
+          tooltipHTML += `</div>`;
 
           if(topContenedor){
             if(topContenedor.estado==='espera'){
@@ -390,6 +438,9 @@ function buildYard(){
             }
             cell.innerHTML += `<span class="cell-height-badge">[${alturaOcupada}]</span>`;
           }
+
+          // Se inyecta el tooltip flotante dentro del HTML de la celda
+          cell.innerHTML += tooltipHTML;
 
           cell.addEventListener('click',function(){ abrirModalPila(this.dataset.bpf); });
           pisos.appendChild(cell);
@@ -432,7 +483,6 @@ function abrirModalPila(bpf){
   document.getElementById('m-title').textContent='Bloque '+p[0]+' · Fila '+p[1]+' · Fondo '+p[2].replace('F','');
   document.getElementById('m-pos').textContent='Ubicación Base: ' + bpf;
   
-  // REQUERIMIENTO COMPLEMENTADO: Ventana emergente informativa con el estado e historial interno de la pila pinchada
   var resumenTexto = [];
   for(var piso=1; piso<=MAX_ALTURA; piso++) {
     var d = estado[generarLlavePila(bpf, piso)];
@@ -443,7 +493,6 @@ function abrirModalPila(bpf){
   document.getElementById('pila-resumen-texto').innerHTML = resumenTexto.length > 0 ? resumenTexto.join('<br>') : 'ℹ️ Pila vacía. Lista para ingreso de contenedores desde la base (P1).';
 
   renderPilaStack();
-  document.getElementById('overlay').classList.add('open');
 }
 
 function renderPilaStack() {
@@ -512,6 +561,7 @@ function renderPilaStack() {
     divNivel.innerHTML = htmlContent;
     stackContainer.appendChild(divNivel);
   }
+  document.getElementById('overlay').classList.add('open');
 }
 
 function conmutarPanelMover(piso) {
@@ -519,7 +569,7 @@ function conmutarPanelMover(piso) {
   if(panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 }
 
-// EJECUTA EL PROCESO DE MOVER UN CONTENEDOR DE UNA PILA A OTRA TOTALMENTE DISTINTA (EJ: C-01-F1-P3 A C-02-F1-P1)
+// 🛠️ CORRECCIÓN: Traslado blindado que limpia por completo el origen de la base de datos local y cierra el modal
 function ejecutarMovimientoInterPila(pisoOrigen) {
   var blDest = document.getElementById(`mv-bl-${pisoOrigen}`).value;
   var posDest = String(document.getElementById(`mv-pos-${pisoOrigen}`).value).padStart(2,'0');
@@ -532,16 +582,24 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
 
   if(llaveOrigen === llaveDestino) { alert('La posición de destino es exactamente la misma.'); return; }
 
-  // Validar si la posición destino está ocupada
   if(estado[llaveDestino]) {
-    if(!confirm(`⚠️ ATENCIÓN:\nLa posición de destino ${llaveDestino.replace('-F',' Fondo ').replace('-P',' Piso ')} ya está ocupada por el contenedor ${estado[llaveDestino].cont}.\n\n¿Deseas sobreescribir el registro?`)) return;
+    if(!confirm(`⚠️ ATENCIÓN:\nLa posición destino ya está ocupada por el contenedor ${estado[llaveDestino].cont}.\n\n¿Deseas sobreescribir el registro?`)) return;
   }
 
   var d = estado[llaveOrigen];
   var ts = new Date().toLocaleString('es-CL');
 
-  // Clonar dato al destino y remover del origen
-  estado[llaveDestino] = { ...d, ts: ts, obs: `Movido desde ${llaveOrigen.replace('-F',' F').replace('-P',' P')}` };
+  // Guardar en destino
+  estado[llaveDestino] = { 
+    cont: d.cont, 
+    linea: d.linea, 
+    estado: d.estado, 
+    op: d.op, 
+    ts: ts, 
+    obs: `Movido desde ${llaveOrigen.replace('-F',' F').replace('-P',' P')}` 
+  };
+  
+  // LIMPIEZA ABSOLUTA DE LA LLAVE DE ORIGEN
   delete estado[llaveOrigen];
 
   historial.unshift({
@@ -555,15 +613,17 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
     accion: 'MOVIMIENTO'
   });
 
-  guardarLocal(); buildYard(); cerrarModal();
+  guardarLocal(); 
+  cerrarModal(); // Cierre automático del modal para evitar bloqueos visuales
+  buildYard(); // Reconstrucción completa del mapa gráfico limpio
+  
   syncSheets({ pos: llaveDestino, cont: d.cont, linea: d.linea, estado: d.estado, op: d.op, obs: `TRASLADO DESDE ${llaveOrigen}`, ts: ts, accion: 'MOVIMIENTO' });
-  alert(`✅ Traslado completado con éxito:\nContenedor: ${d.cont}\nDestino: Bloque ${blDest} · Fila ${parseInt(posDest)} · Fondo ${fDest} · Piso ${pisoDest}`);
 }
 
 function cambiarEstadoDirecto(k, nuevoEst) {
   if(estado[k]) {
     estado[k].estado = nuevoEst;
-    guardarLocal(); buildYard(); renderPilaStack();
+    guardarLocal(); buildYard(); abrirModalPila(celdaActualFondo);
   }
 }
 
@@ -583,10 +643,8 @@ function actualizarNivel(piso) {
   estado[k] = reg;
   
   historial.unshift({ pos: k, cont, linea, estado: reg.estado, op, obs, ts, accion: prev ? 'ACTUALIZA' : 'INGRESO' });
-  guardarLocal(); buildYard();
+  guardarLocal(); buildYard(); abrirModalPila(celdaActualFondo);
   
-  // Refrescar ventana informativa
-  abrirModalPila(celdaActualFondo);
   syncSheets({ pos: k, cont, linea, estado: reg.estado, op, obs, ts, accion: prev ? 'ACTUALIZA' : 'INGRESO' });
 }
 
@@ -602,9 +660,10 @@ function despacharNivel(piso) {
   syncSheets({ pos: k, cont: d.cont, linea: d.linea, estado: d.estado, op: d.op, obs: d.obs||'', ts, accion: 'SALIDA' });
   
   delete estado[k];
-  guardarLocal(); buildYard();
-  abrirModalPila(celdaActualFondo);
+  guardarLocal(); buildYard(); abrirModalPila(celdaActualFondo);
 }
+
+function cerrarModal(){ document.getElementById('overlay').classList.remove('open'); }
 
 function renderHist(){
   var el=document.getElementById('hist-list');
@@ -678,7 +737,7 @@ document.querySelectorAll('.tab').forEach(function(tab){
   });
 });
 
-// START
+// START SEGURO
 buildYard();
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
 </script>
