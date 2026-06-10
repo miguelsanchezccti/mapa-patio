@@ -37,7 +37,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .norte-lbl{font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;}
 .bloques-row{display:flex;align-items:stretch;gap:0;}
 
-/* Lane vertical */
 .lane-v{
   width:34px;display:flex;align-items:center;justify-content:center;
   writing-mode:vertical-lr;font-size:8px;color:var(--text3);letter-spacing:1.5px;
@@ -45,21 +44,17 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   background:rgba(0,200,255,.03);padding:4px 0;
 }
 
-/* Bloque columna */
 .bloque-col{display:flex;flex-direction:column;}
 .bloque-hdr{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text2);text-transform:uppercase;text-align:center;padding:5px 4px;border-bottom:1px solid var(--border);}
 .bloque-st{font-size:9px;color:var(--text3);text-align:center;padding:2px;margin-bottom:4px;}
 
-/* piso headers */
 .piso-hdrs{display:flex;gap:3px;margin-left:24px;margin-bottom:4px;}
 .piso-h{width:48px;text-align:center;font-size:8px;color:var(--text3);}
 
-/* posicion */
 .posicion{display:flex;align-items:center;margin-bottom:3px;}
 .pos-lbl{font-size:8px;color:var(--text3);width:22px;text-align:right;margin-right:3px;flex-shrink:0;font-family:var(--mono);}
 .pisos-row{display:flex;gap:3px;}
 
-/* CELDA */
 .cell{
   width:48px;height:42px;border-radius:5px;
   border:1px solid var(--border);
@@ -71,7 +66,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .cell:hover{border-color:var(--accent);transform:scale(1.06);z-index:5;box-shadow:0 0 8px rgba(0,200,255,.2);}
 .cell.ocu{border-color:rgba(255,255,255,.2);}
 
-/* Estado EN ESPERA CHASIS */
 .cell.espera{
   border:2px dashed var(--orange) !important;
   background:rgba(255,112,67,.08) !important;
@@ -82,15 +76,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   border:1px dashed rgba(255,112,67,.3);border-radius:3px;
 }
 
-/* celda vacía del bloque B en posiciones fuera de rango */
 .cell-gap{width:48px;height:42px;flex-shrink:0;}
 
-/* INGRESO */
 .ingreso-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;min-width:360px;}
 .ing-txt{font-size:11px;color:var(--text2);}
 .oficina{font-size:11px;color:var(--accent);font-family:var(--mono);}
 
-/* LEYENDA */
 .legend{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--border);}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2);}
 .leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
@@ -108,7 +99,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .modal-title{font-size:15px;font-weight:700;margin-bottom:3px;}
 .modal-pos{font-size:11px;color:var(--text2);margin-bottom:18px;font-family:var(--mono);}
 
-/* REGISTRO FORM */
 .fld{margin-bottom:14px;}
 .fld label{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text2);text-transform:uppercase;margin-bottom:6px;}
 .fld input,.fld select,.fld textarea{
@@ -121,7 +111,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .fld-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 
-/* estado badge en el form */
 .estado-btns{display:flex;gap:8px;}
 .est-btn{flex:1;padding:11px 8px;border-radius:8px;border:1.5px solid;background:none;
   font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;}
@@ -132,7 +121,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .est-btn.espera-btn{border-color:rgba(255,112,67,.3);color:var(--orange);}
 .est-btn.espera-btn.sel{background:rgba(255,112,67,.12);border-color:var(--orange);}
 
-/* info container ocupado */
 .ocu-card{background:var(--surface2);border-left:3px solid;border-radius:0 8px 8px 0;padding:14px;margin-bottom:16px;}
 .ocu-num{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:6px;}
 .ocu-detail{font-size:12px;color:var(--text2);line-height:1.8;}
@@ -140,7 +128,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 .fld textarea{resize:vertical;min-height:72px;font-size:13px;}
 
-/* botones accion */
 .btn-row{display:flex;gap:8px;margin-top:18px;}
 .btn{padding:13px;border-radius:9px;border:1px solid;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;flex:1;transition:all .15s;letter-spacing:.3px;}
 .btn-ok{background:rgba(0,200,255,.1);border-color:rgba(0,200,255,.3);color:var(--accent);}
@@ -267,7 +254,14 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
-var CFG_PISOS = JSON.parse(localStorage.getItem('ccti_dep_pisos') || '{"A":3,"B":3,"C":3}');
+// CORRECCIÓN: Estructuración nativa de pisos para evitar el cuelgue si el LocalStorage está limpio
+var basePisos = localStorage.getItem('ccti_dep_pisos');
+if(!basePisos) {
+  basePisos = '{"A":3,"B":3,"C":3}';
+  localStorage.setItem('ccti_dep_pisos', basePisos);
+}
+var CFG_PISOS = JSON.parse(basePisos);
+
 var BLOQUES = [
   {id:'A', posMin:1, posMax:14, pisos:CFG_PISOS.A},
   {id:'B', posMin:6, posMax:11, pisos:CFG_PISOS.B},
@@ -519,10 +513,14 @@ async function confirmar(){
   var ts=new Date().toLocaleString('es-CL');
   var prev=estado[celdaActual];
   var reg={cont,linea,estado:estadoSel,op,obs,ts};
+  
+  // CORRECCIÓN: Asegurar el registro inmediato en tiempo real en la pantalla
   estado[celdaActual]=reg;
   historial.unshift({pos:celdaActual,cont,linea,estado:estadoSel,op,obs,ts,accion:prev?'ACTUALIZA':'INGRESO'});
   guardarLocal(); cerrarModal(); buildYard(); renderHist();
-  await syncSheets({pos:celdaActual,cont,linea,estado:estadoSel,op,obs,ts,accion:prev?'ACTUALIZA':'INGRESO'});
+  
+  // El envío a la nube corre en segundo plano para no congelar la marcha blanca
+  syncSheets({pos:celdaActual,cont,linea,estado:estadoSel,op,obs,ts,accion:prev?'ACTUALIZA':'INGRESO'});
 }
 
 async function vaciar(){
@@ -531,7 +529,7 @@ async function vaciar(){
   if(d){
     var ts=new Date().toLocaleString('es-CL');
     historial.unshift({pos:celdaActual,cont:d.cont,linea:d.linea,estado:d.estado,op:d.op,obs:d.obs||'',ts,accion:'SALIDA'});
-    await syncSheets({pos:celdaActual,cont:d.cont,linea:d.linea,estado:d.estado,op:d.op,obs:d.obs||'',ts,accion:'SALIDA'});
+    syncSheets({pos:celdaActual,cont:d.cont,linea:d.linea,estado:d.estado,op:d.op,obs:d.obs||'',ts,accion:'SALIDA'});
   }
   delete estado[celdaActual];
   guardarLocal(); cerrarModal(); buildYard(); renderHist();
@@ -560,7 +558,7 @@ function mostrarMoverPos(){
   var pisoOpts='<option value="1">Piso 1</option><option value="2">Piso 2</option><option value="3">Piso 3</option>';
 
   var panelMover=`
-    <div style="background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.25);border-radius:10px;padding:14px;margin-top:12px;">
+    <div class="mover-panel" style="background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.25);border-radius:10px;padding:14px;margin-top:12px;">
       <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--amber);text-transform:uppercase;margin-bottom:12px;">📍 Mover a nueva posición</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Contenedor: <b style="color:var(--text);font-family:var(--mono);">${d.cont}</b><br>Desde: <span style="color:var(--text3);">${celdaActual}</span></div>
       <div class="fld-row3">
@@ -592,7 +590,6 @@ async function confirmarMover(){
   }
   if(nuevaKey===celdaActual){alert('Es la misma posición');return;}
   
-  // CORRECCIÓN: Corrección de salto de línea ilegal que rompía la lógica
   if(estado[nuevaKey]){
     if(!confirm('La posición '+nuevaKey+' ya está ocupada con '+estado[nuevaKey].cont+'. ¿Deseas reemplazarla?')) return;
   }
@@ -609,7 +606,7 @@ async function confirmarMover(){
     op:op, obs:'Movido desde '+celdaActual, ts:ts, accion:'MOVIMIENTO'
   });
   guardarLocal(); cerrarModal(); buildYard(); renderHist();
-  await syncSheets({pos:nuevaKey, cont:d.cont, linea:d.linea, estado:d.estado, op:op, obs:'Movido desde '+celdaActual, ts:ts, accion:'MOVIMIENTO'});
+  syncSheets({pos:nuevaKey, cont:d.cont, linea:d.linea, estado:d.estado, op:op, obs:'Movido desde '+celdaActual, ts:ts, accion:'MOVIMIENTO'});
 }
 
 function buscar(val){
@@ -652,15 +649,25 @@ function exportCSV(){
   document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 
+// CORRECCIÓN: Sincronización blindada en try/catch para evitar caídas de marcha blanca
 async function syncSheets(data){
-  if(!SCRIPT_URL)return;
+  if(!SCRIPT_URL) return;
   setSyncDot('spin','Sincronizando...');
   try{
     await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
     setSyncDot('ok','Sync · '+new Date().toTimeString().slice(0,5));
-  }catch(e){setSyncDot('error','Error sync');}
+  }catch(e){
+    setSyncDot('error','Guardado Local (Sin Red)');
+  }
 }
-function setSyncDot(t,m){document.getElementById('sync-dot').className='sync-dot '+t;document.getElementById('sync-msg').textContent=m;}
+function setSyncDot(t,m){
+  var dot = document.getElementById('sync-dot');
+  var msg = document.getElementById('sync-msg');
+  if(dot && msg) {
+    dot.className='sync-dot '+t;
+    msg.textContent=m;
+  }
+}
 
 function guardarLocal(){
   localStorage.setItem('ccti_dep_e',JSON.stringify(estado));
@@ -684,6 +691,7 @@ function guardarCfg(){
   alert('Guardado ✓ — mapa actualizado');
 }
 
+// CORRECCIÓN: Activador de pestañas limpio y directo sin trabas de eventos
 document.querySelectorAll('.tab').forEach(function(tab){
   tab.addEventListener('click',function(){
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -693,14 +701,18 @@ document.querySelectorAll('.tab').forEach(function(tab){
   });
 });
 
-// INIT
+// INIT DISPARADOR SEGURO
 document.getElementById('cfg-s').value=SCRIPT_URL;
 document.getElementById('cfg-pisosA').value=String(CFG_PISOS.A||3);
 document.getElementById('cfg-pisosB').value=String(CFG_PISOS.B||3);
 document.getElementById('cfg-pisosC').value=String(CFG_PISOS.C||3);
+
 if(SCRIPT_URL) setSyncDot('ok','Google Sheets configurado');
+
+// Dibujar el mapa de inmediato al cargar de forma segura
 buildYard();
 renderHist();
+
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
 </script>
 </body>
