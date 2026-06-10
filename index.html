@@ -85,10 +85,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   color:var(--orange) !important;
 }
 
-/* 💻 REQUERIMIENTO COMPLEMENTADO: CSS Tooltip flotante al pasar el puntero del mouse */
+/* 💻 Tooltip flotante al pasar el puntero del mouse */
 .cell-tooltip {
   visibility: hidden;
-  width: 160px;
+  width: 170px;
   background: #11151c;
   color: var(--text);
   text-align: left;
@@ -279,7 +279,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="leg-item"><div class="leg-dot" style="background:#C62828;"></div>OOCL</div>
     <div class="leg-item"><div class="leg-dot" style="background:#4527A0;"></div>CMA CGM</div>
     <div class="leg-item"><div class="leg-dot" style="background:#00695C;"></div>MSC</div>
-    <div class="leg-item" style="color:var(--text3);font-size:10px;">● punto = VACÍO | [N°] = Contenedores en la pila | 🖲️ Pasa el mouse para ver el detalle</div>
+    <div class="leg-item" style="color:var(--text2);font-size:10px;">● punto = VACÍO | [N°] = Contenedores en la pila | 🖲️ Pasa el mouse para ver el detalle en tiempo real</div>
   </div>
 </div>
 
@@ -316,6 +316,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
+// AUTO-INICIALIZACIÓN: Escudo que obliga a Windows/Navegador a pintar el mapa completo pase lo que pase
 var BLOQUES = [
   {id:'A', posMin:1, posMax:14, fondos:3},
   {id:'B', posMin:6, posMax:11, fondos:3},
@@ -326,9 +327,9 @@ var MAX_ALTURA = 4;
 
 var LINEAS = ['MAERSK','ONE','OOCL','Hapag-Lloyd','UASC','CMA CGM','MSC','Otros'];
 var COLS = {
-  MAERSK:{bg:#1565C0,txt:#B3D4F5}, ONE:{bg:#AD1457,txt:#F9C4D8}, UASC:{bg:#2E7D32,txt:#B8E0BA},
-  'Hapag-Lloyd':{bg:#E65100,txt:#FFD0B0}, OOCL:{bg:#C62828,txt:#FFBBBB}, 'CMA CGM':{bg:#4527A0,txt:#D1C8F5'},
-  MSC:{bg:#00695C,txt:#A7DDD6}, Otros:{bg:#37474F',txt:'#CFD8DC'}
+  MAERSK:{bg:'#1565C0',txt:'#B3D4F5'}, ONE:{bg:'#AD1457',txt:'#F9C4D8'}, UASC:{bg:'#2E7D32',txt:'#B8E0BA'},
+  'Hapag-Lloyd':{bg:'#E65100',txt:'#FFD0B0'}, OOCL:{bg:'#C62828',txt:'#FFBBBB'}, 'CMA CGM':{bg:'#4527A0',txt:'#D1C8F5'},
+  MSC:{bg:'#00695C',txt:'#A7DDD6'}, Otros:{bg:'#37474F',txt:'#CFD8DC'}
 };
 var OPS = ['Alexis Perez','Joel Popa','Victor Ramirez','Claudio Araya'];
 
@@ -350,6 +351,7 @@ function generarLlavePila(bloquePosFondo, piso) { return bloquePosFondo + '-P' +
 
 function buildYard(){
   var row = document.getElementById('bloques-row');
+  if(!row) return;
   row.innerHTML = '';
 
   BLOQUES.forEach(function(bl,bi){
@@ -403,22 +405,22 @@ function buildYard(){
           var topContenedor = null;
           var alturaOcupada = 0;
           
-          // 💻 REQUERIMIENTO COMPLEMENTADO: Generación de la información de Tooltip para mouseover en tiempo real
-          var tooltipHTML = `<div class="cell-tooltip"><b>📍 ${bpf.replace('-F',' F')}</b><hr style="border:0;border-top:1px solid var(--border);margin:4px 0;">`;
-          var tieneContenedoresTooltip = false;
+          // 🖲️ REQUERIMIENTO COMPLEMENTADO: Construcción nativa del Tooltip (Puntero del mouse / Hover)
+          var tooltipHTML = `<div class="cell-tooltip"><b>📍 ${bl.id}${parseInt(pos)} — Fondo ${f}</b><hr style="border:0;border-top:1px solid var(--border);margin:4px 0;">`;
+          var tieneUnidades = false;
 
           for(var p=1; p<=MAX_ALTURA; p++) {
             var d = estado[generarLlavePila(bpf, p)];
             if(d) { 
               topContenedor = d; 
               alturaOcupada++; 
-              tieneContenedoresTooltip = true;
-              tooltipHTML += `⚡ P${p}: ${d.cont} [${d.linea}]<br>`;
+              tieneUnidades = true;
+              tooltipHTML += `<span style="color:var(--accent)">P${p}:</span> ${d.cont} [${d.linea}]<br>`;
             }
           }
           
-          if(!tieneContenedoresTooltip) {
-            tooltipHTML += `<span style="color:var(--text3)">Pila Disponible</span>`;
+          if(!tieneUnidades) {
+            tooltipHTML += `<span style="color:var(--text3);font-style:italic;">Espacio Disponible</span>`;
           }
           tooltipHTML += `</div>`;
 
@@ -439,7 +441,7 @@ function buildYard(){
             cell.innerHTML += `<span class="cell-height-badge">[${alturaOcupada}]</span>`;
           }
 
-          // Se inyecta el tooltip flotante dentro del HTML de la celda
+          // Inyectar Tooltip flotante
           cell.innerHTML += tooltipHTML;
 
           cell.addEventListener('click',function(){ abrirModalPila(this.dataset.bpf); });
@@ -469,18 +471,26 @@ function updateStats(){
       }
     }
   });
-  document.getElementById('s-oc').textContent=oc;
-  document.getElementById('s-disp').textContent=tot-oc;
-  document.getElementById('s-full').textContent=full;
-  document.getElementById('s-vac').textContent=vac;
-  document.getElementById('s-esp').textContent=esp;
-  document.getElementById('s-tot').textContent=tot;
+  
+  var elOc = document.getElementById('s-oc');
+  var elDisp = document.getElementById('s-disp');
+  var elFull = document.getElementById('s-full');
+  var elVac = document.getElementById('s-vac');
+  var elEsp = document.getElementById('s-esp');
+  var elTot = document.getElementById('s-tot');
+
+  if(elOc) elOc.textContent=oc;
+  if(elDisp) elDisp.textContent=tot-oc;
+  if(elFull) elFull.textContent=full;
+  if(elVac) elVac.textContent=vac;
+  if(elEsp) elEsp.textContent=esp;
+  if(elTot) elTot.textContent=tot;
 }
 
 function abrirModalPila(bpf){
   celdaActualFondo = bpf;
   var p=bpf.split('-');
-  document.getElementById('m-title').textContent='Bloque '+p[0]+' · Fila '+p[1]+' · Fondo '+p[2].replace('F','');
+  document.getElementById('m-title').textContent='Bloque '+p[0]+' · Fila '+parseInt(p[1])+' · Fondo '+p[2].replace('F','');
   document.getElementById('m-pos').textContent='Ubicación Base: ' + bpf;
   
   var resumenTexto = [];
@@ -497,6 +507,7 @@ function abrirModalPila(bpf){
 
 function renderPilaStack() {
   var stackContainer = document.getElementById('m-pila-stack');
+  if(!stackContainer) return;
   stackContainer.innerHTML = '';
 
   for(var piso=1; piso<=MAX_ALTURA; piso++) {
@@ -569,7 +580,7 @@ function conmutarPanelMover(piso) {
   if(panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 }
 
-// 🛠️ CORRECCIÓN: Traslado blindado que limpia por completo el origen de la base de datos local y cierra el modal
+// 🛠️ TRASLADO MEJORADO: Borra el origen por completo y cierra la ventana al instante para evitar bloqueos visuales
 function ejecutarMovimientoInterPila(pisoOrigen) {
   var blDest = document.getElementById(`mv-bl-${pisoOrigen}`).value;
   var posDest = String(document.getElementById(`mv-pos-${pisoOrigen}`).value).padStart(2,'0');
@@ -589,7 +600,7 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
   var d = estado[llaveOrigen];
   var ts = new Date().toLocaleString('es-CL');
 
-  // Guardar en destino
+  // Registrar en destino
   estado[llaveDestino] = { 
     cont: d.cont, 
     linea: d.linea, 
@@ -599,7 +610,7 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
     obs: `Movido desde ${llaveOrigen.replace('-F',' F').replace('-P',' P')}` 
   };
   
-  // LIMPIEZA ABSOLUTA DE LA LLAVE DE ORIGEN
+  // LIMPIEZA ABSOLUTA DE LA MEMORIA DE ORIGEN
   delete estado[llaveOrigen];
 
   historial.unshift({
@@ -608,14 +619,14 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
     linea: d.linea,
     estado: d.estado,
     op: d.op,
-    obs: `TRASLADO INTERNO OPERATIVO DESDE ${llaveOrigen.replace('-F',' F').replace('-P',' P')}`,
+    obs: `TRASLADO DESDE ${llaveOrigen.replace('-F',' F').replace('-P',' P')}`,
     ts: ts,
     accion: 'MOVIMIENTO'
   });
 
   guardarLocal(); 
-  cerrarModal(); // Cierre automático del modal para evitar bloqueos visuales
-  buildYard(); // Reconstrucción completa del mapa gráfico limpio
+  cerrarModal(); // Cierra la ventana emergente para que no quede pegada en el aire
+  buildYard(); // Redibuja el patio completo con los datos limpios de inmediato
   
   syncSheets({ pos: llaveDestino, cont: d.cont, linea: d.linea, estado: d.estado, op: d.op, obs: `TRASLADO DESDE ${llaveOrigen}`, ts: ts, accion: 'MOVIMIENTO' });
 }
@@ -667,6 +678,7 @@ function cerrarModal(){ document.getElementById('overlay').classList.remove('ope
 
 function renderHist(){
   var el=document.getElementById('hist-list');
+  if(!el) return;
   if(!historial.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos</div>';return;}
   var ac={INGRESO:'var(--green)',SALIDA:'var(--red)',ACTUALIZA:'var(--amber)',MOVIMIENTO:'var(--accent)'};
   el.innerHTML=historial.slice(0,50).map(h=>
@@ -681,6 +693,7 @@ function renderHist(){
 function buscar(val){
   val=val.trim().toUpperCase();
   var el=document.getElementById('search-res');
+  if(!el) return;
   if(val.length<2){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">Ingresa 2+ caracteres</div>';return;}
   var res=Object.keys(estado).filter(k=>estado[k].cont.includes(val)||estado[k].linea.toUpperCase().includes(val));
   if(!res.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">No encontrado</div>';return;}
@@ -737,7 +750,7 @@ document.querySelectorAll('.tab').forEach(function(tab){
   });
 });
 
-// START SEGURO
+// ARRANQUE SEGURO
 buildYard();
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
 </script>
