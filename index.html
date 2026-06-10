@@ -49,12 +49,13 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .bloque-st{font-size:9px;color:var(--text3);text-align:center;padding:2px;margin-bottom:4px;}
 
 .piso-hdrs{display:flex;gap:3px;margin-left:24px;margin-bottom:4px;}
-.piso-h{width:48px;text-align:center;font-size:8px;color:var(--text3);font-weight:bold;}
+.piso-h{width:48px;text-align:center;font-size:8px;color:var(--text2);font-weight:bold;}
 
 .posicion{display:flex;align-items:center;margin-bottom:3px;}
 .pos-lbl{font-size:8px;color:var(--text3);width:22px;text-align:right;margin-right:3px;flex-shrink:0;font-family:var(--mono);}
 .pisos-row{display:flex;gap:3px;}
 
+/* CELDA */
 .cell{
   width:48px;height:42px;border-radius:5px;
   border:1px solid var(--border);
@@ -66,14 +67,23 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .cell:hover{border-color:var(--accent);transform:scale(1.06);z-index:5;box-shadow:0 0 8px rgba(0,200,255,.2);}
 .cell.ocu{border-color:rgba(255,255,255,.2);}
 
+/* Indicador de altura acumulada en el mapa */
+.cell-height-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  font-size: 7px;
+  font-family: var(--mono);
+  background: rgba(0,0,0,0.4);
+  padding: 1px 3px;
+  border-radius: 3px;
+  color: var(--text2);
+}
+
 .cell.espera{
   border:2px dashed var(--orange) !important;
   background:rgba(255,112,67,.08) !important;
   color:var(--orange) !important;
-}
-.cell.espera::after{
-  content:'';position:absolute;inset:3px;
-  border:1px dashed rgba(255,112,67,.3);border-radius:3px;
 }
 
 .cell-gap{width:48px;height:42px;flex-shrink:0;}
@@ -99,21 +109,48 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .modal-title{font-size:15px;font-weight:700;margin-bottom:3px;}
 .modal-pos{font-size:11px;color:var(--text2);margin-bottom:18px;font-family:var(--mono);}
 
-.fld{margin-bottom:14px;}
-.fld label{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text2);text-transform:uppercase;margin-bottom:6px;}
+/* ESTRUCTURA PILA VERTICAL EN EL MODAL */
+.pila-container {
+  display: flex;
+  flex-direction: column-reverse; /* El Piso 4 queda arriba, la Base P1 abajo */
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.pila-nivel {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  position: relative;
+}
+.pila-nivel.activo {
+  border-color: var(--accent);
+  background: rgba(0, 200, 255, 0.03);
+}
+.nivel-lbl {
+  font-size: 9px;
+  font-weight: bold;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.fld{margin-bottom:12px;}
+.fld label{display:block;font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text2);text-transform:uppercase;margin-bottom:4px;}
 .fld input,.fld select,.fld textarea{
-  width:100%;background:var(--surface2);border:1px solid var(--border);
-  border-radius:8px;padding:12px 14px;color:var(--text);
-  font-family:var(--sans);font-size:14px;transition:border-color .2s;
+  width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;padding:8px 10px;color:var(--text);
+  font-family:var(--sans);font-size:13px;
 }
 .fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--accent);}
 .fld input::placeholder{color:var(--text3);}
-.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.fld-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 
-.estado-btns{display:flex;gap:8px;}
-.est-btn{flex:1;padding:11px 8px;border-radius:8px;border:1.5px solid;background:none;
-  font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;}
+.estado-btns{display:flex;gap:6px;}
+.est-btn{flex:1;padding:8px 4px;border-radius:6px;border:1.5px solid;background:none;
+  font-family:var(--sans);font-size:11px;font-weight:700;cursor:pointer;text-align:center;}
 .est-btn.full{border-color:rgba(0,230,118,.3);color:var(--green);}
 .est-btn.full.sel{background:rgba(0,230,118,.12);border-color:var(--green);}
 .est-btn.vacio{border-color:rgba(192,132,252,.3);color:#c084fc;}
@@ -121,33 +158,17 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .est-btn.espera-btn{border-color:rgba(255,112,67,.3);color:var(--orange);}
 .est-btn.espera-btn.sel{background:rgba(255,112,67,.12);border-color:var(--orange);}
 
-.ocu-card{background:var(--surface2);border-left:3px solid;border-radius:0 8px 8px 0;padding:14px;margin-bottom:16px;}
-.ocu-num{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:6px;}
-.ocu-detail{font-size:12px;color:var(--text2);line-height:1.8;}
-.ocu-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-top:6px;}
-
-.fld textarea{resize:vertical;min-height:72px;font-size:13px;}
-
-.btn-row{display:flex;gap:8px;margin-top:18px;}
-.btn{padding:13px;border-radius:9px;border:1px solid;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;flex:1;transition:all .15s;letter-spacing:.3px;}
+.btn-row{display:flex;gap:8px;margin-top:14px;}
+.btn{padding:11px;border-radius:8px;border:1px solid;font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;flex:1;transition:all .15s;}
 .btn-ok{background:rgba(0,200,255,.1);border-color:rgba(0,200,255,.3);color:var(--accent);}
 .btn-sal{background:rgba(255,77,109,.1);border-color:rgba(255,77,109,.3);color:var(--red);}
-.btn-esp{background:rgba(255,112,67,.1);border-color:rgba(255,112,67,.3);color:var(--orange);}
-.btn-cancel{background:none;border-color:var(--border);color:var(--text2);flex:0;padding:13px 16px;}
+.btn-cancel{background:none;border-color:var(--border);color:var(--text2);flex:0;padding:11px 16px;}
 
 /* ══ HISTORIAL ══════════════════════════════════════ */
 .hist-item{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);font-size:11px;}
 .hist-accion{font-weight:700;font-family:var(--mono);font-size:10px;letter-spacing:.5px;}
 .hist-info{color:var(--text2);margin-top:2px;}
-.hist-obs{font-size:10px;color:var(--text3);margin-top:1px;font-style:italic;}
 .hist-time{font-size:10px;color:var(--text3);flex-shrink:0;margin-left:8px;text-align:right;}
-
-/* ══ BUSCAR ══════════════════════════════════════════ */
-.search-wrap{padding:14px;}
-.search-inp{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-size:14px;margin-bottom:12px;}
-.search-inp:focus{outline:none;border-color:var(--accent);}
-.s-result{background:var(--surface2);border-left:3px solid;border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:opacity .15s;}
-.s-result:hover{opacity:.8;}
 
 .sync-bar{padding:7px 14px;font-size:10px;color:var(--text3);display:flex;align-items:center;gap:6px;border-top:1px solid var(--border);}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
@@ -155,8 +176,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .sync-dot.error{background:var(--red);}
 .sync-dot.spin{background:var(--amber);animation:blink .8s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
-@media(max-width:400px){.cell{width:40px;height:36px;}.piso-h{width:40px;}.cell-gap{width:40px;height:36px;}}
 </style>
 </head>
 <body>
@@ -172,14 +191,13 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   <div class="stat"><div class="stat-val" style="color:var(--amber)"  id="s-full">0</div><div class="stat-lbl">Full</div></div>
   <div class="stat"><div class="stat-val" style="color:#c084fc"        id="s-vac">0</div><div class="stat-lbl">Vacío</div></div>
   <div class="stat"><div class="stat-val" style="color:var(--orange)" id="s-esp">0</div><div class="stat-lbl">En espera</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--accent)" id="s-tot">0</div><div class="stat-lbl">Total</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--accent)" id="s-tot">0</div><div class="stat-lbl">Total Columns</div></div>
 </div>
 
 <div class="tabs">
   <div class="tab active" data-tab="mapa">🗺 Mapa</div>
   <div class="tab" data-tab="buscar">🔍 Buscar</div>
   <div class="tab" data-tab="hist">📋 Historial</div>
-  <div class="tab" data-tab="cfg">⚙ Config</div>
 </div>
 
 <div class="pane active" id="pane-mapa">
@@ -203,9 +221,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="leg-item"><div class="leg-dot" style="background:#C62828;"></div>OOCL</div>
     <div class="leg-item"><div class="leg-dot" style="background:#4527A0;"></div>CMA CGM</div>
     <div class="leg-item"><div class="leg-dot" style="background:#00695C;"></div>MSC</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#37474F;"></div>Otros</div>
-    <div class="leg-item"><div class="leg-esp"></div>En espera chasis</div>
-    <div class="leg-item" style="color:var(--text3);font-size:10px;">● punto = VACÍO</div>
+    <div class="leg-item" style="color:var(--text3);font-size:10px;">● punto = VACÍO | [N°] = Altura en la pila</div>
   </div>
 </div>
 
@@ -218,27 +234,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 <div class="pane" id="pane-hist">
   <div id="hist-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos</div></div>
-  <div style="padding:12px;">
-    <button onclick="exportCSV()" style="width:100%;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.2);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:600;padding:12px;border-radius:8px;cursor:pointer;">⬇ Exportar CSV</button>
-  </div>
-</div>
-
-<div class="pane" id="pane-cfg">
-  <div style="padding:16px;">
-    <div class="fld">
-      <label>Google Sheets — Apps Script URL</label>
-      <input type="text" id="cfg-s" placeholder="https://script.google.com/macros/s/..." style="font-size:12px;font-family:var(--mono);">
-    </div>
-    <div class="fld-row3" style="margin-bottom: 14px;">
-      <div class="fld"><label>Pisos Bloque A</label><input type="number" id="cfg-pisosA" min="1" max="5"></div>
-      <div class="fld"><label>Pisos Bloque B</label><input type="number" id="cfg-pisosB" min="1" max="5"></div>
-      <div class="fld"><label>Pisos Bloque C</label><input type="number" id="cfg-pisosC" min="1" max="5"></div>
-    </div>
-    <button onclick="guardarCfg()" style="width:100%;background:rgba(0,200,255,.1);border:1px solid rgba(0,200,255,.3);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:700;padding:13px;border-radius:9px;cursor:pointer;margin-bottom:20px;">✓ Guardar configuración</button>
-    <div style="border-top:1px solid var(--border);padding-top:16px;">
-      <button onclick="if(confirm('¿Resetear todo el estado del patio?')){estado={};historial=[];guardarLocal();buildYard();renderHist();}" style="width:100%;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.25);color:var(--red);font-family:var(--sans);font-size:12px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">⚠ Resetear patio completo</button>
-    </div>
-  </div>
 </div>
 
 <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span id="sync-msg">Sin configurar</span></div>
@@ -248,47 +243,40 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="modal-handle"></div>
     <div class="modal-title" id="m-title">Posición</div>
     <div class="modal-pos" id="m-pos"></div>
-    <div id="m-body"></div>
-    <div class="btn-row" id="m-btns"></div>
+    
+    <div class="pila-container" id="m-pila-stack"></div>
+    
+    <div class="btn-row">
+      <button class="btn btn-cancel" onclick="cerrarModal()" style="width:100%">✕ Cerrar Vista de Pila</button>
+    </div>
   </div>
 </div>
 
 <script>
-// REQUERIMIENTO REESTRUCTURADO: Altura máxima aumentada de fábrica a 4 contenedores (P1 al P4)
-var basePisos = localStorage.getItem('ccti_dep_pisos');
-if(!basePisos) {
-  basePisos = '{"A":4,"B":4,"C":4}';
-  localStorage.setItem('ccti_dep_pisos', basePisos);
-}
-var CFG_PISOS = JSON.parse(basePisos);
-
+// REQUERIMIENTO CUADRADO: 3 Fondos de izquierda a derecha de fábrica
 var BLOQUES = [
-  {id:'A', posMin:1, posMax:14, pisos:CFG_PISOS.A},
-  {id:'B', posMin:6, posMax:11, pisos:CFG_PISOS.B},
-  {id:'C', posMin:1, posMax:14, pisos:CFG_PISOS.C}
+  {id:'A', posMin:1, posMax:14, fondos:3},
+  {id:'B', posMin:6, posMax:11, fondos:3},
+  {id:'C', posMin:1, posMax:14, fondos:3}
 ];
 var POS_GLOBAL_MAX = 14;
+var MAX_ALTURA = 4; // Altura máxima estricta hacia arriba
 
 var LINEAS = ['MAERSK','ONE','OOCL','Hapag-Lloyd','UASC','CMA CGM','MSC','Otros'];
 var COLS = {
-  MAERSK:{bg:'#1565C0',txt:'#B3D4F5'},
-  ONE:{bg:'#AD1457',txt:'#F9C4D8'},
-  UASC:{bg:'#2E7D32',txt:'#B8E0BA'},
-  'Hapag-Lloyd':{bg:'#E65100',txt:'#FFD0B0'},
-  OOCL:{bg:'#C62828',txt:'#FFBBBB'},
-  'CMA CGM':{bg:'#4527A0',txt:'#D1C8F5'},
-  MSC:{bg:'#00695C',txt:'#A7DDD6'},
-  Otros:{bg:'#37474F',txt:'#CFD8DC'}
+  MAERSK:{bg:'#1565C0',txt:'#B3D4F5'}, ONE:{bg:'#AD1457',txt:'#F9C4D8'}, UASC:{bg:'#2E7D32',txt:'#B8E0BA'},
+  'Hapag-Lloyd':{bg:'#E65100',txt:'#FFD0B0'}, OOCL:{bg:'#C62828',txt:'#FFBBBB'}, 'CMA CGM':{bg:'#4527A0',txt:'#D1C8F5'},
+  MSC:{bg:'#00695C',txt:'#A7DDD6'}, Otros:{bg:'#37474F',txt:'#CFD8DC'}
 };
 var OPS = ['Alexis Perez','Joel Popa','Victor Ramirez','Claudio Araya'];
 
-var estado    = JSON.parse(localStorage.getItem('ccti_dep_e') || '{}');
+// La base de datos guarda la llave única: Bloque-Posición-Fondo-Piso (Ej: C-01-F1-P3)
+var estado = JSON.parse(localStorage.getItem('ccti_dep_e') || '{}');
 var historial = JSON.parse(localStorage.getItem('ccti_dep_h') || '[]');
 var SCRIPT_URL = localStorage.getItem('ccti_dep_sc') || '';
-var celdaActual = null;
-var estadoSel = 'full';
+var celdaActualFondo = null; // Guarda Bloque-Posicion-Fondo
 
-function key(b,p,pi){ return b+'-'+String(p).padStart(2,'0')+'-F'+pi; } // Se renombra llave interna a Fondo (F)
+function generarLlavePila(bloquePosFondo, piso) { return bloquePosFondo + '-P' + piso; }
 
 (function tick(){
   var n=new Date(), pad=x=>String(x).padStart(2,'0');
@@ -299,6 +287,7 @@ function key(b,p,pi){ return b+'-'+String(p).padStart(2,'0')+'-F'+pi; } // Se re
   setTimeout(tick,1000);
 })();
 
+// REQUERIMIENTO CUADRADO: Renderizado Fondo 1 (Izquierda) -> Fondo 2 -> Fondo 3 (Derecha)
 function buildYard(){
   var row = document.getElementById('bloques-row');
   row.innerHTML = '';
@@ -306,8 +295,7 @@ function buildYard(){
   BLOQUES.forEach(function(bl,bi){
     if(bi>0){
       var lane=document.createElement('div');
-      lane.className='lane-v';
-      lane.textContent='pasillo · reachstacker';
+      lane.className='lane-v'; lane.textContent='pasillo · reachstacker';
       row.appendChild(lane);
     }
 
@@ -319,17 +307,12 @@ function buildYard(){
     hdr.textContent='Bloque '+bl.id+(bl.id==='A'?' — fondo':bl.id==='C'?' — entrada':'');
     col.appendChild(hdr);
 
-    var st=document.createElement('div');
-    st.className='bloque-st'; st.id='bst-'+bl.id;
-    col.appendChild(st);
-
-    // REQUERIMIENTO COMPLEMENTADO: Mapeo de cabecera visual Fondo 3 (Derecha) -> Fondo 2 -> Fondo 1 (Izquierda)
     var phRow=document.createElement('div');
     phRow.className='piso-hdrs';
-    for(var pi=bl.pisos; pi>=1; pi--){
+    // Izquierda a Derecha: Fondo 1 -> Fondo 2 -> Fondo 3
+    for(var f=1; f<=bl.fondos; f++){
       var ph=document.createElement('div');
-      ph.className='piso-h'; 
-      ph.textContent='F'+pi; // Refleja la columna de fondo en el encabezado
+      ph.className='piso-h'; ph.textContent='F'+f;
       phRow.appendChild(ph);
     }
     col.appendChild(phRow);
@@ -339,8 +322,7 @@ function buildYard(){
       prow.className='posicion';
 
       var plbl=document.createElement('div');
-      plbl.className='pos-lbl';
-      plbl.textContent=pos;
+      plbl.className='pos-lbl'; plbl.textContent=pos;
       prow.appendChild(plbl);
 
       var pisos=document.createElement('div');
@@ -348,67 +330,48 @@ function buildYard(){
 
       var inBloque=(pos>=bl.posMin && pos<=bl.posMax);
 
-      // REQUERIMIENTO COMPLEMENTADO: Renderizado invertido para que F3 quede a la derecha, F2 al medio y F1 a la izquierda
-      for(var pi=bl.pisos; pi>=1; pi--){
+      for(var f=1; f<=bl.fondos; f++){
         if(!inBloque){
           var gap=document.createElement('div');
-          gap.className='cell-gap';
-          pisos.appendChild(gap);
+          gap.className='cell-gap'; pisos.appendChild(gap);
         } else {
-          var k=key(bl.id,pos,pi);
+          var bpf = bl.id + '-' + String(pos).padStart(2,'0') + '-F' + f;
           var cell=document.createElement('div');
           cell.className='cell';
-          cell.id='cell-'+k;
-          cell.dataset.key=k;
-          cell.dataset.bloque=bl.id;
-          cell.dataset.pos=pos;
-          cell.dataset.piso=pi;
+          cell.id='cell-'+bpf;
+          cell.dataset.bpf=bpf;
 
-          var d=estado[k];
-          if(d){
-            if(d.estado==='espera'){
+          // Evaluar qué corona la pila (el contenedor del piso más alto ocupado)
+          var topContenedor = null;
+          var alturaOcupada = 0;
+          for(var p=1; p<=MAX_ALTURA; p++) {
+            var d = estado[generarLlavePila(bpf, p)];
+            if(d) { topContenedor = d; alturaOcupada++; }
+          }
+
+          if(topContenedor){
+            if(topContenedor.estado==='espera'){
               cell.classList.add('espera');
-              var sp=document.createElement('span');
-              sp.style.cssText='font-size:7px;font-weight:700;text-align:center;line-height:1.2;';
-              sp.textContent=d.cont.substring(0,7);
-              cell.appendChild(sp);
-              var sp2=document.createElement('span');
-              sp2.style.cssText='font-size:6px;opacity:.7;';
-              sp2.textContent='⏳ chasis';
-              cell.appendChild(sp2);
+              cell.innerHTML = `<span style="font-size:7px;font-weight:700;color:var(--orange)">${topContenedor.cont.substring(0,7)}</span>`;
             } else {
               cell.classList.add('ocu');
-              var c2=COLS[d.linea]||COLS.Otros;
+              var c2=COLS[topContenedor.linea]||COLS.Otros;
               cell.style.background=c2.bg;
               cell.style.borderColor='rgba(255,255,255,.2)';
-              var sp=document.createElement('span');
-              sp.style.cssText='color:'+c2.txt+';font-size:7px;font-weight:700;text-align:center;line-height:1.2;max-width:46px;overflow:hidden;';
-              sp.textContent=d.cont.substring(0,7);
-              cell.appendChild(sp);
-              if(d.estado==='vacio'){
-                var dot=document.createElement('div');
-                dot.style.cssText='position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);';
-                cell.appendChild(dot);
+              cell.innerHTML = `<span style="color:${c2.txt};font-size:7px;font-weight:700;">${topContenedor.cont.substring(0,7)}</span>`;
+              if(topContenedor.estado==='vacio'){
+                cell.innerHTML += `<div style="position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.6);"></div>`;
               }
             }
+            // Muestra cuántos contenedores hay apilados en ese fondo
+            cell.innerHTML += `<span class="cell-height-badge">[${alturaOcupada}]</span>`;
           }
-          cell.addEventListener('click',function(){ abrirModal(this); });
+
+          cell.addEventListener('click',function(){ abrirModalPila(this.dataset.bpf); });
           pisos.appendChild(cell);
         }
       }
       prow.appendChild(pisos);
-
-      var hayEspera=false;
-      for(var pi2=1;pi2<=bl.pisos;pi2++){
-        var dd=estado[key(bl.id,pos,pi2)];
-        if(dd&&dd.estado==='espera') hayEspera=true;
-      }
-      if(hayEspera){
-        prow.style.paddingBottom='3px';
-        prow.style.borderBottom='1px dashed rgba(255,112,67,.2)';
-        prow.style.marginBottom='5px';
-      }
-
       col.appendChild(prow);
     }
     row.appendChild(col);
@@ -420,14 +383,16 @@ function buildYard(){
 function updateStats(){
   var oc=0,full=0,vac=0,esp=0,tot=0;
   BLOQUES.forEach(function(bl){
-    var bOc=0,bTot=(bl.posMax-bl.posMin+1)*bl.pisos;
-    tot+=bTot;
-    for(var p=bl.posMin;p<=bl.posMax;p++) for(var pi=1;pi<=bl.pisos;pi++){
-      var d=estado[key(bl.id,p,pi)];
-      if(d){oc++;bOc++;if(d.estado==='full')full++;else if(d.estado==='vacio')vac++;else esp++;}
+    tot += (bl.posMax-bl.posMin+1) * bl.fondos * MAX_ALTURA;
+    for(var p=bl.posMin;p<=bl.posMax;p++) {
+      for(var f=1;f<=bl.fondos;f++){
+        var bpf = bl.id + '-' + String(p).padStart(2,'0') + '-F' + f;
+        for(var pi=1; pi<=MAX_ALTURA; pi++) {
+          var d=estado[generarLlavePila(bpf, pi)];
+          if(d){oc++; if(d.estado==='full')full++; else if(d.estado==='vacio')vac++; else esp++;}
+        }
+      }
     }
-    var el=document.getElementById('bst-'+bl.id);
-    if(el) el.textContent=bOc+'/'+bTot+' ocupados';
   });
   document.getElementById('s-oc').textContent=oc;
   document.getElementById('s-disp').textContent=tot-oc;
@@ -437,195 +402,132 @@ function updateStats(){
   document.getElementById('s-tot').textContent=tot;
 }
 
-function abrirModal(cell){
-  celdaActual=cell.dataset.key;
-  estadoSel='full';
-  var b=cell.dataset.bloque, p=cell.dataset.pos, pi=cell.dataset.piso;
+// ABRE LA VISTA DE LA PILA VERTICAL (P1 AL P4)
+function abrirModalPila(bpf){
+  celdaActualFondo = bpf;
+  var p=bpf.split('-');
+  document.getElementById('m-title').textContent='Bloque '+p[0]+' · Fila '+p[1]+' · Fondo '+p[2].replace('F','');
+  document.getElementById('m-pos').textContent='Ubicación: ' + bpf;
   
-  // REQUERIMIENTO COMPLEMENTADO: Ajuste del título del modal indicando el Fondo y agregando selector de Altura de pila
-  document.getElementById('m-title').textContent='Bloque '+b+' · Posición '+p+' · Fondo '+pi;
-  document.getElementById('m-pos').textContent=celdaActual;
-  var d=estado[celdaActual];
-  var body=document.getElementById('m-body');
-  var btns=document.getElementById('m-btns');
-
-  // Selector dinámico para ingresar la altura de apilamiento (máximo 4 contenedores)
-  var alturaSelect = `
-    <div class="fld">
-      <label>Altura de apilamiento (Nivel Pila)</label>
-      <select id="m-altura_pila">
-        <option value="P1" ${d && d.altura_pila==='P1'?'selected':''}>Piso 1 (Base)</option>
-        <option value="P2" ${d && d.altura_pila==='P2'?'selected':''}>Piso 2</option>
-        <option value="P3" ${d && d.altura_pila==='P3'?'selected':''}>Piso 3</option>
-        <option value="P4" ${d && d.altura_pila==='P4'?'selected':''}>Piso 4 (Máx)</option>
-      </select>
-    </div>
-  `;
-
-  if(d){
-    var c2=COLS[d.linea]||COLS.Otros;
-    var badgeTxt=d.estado==='full'?'FULL 📦':d.estado==='vacio'?'VACÍO ◻':'⏳ EN ESPERA CHASIS';
-    var badgeCol=d.estado==='full'?'var(--green)':d.estado==='vacio'?'#c084fc':'var(--orange)';
-    body.innerHTML=
-      '<div class="ocu-card" style="border-left-color:'+c2.bg+';">'
-      +'<div class="ocu-num" style="color:'+c2.txt+';">'+d.cont+'</div>'
-      +'<div class="ocu-detail">'
-      +'Línea: <b>'+d.linea+'</b> | Altura real: <b>'+(d.altura_pila || 'P1')+'</b><br>'
-      +'Operador: '+d.op+'<br>'
-      +'<span style="font-size:10px;color:var(--text3);">'+d.ts+'</span>'
-      +'</div>'
-      +'<span class="ocu-badge" style="background:'+badgeCol+'22;color:'+badgeCol+';border:1px solid '+badgeCol+'44;">'+badgeTxt+'</span>'
-      +(d.obs?'<div style="font-size:11px;color:var(--text2);margin-top:8px;font-style:italic;">'+d.obs+'</div>':'')
-      +'</div>'
-      +'<div class="fld"><label>Actualizar contenedor</label><input type="text" id="m-cont" value="'+d.cont+'" style="text-transform:uppercase;font-family:var(--mono);font-size:15px;"></div>'
-      + alturaSelect
-      +'<div class="fld-row">'
-      +'<div class="fld"><label>Línea</label><select id="m-linea">'+LINEAS.map(l=>'<option value="'+l+'"'+(l===d.linea?' selected':'')+'>'+l+'</option>').join('')+'</select></div>'
-      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPS.map(o=>'<option value="'+o+'"'+(o===d.op?' selected':'')+'>'+o+'</option>').join('')+'</select></div>'
-      +'</div>'
-      +'<div class="fld"><label>Estado del contenedor</label>'
-      +'<div class="estado-btns">'
-      +'<button class="est-btn full'+(d.estado==='full'?' sel':'')+'" onclick="selEstado(\'full\',this)">📦 Full</button>'
-      +'<button class="est-btn vacio'+(d.estado==='vacio'?' sel':'')+'" onclick="selEstado(\'vacio\',this)">◻ Vacío</button>'
-      +'<button class="est-btn espera-btn'+(d.estado==='espera'?' sel':'')+'" onclick="selEstado(\'espera\',this)">⏳ Espera chasis</button>'
-      +'</div></div>'
-      +'<div class="fld"><label>Observaciones</label><textarea id="m-obs" placeholder="Notas adicionales...">'+( d.obs||'')+'</textarea></div>';
-    estadoSel=d.estado||'full';
-    btns.innerHTML='<button class="btn btn-ok" onclick="confirmar()">✓ Actualizar</button>'
-      +'<button class="btn btn-sal" onclick="vaciar()">↑ Despachar</button>'
-      +'<button class="btn" style="background:rgba(240,165,0,.1);border-color:rgba(240,165,0,.3);color:var(--amber);" onclick="mostrarMoverPos()">📍 Mover</button>'
-      +'<button class="btn btn-cancel" onclick="cerrarModal()">✕</button>';
-  } else {
-    body.innerHTML=
-      '<div class="fld"><label>N° Contenedor</label><input type="text" id="m-cont" placeholder="Ej: OOLU190633-7" style="text-transform:uppercase;font-family:var(--mono);font-size:15px;"></div>'
-      + alturaSelect
-      +'<div class="fld-row">'
-      +'<div class="fld"><label>Línea / Cliente</label><select id="m-linea">'+LINEAS.map(l=>'<option value="'+l+'">'+l+'</option>').join('')+'</select></div>'
-      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPS.map(o=>'<option value="'+o+'">'+o+'</option>').join('')+'</select></div>'
-      +'</div>'
-      +'<div class="fld"><label>Estado del contenedor</label>'
-      +'<div class="estado-btns">'
-      +'<button class="est-btn full sel" onclick="selEstado(\'full\',this)">📦 Full</button>'
-      +'<button class="est-btn vacio" onclick="selEstado(\'vacio\',this)">◻ Vacío</button>'
-      +'<button class="est-btn espera-btn" onclick="selEstado(\'espera\',this)">⏳ Espera chasis</button>'
-      +'</div></div>'
-      +'<div class="fld"><label>Observaciones</label><textarea id="m-obs" placeholder="Notas adicionales..."></textarea></div>';
-    btns.innerHTML='<button class="btn btn-ok" onclick="confirmar()">📥 Ingresar</button>'
-      +'<button class="btn btn-cancel" onclick="cerrarModal()">✕ Cancelar</button>';
-  }
+  renderPilaStack();
   document.getElementById('overlay').classList.add('open');
 }
 
-function selEstado(est,btn){
-  estadoSel=est;
-  document.querySelectorAll('.est-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
+// Renderiza cada uno de los 4 niveles de la columna de forma independiente
+function renderPilaStack() {
+  var stackContainer = document.getElementById('m-pila-stack');
+  stackContainer.innerHTML = '';
+
+  for(var piso=1; piso<=MAX_ALTURA; piso++) {
+    var k = generarLlavePila(celdaActualFondo, piso);
+    var d = estado[k];
+    
+    var divNivel = document.createElement('div');
+    divNivel.className = 'pila-nivel' + (d ? ' activo' : '');
+    
+    var htmlContent = `
+      <div class="nivel-lbl">
+        <span>Nivel Altura: Piso ${piso}</span>
+        <span style="color:var(--accent)">${d ? d.ts.split(' ')[1]||'' : 'VACÍO'}</span>
+      </div>
+    `;
+
+    if(d) {
+      var c2 = COLS[d.linea] || COLS.Otros;
+      htmlContent += `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <div class="fld"><label>Contenedor</label><input type="text" value="${d.cont}" id="cont-${piso}" style="text-transform:uppercase; font-family:var(--mono);"></div>
+          <div class="fld"><label>Línea</label><select id="linea-${piso}">${LINEAS.map(l=>`<option value="${l}" ${l===d.linea?'selected':''}>${l}</option>`).join('')}</select></div>
+        </div>
+        <div class="fld-row" style="margin-bottom:8px;">
+          <div class="fld"><label>Operador</label><select id="op-${piso}">${OPS.map(o=>`<option value="${o}" ${o===d.op?'selected':''}>${o}</option>`).join('')}</select></div>
+          <div class="fld"><label>Estado</label>
+            <div class="estado-btns">
+              <button class="est-btn full ${d.estado==='full'?'sel':''}" onclick="cambiarEstadoDirecto('${k}','full')">📦 F</button>
+              <button class="est-btn vacio ${d.estado==='vacio'?'sel':''}" onclick="cambiarEstadoDirecto('${k}','vacio')">◻ V</button>
+              <button class="est-btn espera-btn ${d.estado==='espera'?'sel':''}" onclick="cambiarEstadoDirecto('${k}','espera')">⏳ E</button>
+            </div>
+          </div>
+        </div>
+        <div class="fld"><input type="text" id="obs-${piso}" value="${d.obs||''}" placeholder="Observaciones..."></div>
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="btn btn-ok" onclick="actualizarNivel('${piso}')">✓ Guardar P${piso}</button>
+          <button class="btn btn-sal" onclick="despacharNivel('${piso}')">↑ Despachar</button>
+        </div>
+      `;
+    } else {
+      htmlContent += `
+        <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:8px; margin-bottom:4px;">
+          <div class="fld"><input type="text" id="cont-${piso}" placeholder="Número Contenedor" style="text-transform:uppercase; font-family:var(--mono);"></div>
+          <div class="fld"><select id="linea-${piso}">${LINEAS.map(l=>`<option value="${l}">${l}</option>`).join('')}</select></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="fld"><select id="op-${piso}">${OPS.map(o=>`<option value="${o}">${o}</option>`).join('')}</select></div>
+          <button class="btn btn-ok" onclick="actualizarNivel('${piso}')" style="padding:8px;">📥 Ingresar en P${piso}</button>
+        </div>
+      `;
+    }
+
+    divNivel.innerHTML = htmlContent;
+    stackContainer.appendChild(divNivel);
+  }
+}
+
+function cambiarEstadoDirecto(k, nuevoEst) {
+  if(estado[k]) {
+    estado[k].estado = nuevoEst;
+    guardarLocal(); buildYard(); renderPilaStack();
+  }
 }
 
 function cerrarModal(){ document.getElementById('overlay').classList.remove('open'); }
 
-async function confirmar(){
-  var cont=(document.getElementById('m-cont').value||'').trim().toUpperCase();
-  if(!cont){alert('Ingresa el número de contenedor');return;}
-  var linea=document.getElementById('m-linea').value;
-  var op=document.getElementById('m-op').value;
-  var altura_pila=document.getElementById('m-altura_pila').value;
-  var obs=(document.getElementById('m-obs').value||'').trim();
-  var ts=new Date().toLocaleString('es-CL');
-  var prev=estado[celdaActual];
-  var reg={cont,linea,estado:estadoSel,op,altura_pila,obs,ts};
+function actualizarNivel(piso) {
+  var cont = (document.getElementById(`cont-${piso}`).value || '').trim().toUpperCase();
+  if(!cont) { alert('Falta el número de contenedor'); return; }
   
-  estado[celdaActual]=reg;
-  historial.unshift({pos:celdaActual,cont,linea,estado:estadoSel,op,obs:'['+altura_pila+'] '+obs,ts,accion:prev?'ACTUALIZA':'INGRESO'});
-  guardarLocal(); cerrarModal(); buildYard(); renderHist();
+  var linea = document.getElementById(`linea-${piso}`).value;
+  var op = document.getElementById(`op-${piso}`).value;
+  var obs = document.getElementById(`obs-${piso}`) ? document.getElementById(`obs-${piso}`).value.trim() : '';
+  var ts = new Date().toLocaleString('es-CL');
   
-  syncSheets({pos:celdaActual,cont,linea,estado:estadoSel,op,altura_pila,obs,ts,accion:prev?'ACTUALIZA':'INGRESO'});
+  var k = generarLlavePila(celdaActualFondo, piso);
+  var prev = estado[k];
+  
+  var reg = { cont, linea, estado: prev ? prev.estado : 'full', op, obs, ts };
+  estado[k] = reg;
+  
+  historial.unshift({ pos: k, cont, linea, estado: reg.estado, op, obs, ts, accion: prev ? 'ACTUALIZA' : 'INGRESO' });
+  guardarLocal(); buildYard(); renderPilaStack();
+  syncSheets({ pos: k, cont, linea, estado: reg.estado, op, obs, ts, accion: prev ? 'ACTUALIZA' : 'INGRESO' });
 }
 
-async function vaciar(){
-  if(!confirm('¿Despachar/liberar esta posición?'))return;
-  var d=estado[celdaActual];
-  if(d){
-    var ts=new Date().toLocaleString('es-CL');
-    historial.unshift({pos:celdaActual,cont:d.cont,linea:d.linea,estado:d.estado,op:d.op,obs:d.obs||'',ts,accion:'SALIDA'});
-    syncSheets({pos:celdaActual,cont:d.cont,linea:d.linea,estado:d.estado,op:d.op,obs:d.obs||'',ts,accion:'SALIDA'});
-  }
-  delete estado[celdaActual];
-  guardarLocal(); cerrarModal(); buildYard(); renderHist();
+function despacharNivel(piso) {
+  var k = generarLlavePila(celdaActualFondo, piso);
+  var d = estado[k];
+  if(!d) return;
+  
+  if(!confirm(`¿Despachar contenedor ${d.cont} del Piso ${piso}?`)) return;
+  
+  var ts = new Date().toLocaleString('es-CL');
+  historial.unshift({ pos: k, cont: d.cont, linea: d.linea, estado: d.estado, op: d.op, obs: d.obs||'', ts, accion: 'SALIDA' });
+  syncSheets({ pos: k, cont: d.cont, linea: d.linea, estado: d.estado, op: d.op, obs: d.obs||'', ts, accion: 'SALIDA' });
+  
+  delete estado[k];
+  guardarLocal(); buildYard(); renderPilaStack();
 }
 
 function renderHist(){
   var el=document.getElementById('hist-list');
   if(!historial.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos</div>';return;}
   var ac={INGRESO:'var(--green)',SALIDA:'var(--red)',ACTUALIZA:'var(--amber)',MOVIMIENTO:'var(--accent)'};
-  el.innerHTML=historial.slice(0,80).map(h=>
+  el.innerHTML=historial.slice(0,50).map(h=>
     '<div class="hist-item"><div>'
     +'<div class="hist-accion" style="color:'+(ac[h.accion]||'var(--text2)')+';">'+h.accion+'</div>'
-    +'<div class="hist-info">'+h.cont+' · '+h.pos+'</div>'
-    +'<div style="font-size:10px;color:var(--text3);">'+h.linea+' · '+(h.estado==='full'?'FULL':h.estado==='espera'?'⏳ espera chasis':'VACÍO')+' · '+h.op+'</div>'
-    +(h.obs?'<div class="hist-obs">'+h.obs+'</div>':'')
+    +'<div class="hist-info">'+h.cont+' ➔ Pos: '+h.pos.replace('-P',' Piso ')+'</div>'
+    +'<div style="font-size:10px;color:var(--text3);">'+h.linea+' · '+h.op+'</div>'
     +'</div><div class="hist-time">'+(h.ts.split(',')[1]||h.ts)+'</div></div>'
   ).join('');
-}
-
-function mostrarMoverPos(){
-  var d=estado[celdaActual];
-  if(!d) return;
-  var body=document.getElementById('m-body');
-  var bloqueOpts=BLOQUES.map(bl=>'<option value="'+bl.id+'">Bloque '+bl.id+'</option>').join('');
-  var posOpts='';for(var p=1;p<=14;p++) posOpts+='<option value="'+p+'">'+p+'</option>';
-  var pisoOpts='<option value="1">Fondo 1</option><option value="2">Fondo 2</option><option value="3">Fondo 3</option><option value="4">Fondo 4</option>';
-
-  var panelMover=`
-    <div class="mover-panel" style="background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.25);border-radius:10px;padding:14px;margin-top:12px;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--amber);text-transform:uppercase;margin-bottom:12px;">📍 Mover a nueva posición</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Contenedor: <b style="color:var(--text);font-family:var(--mono);">${d.cont}</b><br>Desde: <span style="color:var(--text3);">${celdaActual}</span></div>
-      <div class="fld-row3">
-        <div class="fld"><label>Bloque</label><select id="mv-bloque">${bloqueOpts}</select></div>
-        <div class="fld"><label>Posición</label><select id="mv-pos">${posOpts}</select></div>
-        <div class="fld"><label>Fondo</label><select id="mv-piso">${pisoOpts}</select></div>
-      </div>
-      <button onclick="confirmarMover()" style="width:100%;background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.35);color:var(--amber);font-family:var(--sans);font-size:13px;font-weight:700;padding:11px;border-radius:8px;cursor:pointer;margin-top:4px;">✓ Confirmar movimiento</button>
-    </div>`;
-  var existing=body.querySelector('.mover-panel');
-  if(existing) existing.remove();
-  var div=document.createElement('div');
-  div.className='mover-panel';
-  div.innerHTML=panelMover;
-  body.appendChild(div);
-  div.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-async function confirmarMover(){
-  var nuevoBloque=document.getElementById('mv-bloque').value;
-  var nuevaPos=document.getElementById('mv-pos').value;
-  var nuevoPiso=document.getElementById('mv-piso').value;
-  var nuevaKey=nuevoBloque+'-'+String(nuevaPos).padStart(2,'0')+'-F'+nuevoPiso;
-
-  var bl=BLOQUES.find(b=>b.id===nuevoBloque);
-  if(bl && (parseInt(nuevaPos)<bl.posMin || parseInt(nuevaPos)>bl.posMax)){
-    alert('El Bloque '+nuevoBloque+' solo tiene posiciones '+bl.posMin+' a '+bl.posMax);
-    return;
-  }
-  if(nuevaKey===celdaActual){alert('Es la misma posición');return;}
-  
-  if(estado[nuevaKey]){
-    if(!confirm('La posición '+nuevaKey+' ya está ocupada con '+estado[nuevaKey].cont+'. ¿Deseas reemplazarla?')) return;
-  }
-
-  var d=estado[celdaActual];
-  var ts=new Date().toLocaleString('es-CL');
-  var op=document.getElementById('m-op')?document.getElementById('m-op').value:d.op;
-
-  estado[nuevaKey]={...d, op:op, ts:ts};
-  delete estado[celdaActual];
-
-  historial.unshift({
-    pos:nuevaKey, cont:d.cont, linea:d.linea, estado:d.estado,
-    op:op, obs:'Movido desde '+celdaActual, ts:ts, accion:'MOVIMIENTO'
-  });
-  guardarLocal(); cerrarModal(); buildYard(); renderHist();
-  syncSheets({pos:nuevaKey, cont:d.cont, linea:d.linea, estado:d.estado, op:op, obs:'Movido desde '+celdaActual, ts:ts, accion:'MOVIMIENTO'});
 }
 
 function buscar(val){
@@ -637,35 +539,32 @@ function buscar(val){
   el.innerHTML=res.map(k=>{
     var d=estado[k], c2=COLS[d.linea]||COLS.Otros;
     var stColor=d.estado==='espera'?'var(--orange)':d.estado==='full'?'var(--green)':'#c084fc';
-    return '<div class="s-result" style="border-left-color:'+c2.bg+';" onclick="irAPos(\''+k+'\')">'
+    var bpf = k.substring(0, 10); // Extrae la celda base
+    return '<div class="s-result" style="border-left-color:'+c2.bg+';" onclick="irAPos(\''+bpf+'\')">'
       +'<div style="font-family:var(--mono);font-size:14px;font-weight:700;color:'+c2.txt+';">'+d.cont+'</div>'
-      +'<div style="font-size:11px;color:var(--text2);margin-top:3px;">'+k.replace('-F','-Fondo ')+' · '+d.linea+'</div>'
-      +'<div style="font-size:11px;margin-top:2px;color:'+stColor+';">'+(d.estado==='full'?'📦 FULL':d.estado==='espera'?'⏳ En espera chasis':'◻ VACÍO')+'</div>'
-      +(d.obs?'<div style="font-size:10px;color:var(--text3);font-style:italic;margin-top:2px;">'+d.obs+'</div>':'')
+      +'<div style="font-size:11px;color:var(--text2);margin-top:3px;">'+k.replace('-F',' Fondo ').replace('-P',' Piso ')+' · '+d.linea+'</div>'
       +'</div>';
   }).join('');
 }
 
-function irAPos(k){
+function irAPos(bpf){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
   document.querySelector('[data-tab="mapa"]').classList.add('active');
   document.getElementById('pane-mapa').classList.add('active');
   setTimeout(function(){
-    var cell=document.getElementById('cell-'+k);
-    if(cell){cell.scrollIntoView({behavior:'smooth',block:'center'});cell.style.boxShadow='0 0 0 3px var(--accent)';setTimeout(()=>cell.style.boxShadow='',2500);}
+    var cell=document.getElementById('cell-'+bpf);
+    if(cell){
+      cell.scrollIntoView({behavior:'smooth',block:'center'});
+      cell.style.boxShadow='0 0 0 3px var(--accent)';
+      setTimeout(()=>cell.style.boxShadow='',2500);
+    }
   },200);
 }
 
-function exportCSV(){
-  var rows=[['Posición','Bloque','Pos','Fondo','Contenedor','Línea','Estado','Operador','Altura Pila','Observación','Fecha/Hora']];
-  Object.keys(estado).forEach(k=>{
-    var d=estado[k],p=k.split('-');
-    rows.push([k,p[0],p[1],p[2].replace('F',''),d.cont,d.linea,d.estado==='full'?'FULL':d.estado==='espera'?'EN ESPERA CHASIS':'VACÍO',d.op,d.altura_pila||'P1',d.obs||'',d.ts]);
-  });
-  var csv='data:text/csv;charset=utf-8,\uFEFF'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');
-  var a=document.createElement('a');a.href=encodeURI(csv);a.download='CCTI_Deposito_'+new Date().toISOString().split('T')[0]+'.csv';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
+function guardarLocal(){
+  localStorage.setItem('ccti_dep_e',JSON.stringify(estado));
+  localStorage.setItem('ccti_dep_h',JSON.stringify(historial.slice(0,100)));
 }
 
 async function syncSheets(data){
@@ -674,39 +573,11 @@ async function syncSheets(data){
   try{
     await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
     setSyncDot('ok','Sync · '+new Date().toTimeString().slice(0,5));
-  }catch(e){
-    setSyncDot('error','Guardado Local (Sin Red)');
-  }
+  }catch(e){ setSyncDot('error','Guardado Local (Sin Red)'); }
 }
 function setSyncDot(t,m){
-  var dot = document.getElementById('sync-dot');
-  var msg = document.getElementById('sync-msg');
-  if(dot && msg) {
-    dot.className='sync-dot '+t;
-    msg.textContent=m;
-  }
-}
-
-function guardarLocal(){
-  localStorage.setItem('ccti_dep_e',JSON.stringify(estado));
-  localStorage.setItem('ccti_dep_h',JSON.stringify(historial.slice(0,200)));
-}
-
-function guardarCfg(){
-  SCRIPT_URL=document.getElementById('cfg-s').value.trim();
-  localStorage.setItem('ccti_dep_sc',SCRIPT_URL);
-  
-  var pisosA=parseInt(document.getElementById('cfg-pisosA').value)||4;
-  var pisosB=parseInt(document.getElementById('cfg-pisosB').value)||4;
-  var pisosC=parseInt(document.getElementById('cfg-pisosC').value)||4;
-  CFG_PISOS={A:pisosA,B:pisosB,C:pisosC};
-  localStorage.setItem('ccti_dep_pisos',JSON.stringify(CFG_PISOS));
-  BLOQUES[0].pisos=pisosA;
-  BLOQUES[1].pisos=pisosB;
-  BLOQUES[2].pisos=pisosC;
-  if(SCRIPT_URL) setSyncDot('ok','Google Sheets configurado');
-  buildYard();
-  alert('Guardado ✓ — mapa actualizado');
+  var dot = document.getElementById('sync-dot'); var msg = document.getElementById('sync-msg');
+  if(dot && msg) { dot.className='sync-dot '+t; msg.textContent=m; }
 }
 
 document.querySelectorAll('.tab').forEach(function(tab){
@@ -715,20 +586,12 @@ document.querySelectorAll('.tab').forEach(function(tab){
     document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
     this.classList.add('active');
     document.getElementById('pane-'+this.dataset.tab).classList.add('active');
+    if(this.dataset.tab === 'hist') renderHist();
   });
 });
 
-// INIT DISPARADOR SEGURO
-document.getElementById('cfg-s').value=SCRIPT_URL;
-document.getElementById('cfg-pisosA').value=String(CFG_PISOS.A||4);
-document.getElementById('cfg-pisosB').value=String(CFG_PISOS.B||4);
-document.getElementById('cfg-pisosC').value=String(CFG_PISOS.C||4);
-
-if(SCRIPT_URL) setSyncDot('ok','Google Sheets configurado');
-
+// START
 buildYard();
-renderHist();
-
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
 </script>
 </body>
