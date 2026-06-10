@@ -9,7 +9,7 @@
 <style>
 :root{
   --bg:#0f1117;--surface:#161b24;--surface2:#1e2535;--border:#252f42;
-  --accent:#00c8ff;--green:#00e676;--red:#ff4d6d;--amber:#f0a500;
+  --accent:#00c8ff;--green:#00e676;--red:#ff4d6d;--amber:#f0a500;--orange:#ff7043;
   --text:#e8f0f8;--text2:#6b82a0;--text3:#3a4f6a;
   --sans:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
 }
@@ -23,119 +23,153 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 .stats-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;gap:14px;overflow-x:auto;}
 .stat{display:flex;flex-direction:column;gap:1px;flex-shrink:0;}
-.stat-val{font-family:var(--mono);font-size:18px;font-weight:600;}
+.stat-val{font-family:var(--mono);font-size:20px;font-weight:600;}
 .stat-lbl{font-size:9px;letter-spacing:1px;color:var(--text2);text-transform:uppercase;}
 
 .tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);}
-.tab{flex:1;padding:10px 8px;text-align:center;font-size:11px;font-weight:600;letter-spacing:.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .15s;}
+.tab{flex:1;padding:11px 8px;text-align:center;font-size:11px;font-weight:600;letter-spacing:.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .15s;}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-
 .pane{display:none;}.pane.active{display:block;}
 
-/* ── MAPA ─────────────────────────────── */
-.map-scroll{overflow-x:auto;padding:14px;}
-.map-frame{display:inline-flex;flex-direction:column;align-items:center;min-width:340px;}
-
-/* norte label */
-.norte{font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:6px;}
-
-/* contenedor de los 3 bloques en columnas */
+/* ══ MAPA ══════════════════════════════════════════ */
+.map-scroll{overflow-x:auto;padding:16px;}
+.map-frame{display:inline-flex;flex-direction:column;align-items:center;gap:6px;}
+.norte-lbl{font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;}
 .bloques-row{display:flex;align-items:stretch;gap:0;}
 
-/* lane vertical entre bloques */
+/* Lane vertical */
 .lane-v{
-  width:28px;display:flex;align-items:center;justify-content:center;
-  writing-mode:vertical-lr;font-size:8px;color:var(--text3);letter-spacing:1px;
+  width:34px;display:flex;align-items:center;justify-content:center;
+  writing-mode:vertical-lr;font-size:8px;color:var(--text3);letter-spacing:1.5px;
   border-left:1px dashed var(--border);border-right:1px dashed var(--border);
-  background:rgba(0,200,255,.03);
+  background:rgba(0,200,255,.03);padding:4px 0;
 }
 
-/* un bloque = columna de posiciones */
-.bloque-col{display:flex;flex-direction:column;align-items:stretch;}
-.bloque-header{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text2);
-  text-transform:uppercase;text-align:center;padding:4px 2px;border-bottom:1px solid var(--border);}
-.bloque-stat{font-size:8px;color:var(--text3);text-align:center;padding:2px;}
+/* Bloque columna */
+.bloque-col{display:flex;flex-direction:column;}
+.bloque-hdr{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text2);text-transform:uppercase;text-align:center;padding:5px 4px;border-bottom:1px solid var(--border);}
+.bloque-st{font-size:9px;color:var(--text3);text-align:center;padding:2px;margin-bottom:4px;}
 
-/* posicion = fila de pisos */
-.posicion{display:flex;align-items:center;margin-bottom:2px;}
-.pos-lbl{font-size:8px;color:var(--text3);width:18px;text-align:right;margin-right:3px;flex-shrink:0;}
+/* piso headers */
+.piso-hdrs{display:flex;gap:3px;margin-left:24px;margin-bottom:4px;}
+.piso-h{width:48px;text-align:center;font-size:8px;color:var(--text3);}
 
-/* pisos de una posicion */
-.pisos-row{display:flex;gap:2px;}
+/* posicion */
+.posicion{display:flex;align-items:center;margin-bottom:3px;}
+.pos-lbl{font-size:8px;color:var(--text3);width:22px;text-align:right;margin-right:3px;flex-shrink:0;font-family:var(--mono);}
+.pisos-row{display:flex;gap:3px;}
 
-/* celda de un contenedor */
+/* CELDA — tamaño aumentado */
 .cell{
-  width:30px;height:22px;border-radius:3px;border:1px solid var(--border);
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  font-size:6px;font-weight:600;transition:all .1s;
-  background:var(--surface2);color:var(--text3);flex-shrink:0;overflow:hidden;
+  width:48px;height:42px;border-radius:5px;
+  border:1px solid var(--border);
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:7px;font-weight:600;transition:all .12s;
+  background:var(--surface2);color:var(--text3);
+  flex-shrink:0;overflow:hidden;position:relative;gap:1px;
 }
-.cell:hover{border-color:var(--accent);transform:scale(1.08);z-index:5;}
+.cell:hover{border-color:var(--accent);transform:scale(1.06);z-index:5;box-shadow:0 0 8px rgba(0,200,255,.2);}
 .cell.ocu{border-color:rgba(255,255,255,.2);}
 
-/* piso labels encabezado */
-.piso-headers{display:flex;gap:2px;justify-content:center;margin-bottom:3px;}
-.piso-h{width:30px;text-align:center;font-size:7px;color:var(--text3);}
-
-/* espacio vacío (B no tiene todas las posiciones) */
-.cell-phantom{width:30px;height:22px;flex-shrink:0;}
-
-/* FONDO y ENTRADA labels */
-.yard-label{font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;text-align:center;padding:4px;}
-
-.ingreso-box{
-  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
-  padding:10px 20px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;
-  min-width:340px;
+/* Estado EN ESPERA CHASIS — borde punteado naranja con gap visual */
+.cell.espera{
+  border:2px dashed var(--orange) !important;
+  background:rgba(255,112,67,.08) !important;
+  color:var(--orange) !important;
 }
+.cell.espera::after{
+  content:'';position:absolute;inset:3px;
+  border:1px dashed rgba(255,112,67,.3);border-radius:3px;
+}
+
+/* celda vacía del bloque B en posiciones fuera de rango */
+.cell-gap{width:48px;height:42px;flex-shrink:0;}
+
+/* INGRESO */
+.ingreso-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;min-width:360px;}
 .ing-txt{font-size:11px;color:var(--text2);}
 .oficina{font-size:11px;color:var(--accent);font-family:var(--mono);}
 
-.legend{display:flex;gap:8px;flex-wrap:wrap;padding:8px 14px;border-top:1px solid var(--border);}
-.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2);}
-.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+/* LEYENDA */
+.legend{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--border);}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2);}
+.leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.leg-esp{width:12px;height:12px;border-radius:3px;border:2px dashed var(--orange);flex-shrink:0;}
 
-/* ── MODAL ────────────────────────────── */
+/* ══ MODAL ═════════════════════════════════════════ */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:flex-end;justify-content:center;}
 .overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px 14px 0 0;padding:20px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
-.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
-.modal-title{font-size:14px;font-weight:600;margin-bottom:4px;}
-.modal-pos{font-size:11px;color:var(--text2);margin-bottom:14px;font-family:var(--mono);}
-.fld{margin-bottom:11px;}
-.fld label{display:block;font-size:10px;letter-spacing:1px;color:var(--text2);text-transform:uppercase;margin-bottom:4px;}
-.fld input,.fld select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 11px;color:var(--text);font-family:var(--sans);font-size:13px;}
-.fld input:focus,.fld select:focus{outline:none;border-color:var(--accent);}
-.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ocu-info{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px;}
-.ocu-cont{font-family:var(--mono);font-size:14px;font-weight:600;margin-bottom:4px;}
-.ocu-det{font-size:11px;color:var(--text2);line-height:1.7;}
-.btn-row{display:flex;gap:8px;margin-top:14px;}
-.btn{padding:11px;border-radius:8px;border:1px solid;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;flex:1;transition:all .15s;}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px 16px 0 0;padding:22px 20px 28px;
+  width:100%;max-width:500px;max-height:88vh;overflow-y:auto;
+}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px;}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:3px;}
+.modal-pos{font-size:11px;color:var(--text2);margin-bottom:18px;font-family:var(--mono);}
+
+/* REGISTRO FORM — espaciado cómodo */
+.fld{margin-bottom:14px;}
+.fld label{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text2);text-transform:uppercase;margin-bottom:6px;}
+.fld input,.fld select,.fld textarea{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px;color:var(--text);
+  font-family:var(--sans);font-size:14px;transition:border-color .2s;
+}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--accent);}
+.fld input::placeholder{color:var(--text3);}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fld-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+
+/* estado badge en el form */
+.estado-btns{display:flex;gap:8px;}
+.est-btn{flex:1;padding:11px 8px;border-radius:8px;border:1.5px solid;background:none;
+  font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;}
+.est-btn.full{border-color:rgba(0,230,118,.3);color:var(--green);}
+.est-btn.full.sel{background:rgba(0,230,118,.12);border-color:var(--green);}
+.est-btn.vacio{border-color:rgba(192,132,252,.3);color:#c084fc;}
+.est-btn.vacio.sel{background:rgba(192,132,252,.12);border-color:#c084fc;}
+.est-btn.espera-btn{border-color:rgba(255,112,67,.3);color:var(--orange);}
+.est-btn.espera-btn.sel{background:rgba(255,112,67,.12);border-color:var(--orange);}
+
+/* info container ocupado */
+.ocu-card{background:var(--surface2);border-left:3px solid;border-radius:0 8px 8px 0;padding:14px;margin-bottom:16px;}
+.ocu-num{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:6px;}
+.ocu-detail{font-size:12px;color:var(--text2);line-height:1.8;}
+.ocu-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-top:6px;}
+
+/* obs textarea */
+.fld textarea{resize:vertical;min-height:72px;font-size:13px;}
+
+/* botones accion */
+.btn-row{display:flex;gap:8px;margin-top:18px;}
+.btn{padding:13px;border-radius:9px;border:1px solid;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;flex:1;transition:all .15s;letter-spacing:.3px;}
 .btn-ok{background:rgba(0,200,255,.1);border-color:rgba(0,200,255,.3);color:var(--accent);}
 .btn-sal{background:rgba(255,77,109,.1);border-color:rgba(255,77,109,.3);color:var(--red);}
-.btn-cancel{background:none;border-color:var(--border);color:var(--text2);flex:0;padding:11px 14px;}
+.btn-esp{background:rgba(255,112,67,.1);border-color:rgba(255,112,67,.3);color:var(--orange);}
+.btn-cancel{background:none;border-color:var(--border);color:var(--text2);flex:0;padding:13px 16px;}
 
-/* ── HISTORIAL ────────────────────────── */
-.hist-item{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 14px;border-bottom:1px solid var(--border);font-size:11px;}
-.hist-accion{font-weight:700;font-family:var(--mono);font-size:10px;}
-.hist-info{color:var(--text2);margin-top:1px;}
-.hist-time{font-size:10px;color:var(--text3);flex-shrink:0;margin-left:8px;}
+/* ══ HISTORIAL ══════════════════════════════════════ */
+.hist-item{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);font-size:11px;}
+.hist-accion{font-weight:700;font-family:var(--mono);font-size:10px;letter-spacing:.5px;}
+.hist-info{color:var(--text2);margin-top:2px;}
+.hist-obs{font-size:10px;color:var(--text3);margin-top:1px;font-style:italic;}
+.hist-time{font-size:10px;color:var(--text3);flex-shrink:0;margin-left:8px;text-align:right;}
 
-/* ── BUSCAR ───────────────────────────── */
+/* ══ BUSCAR ══════════════════════════════════════════ */
 .search-wrap{padding:14px;}
-.search-inp{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;margin-bottom:12px;}
+.search-inp{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-size:14px;margin-bottom:12px;}
 .search-inp:focus{outline:none;border-color:var(--accent);}
-.s-result{background:var(--surface2);border-left:3px solid;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:opacity .15s;}
-.s-result:hover{opacity:.85;}
-.s-cont{font-family:var(--mono);font-size:13px;font-weight:600;}
-.s-det{font-size:11px;color:var(--text2);margin-top:2px;}
+.s-result{background:var(--surface2);border-left:3px solid;border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:opacity .15s;}
+.s-result:hover{opacity:.8;}
 
 .sync-bar{padding:7px 14px;font-size:10px;color:var(--text3);display:flex;align-items:center;gap:6px;border-top:1px solid var(--border);}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
 .sync-dot.ok{background:var(--green);}
 .sync-dot.spin{background:var(--amber);animation:blink .8s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+@media(max-width:400px){.cell{width:40px;height:36px;}.piso-h{width:40px;}.cell-gap{width:40px;height:36px;}}
 </style>
 </head>
 <body>
@@ -146,30 +180,31 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <div class="stats-bar">
-  <div class="stat"><div class="stat-val" style="color:var(--red)" id="s-oc">0</div><div class="stat-lbl">Ocupados</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--green)" id="s-disp">0</div><div class="stat-lbl">Disponibles</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--amber)" id="s-full">0</div><div class="stat-lbl">Full</div></div>
-  <div class="stat"><div class="stat-val" style="color:#c084fc" id="s-vac">0</div><div class="stat-lbl">Vacío</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--accent)" id="s-tot">0</div><div class="stat-lbl">Total pos.</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--red)"    id="s-oc">0</div><div class="stat-lbl">Ocupados</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--green)"  id="s-disp">0</div><div class="stat-lbl">Disponibles</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--amber)"  id="s-full">0</div><div class="stat-lbl">Full</div></div>
+  <div class="stat"><div class="stat-val" style="color:#c084fc"        id="s-vac">0</div><div class="stat-lbl">Vacío</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--orange)" id="s-esp">0</div><div class="stat-lbl">En espera</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--accent)" id="s-tot">0</div><div class="stat-lbl">Total</div></div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="setTab('mapa',this)">🗺 Mapa</div>
-  <div class="tab" onclick="setTab('buscar',this)">🔍 Buscar</div>
-  <div class="tab" onclick="setTab('hist',this)">📋 Historial</div>
-  <div class="tab" onclick="setTab('cfg',this)">⚙ Config</div>
+  <div class="tab active" data-tab="mapa">🗺 Mapa</div>
+  <div class="tab" data-tab="buscar">🔍 Buscar</div>
+  <div class="tab" data-tab="hist">📋 Historial</div>
+  <div class="tab" data-tab="cfg">⚙ Config</div>
 </div>
 
 <!-- MAPA -->
 <div class="pane active" id="pane-mapa">
   <div class="map-scroll">
     <div class="map-frame">
-      <div class="norte">↑ Norte — fondo del depósito</div>
+      <div class="norte-lbl">↑ Norte — fondo del depósito</div>
       <div class="bloques-row" id="bloques-row"></div>
-      <div style="font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;text-align:center;padding:5px;">↓ Sur — entrada</div>
+      <div class="norte-lbl" style="margin-top:4px;">↓ Sur — entrada</div>
       <div class="ingreso-box">
-        <div class="ing-txt">🚛 Ingreso / Salida de camiones</div>
-        <div class="oficina">🏢 Oficina</div>
+        <div class="ing-txt">🚛 Ingreso / Salida camiones</div>
+        <div class="oficina">🏢 Oficina depósito</div>
       </div>
     </div>
   </div>
@@ -183,66 +218,70 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="leg-item"><div class="leg-dot" style="background:#4527A0;"></div>CMA CGM</div>
     <div class="leg-item"><div class="leg-dot" style="background:#00695C;"></div>MSC</div>
     <div class="leg-item"><div class="leg-dot" style="background:#37474F;"></div>Otros</div>
-    <div class="leg-item" style="margin-left:8px;font-size:10px;color:var(--text3);">● punto blanco = VACÍO</div>
+    <div class="leg-item"><div class="leg-esp"></div>En espera chasis</div>
+    <div class="leg-item" style="color:var(--text3);font-size:10px;">● punto = VACÍO</div>
   </div>
 </div>
 
 <!-- BUSCAR -->
 <div class="pane" id="pane-buscar">
   <div class="search-wrap">
-    <input type="text" class="search-inp" placeholder="Buscar contenedor... ej: OOLU190633" style="text-transform:uppercase" oninput="buscar(this.value)">
-    <div id="search-res"><div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">Ingresa 2 o más caracteres</div></div>
+    <input type="text" class="search-inp" placeholder="Buscar contenedor, línea..." style="text-transform:uppercase" oninput="buscar(this.value)">
+    <div id="search-res"><div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">Ingresa 2+ caracteres</div></div>
   </div>
 </div>
 
 <!-- HISTORIAL -->
 <div class="pane" id="pane-hist">
-  <div id="hist-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos aún</div></div>
+  <div id="hist-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos</div></div>
   <div style="padding:12px;">
-    <button onclick="exportCSV()" style="width:100%;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.25);color:var(--accent);font-family:var(--sans);font-size:12px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">⬇ Exportar CSV</button>
+    <button onclick="exportCSV()" style="width:100%;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.2);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:600;padding:12px;border-radius:8px;cursor:pointer;">⬇ Exportar CSV</button>
   </div>
 </div>
 
 <!-- CONFIG -->
 <div class="pane" id="pane-cfg">
-  <div style="padding:14px;">
-    <div class="fld"><label>Google Sheets — Apps Script URL</label>
-      <input type="text" id="cfg-s" placeholder="https://script.google.com/macros/s/..." style="font-size:11px;font-family:var(--mono);">
+  <div style="padding:16px;">
+    <div class="fld">
+      <label>Google Sheets — Apps Script URL</label>
+      <input type="text" id="cfg-s" placeholder="https://script.google.com/macros/s/..." style="font-size:12px;font-family:var(--mono);">
     </div>
-    <button onclick="guardarCfg()" style="width:100%;background:rgba(0,200,255,.1);border:1px solid rgba(0,200,255,.3);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">✓ Guardar</button>
-    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
-      <button onclick="if(confirm('¿Resetear todo el estado del patio?')){estado={};historial=[];guardarLocal();buildYard();renderHist();}" style="width:100%;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.25);color:var(--red);font-family:var(--sans);font-size:12px;font-weight:600;padding:10px;border-radius:8px;cursor:pointer;">⚠ Resetear patio</button>
+    <button onclick="guardarCfg()" style="width:100%;background:rgba(0,200,255,.1);border:1px solid rgba(0,200,255,.3);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:700;padding:13px;border-radius:9px;cursor:pointer;margin-bottom:20px;">✓ Guardar configuración</button>
+    <div style="border-top:1px solid var(--border);padding-top:16px;">
+      <button onclick="if(confirm('¿Resetear todo el estado del patio?')){estado={};historial=[];guardarLocal();buildYard();renderHist();}" style="width:100%;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.25);color:var(--red);font-family:var(--sans);font-size:12px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">⚠ Resetear patio completo</button>
     </div>
   </div>
 </div>
 
 <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span id="sync-msg">Sin configurar</span></div>
 
-<!-- MODAL -->
+<!-- MODAL REGISTRO -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="m-title"></div>
-    <div class="modal-pos"  id="m-pos"></div>
+    <div class="modal-title" id="m-title">Posición</div>
+    <div class="modal-pos" id="m-pos"></div>
     <div id="m-body"></div>
     <div class="btn-row" id="m-btns"></div>
   </div>
 </div>
 
 <script>
-// ═══ ESTRUCTURA DEL DEPÓSITO ══════════════════════
-// Bloques como columnas norte-sur
-// Posición 1 = sur (entrada), 14 = norte (fondo)
-// Bloque B solo tiene posiciones 6-11
-
+// ═══════════════════════════════════════════════
+// ESTRUCTURA DEL DEPÓSITO
+// Bloques como columnas norte→sur (pos 14 = norte, pos 1 = sur/entrada)
+// Bloque B solo posiciones 6-11
+// ═══════════════════════════════════════════════
+var CFG_PISOS = JSON.parse(localStorage.getItem('ccti_dep_pisos') || '{"A":3,"B":3,"C":3}');
 var BLOQUES = [
-  {id:'A', nombre:'Bloque A', posMin:1, posMax:14, pisos:3},
-  {id:'B', nombre:'Bloque B', posMin:6, posMax:11, pisos:3},
-  {id:'C', nombre:'Bloque C', posMin:1, posMax:14, pisos:3}
+  {id:'A', posMin:1, posMax:14, pisos:CFG_PISOS.A},
+  {id:'B', posMin:6, posMax:11, pisos:CFG_PISOS.B},
+  {id:'C', posMin:1, posMax:14, pisos:CFG_PISOS.C}
 ];
+var POS_GLOBAL_MAX = 14;
 
 var LINEAS = ['MAERSK','ONE','OOCL','Hapag-Lloyd','UASC','CMA CGM','MSC','Otros'];
-var COLORES = {
+var COLS = {
   MAERSK:{bg:'#1565C0',txt:'#B3D4F5'},
   ONE:{bg:'#AD1457',txt:'#F9C4D8'},
   UASC:{bg:'#2E7D32',txt:'#B8E0BA'},
@@ -252,17 +291,18 @@ var COLORES = {
   MSC:{bg:'#00695C',txt:'#A7DDD6'},
   Otros:{bg:'#37474F',txt:'#CFD8DC'}
 };
-var OPERADORES=['Alexis Perez','Joel Popa','Victor Ramirez','Claudio Araya'];
+var OPS = ['Alexis Perez','Joel Popa','Victor Ramirez','Claudio Araya'];
 
-// ═══ ESTADO ═══════════════════════════════════════
-var estado   = JSON.parse(localStorage.getItem('ccti_dep_estado')||'{}');
-var historial= JSON.parse(localStorage.getItem('ccti_dep_hist')  ||'[]');
-var SCRIPT_URL = localStorage.getItem('ccti_dep_script')||'';
+// ESTADOS: 'full' | 'vacio' | 'espera'
+var estado    = JSON.parse(localStorage.getItem('ccti_dep_e') || '{}');
+var historial = JSON.parse(localStorage.getItem('ccti_dep_h') || '[]');
+var SCRIPT_URL = localStorage.getItem('ccti_dep_sc') || '';
 var celdaActual = null;
+var estadoSel = 'full'; // estado seleccionado en el modal
 
 function key(b,p,pi){ return b+'-'+String(p).padStart(2,'0')+'-P'+pi; }
 
-// ═══ RELOJ ════════════════════════════════════════
+// ── Reloj ──────────────────────────────────────
 (function tick(){
   var n=new Date(), pad=x=>String(x).padStart(2,'0');
   var el=document.getElementById('clk');
@@ -272,50 +312,44 @@ function key(b,p,pi){ return b+'-'+String(p).padStart(2,'0')+'-P'+pi; }
   setTimeout(tick,1000);
 })();
 
-// ═══ BUILD MAPA ═══════════════════════════════════
+// ── BUILD MAPA ─────────────────────────────────
 function buildYard(){
   var row = document.getElementById('bloques-row');
-  row.innerHTML='';
-
-  // Posiciones máximas globales para alinear todos los bloques
-  var POS_MAX = 14; // todos los bloques se alinean de 1 a 14
+  row.innerHTML = '';
 
   BLOQUES.forEach(function(bl,bi){
     if(bi>0){
       var lane=document.createElement('div');
       lane.className='lane-v';
-      lane.textContent='pasillo reachstacker';
+      lane.textContent='pasillo · reachstacker';
       row.appendChild(lane);
     }
 
     var col=document.createElement('div');
     col.className='bloque-col';
 
-    // Header del bloque
+    // Header
     var hdr=document.createElement('div');
-    hdr.className='bloque-header';
-    hdr.textContent='Bloque '+bl.id;
+    hdr.className='bloque-hdr';
+    hdr.textContent='Bloque '+bl.id+(bl.id==='A'?' — fondo':bl.id==='C'?' — entrada':'');
     col.appendChild(hdr);
 
     var st=document.createElement('div');
-    st.className='bloque-stat';
-    st.id='bst-'+bl.id;
-    st.textContent='—';
+    st.className='bloque-st'; st.id='bst-'+bl.id;
     col.appendChild(st);
 
-    // Piso labels (P3 P2 P1)
-    var pisoHdr=document.createElement('div');
-    pisoHdr.className='piso-headers';
-    pisoHdr.style.marginLeft='21px';
+    // Piso headers P3 P2 P1
+    var phRow=document.createElement('div');
+    phRow.className='piso-hdrs';
     for(var pi=bl.pisos;pi>=1;pi--){
       var ph=document.createElement('div');
       ph.className='piso-h'; ph.textContent='P'+pi;
-      pisoHdr.appendChild(ph);
+      phRow.appendChild(ph);
     }
-    col.appendChild(pisoHdr);
+    col.appendChild(phRow);
 
-    // Posiciones de 14 → 1 (norte arriba, sur abajo)
-    for(var pos=POS_MAX; pos>=1; pos--){
+    // Posiciones 14 → 1 (norte arriba)
+    for(var pos=POS_GLOBAL_MAX; pos>=1; pos--){
       var prow=document.createElement('div');
       prow.className='posicion';
 
@@ -327,13 +361,13 @@ function buildYard(){
       var pisos=document.createElement('div');
       pisos.className='pisos-row';
 
-      var enBloque = (pos >= bl.posMin && pos <= bl.posMax);
+      var inBloque=(pos>=bl.posMin && pos<=bl.posMax);
 
       for(var pi=bl.pisos;pi>=1;pi--){
-        if(!enBloque){
-          var ph2=document.createElement('div');
-          ph2.className='cell-phantom';
-          pisos.appendChild(ph2);
+        if(!inBloque){
+          var gap=document.createElement('div');
+          gap.className='cell-gap';
+          pisos.appendChild(gap);
         } else {
           var k=key(bl.id,pos,pi);
           var cell=document.createElement('div');
@@ -343,20 +377,35 @@ function buildYard(){
           cell.dataset.bloque=bl.id;
           cell.dataset.pos=pos;
           cell.dataset.piso=pi;
+
           var d=estado[k];
           if(d){
-            cell.classList.add('ocu');
-            var col2=COLORES[d.linea]||COLORES.Otros;
-            cell.style.background=col2.bg;
-            cell.style.borderColor='rgba(255,255,255,.2)';
-            var span=document.createElement('span');
-            span.style.cssText='color:'+col2.txt+';font-size:6px;font-weight:600;text-align:center;line-height:1.1;overflow:hidden;max-width:28px;';
-            span.textContent=d.cont.substring(0,6);
-            cell.appendChild(span);
-            if(!d.full){
-              var dot=document.createElement('div');
-              dot.style.cssText='position:absolute;top:2px;right:2px;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5);';
-              cell.appendChild(dot);
+            if(d.estado==='espera'){
+              // EN ESPERA CHASIS — borde dashed naranja con gap visual
+              cell.classList.add('espera');
+              var sp=document.createElement('span');
+              sp.style.cssText='font-size:7px;font-weight:700;text-align:center;line-height:1.2;';
+              sp.textContent=d.cont.substring(0,7);
+              cell.appendChild(sp);
+              var sp2=document.createElement('span');
+              sp2.style.cssText='font-size:6px;opacity:.7;';
+              sp2.textContent='⏳ chasis';
+              cell.appendChild(sp2);
+            } else {
+              cell.classList.add('ocu');
+              var c2=COLS[d.linea]||COLS.Otros;
+              cell.style.background=c2.bg;
+              cell.style.borderColor='rgba(255,255,255,.2)';
+              var sp=document.createElement('span');
+              sp.style.cssText='color:'+c2.txt+';font-size:7px;font-weight:700;text-align:center;line-height:1.2;max-width:46px;overflow:hidden;';
+              sp.textContent=d.cont.substring(0,7);
+              cell.appendChild(sp);
+              // punto blanco = VACÍO
+              if(d.estado==='vacio'){
+                var dot=document.createElement('div');
+                dot.style.cssText='position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);';
+                cell.appendChild(dot);
+              }
             }
           }
           cell.addEventListener('click',function(){ abrirModal(this); });
@@ -364,6 +413,19 @@ function buildYard(){
         }
       }
       prow.appendChild(pisos);
+
+      // Separador visual entre posiciones con espera
+      var hayEspera=false;
+      for(var pi2=1;pi2<=bl.pisos;pi2++){
+        var dd=estado[key(bl.id,pos,pi2)];
+        if(dd&&dd.estado==='espera') hayEspera=true;
+      }
+      if(hayEspera){
+        prow.style.paddingBottom='3px';
+        prow.style.borderBottom='1px dashed rgba(255,112,67,.2)';
+        prow.style.marginBottom='5px';
+      }
+
       col.appendChild(prow);
     }
     row.appendChild(col);
@@ -373,98 +435,206 @@ function buildYard(){
 }
 
 function updateStats(){
-  var oc=0,full=0,vac=0,tot=0;
+  var oc=0,full=0,vac=0,esp=0,tot=0;
   BLOQUES.forEach(function(bl){
     var bOc=0,bTot=(bl.posMax-bl.posMin+1)*bl.pisos;
     tot+=bTot;
     for(var p=bl.posMin;p<=bl.posMax;p++) for(var pi=1;pi<=bl.pisos;pi++){
       var d=estado[key(bl.id,p,pi)];
-      if(d){oc++;bOc++;if(d.full)full++;else vac++;}
+      if(d){oc++;bOc++;if(d.estado==='full')full++;else if(d.estado==='vacio')vac++;else esp++;}
     }
     var el=document.getElementById('bst-'+bl.id);
-    if(el) el.textContent=bOc+'/'+bTot;
+    if(el) el.textContent=bOc+'/'+bTot+' ocupados';
   });
   document.getElementById('s-oc').textContent=oc;
   document.getElementById('s-disp').textContent=tot-oc;
   document.getElementById('s-full').textContent=full;
   document.getElementById('s-vac').textContent=vac;
+  document.getElementById('s-esp').textContent=esp;
   document.getElementById('s-tot').textContent=tot;
 }
 
-// ═══ MODAL ════════════════════════════════════════
+// ── MODAL ──────────────────────────────────────
 function abrirModal(cell){
   celdaActual=cell.dataset.key;
-  var b=cell.dataset.bloque,p=cell.dataset.pos,pi=cell.dataset.piso;
+  estadoSel='full';
+  var b=cell.dataset.bloque, p=cell.dataset.pos, pi=cell.dataset.piso;
   document.getElementById('m-title').textContent='Bloque '+b+' · Posición '+p+' · Piso '+pi;
   document.getElementById('m-pos').textContent=celdaActual;
   var d=estado[celdaActual];
   var body=document.getElementById('m-body');
   var btns=document.getElementById('m-btns');
+
   if(d){
-    var c2=COLORES[d.linea]||COLORES.Otros;
-    body.innerHTML='<div class="ocu-info" style="border-left:3px solid '+c2.bg+';">'
-      +'<div class="ocu-cont" style="color:'+c2.txt+';">'+d.cont+'</div>'
-      +'<div class="ocu-det">Línea: '+d.linea+'<br>Estado: <b>'+(d.full?'FULL 📦':'VACÍO ◻')+'</b><br>Operador: '+d.op+'<br><span style="font-size:10px;color:var(--text3);">'+d.ts+'</span></div>'
+    var c2=COLS[d.linea]||COLS.Otros;
+    var badgeTxt=d.estado==='full'?'FULL 📦':d.estado==='vacio'?'VACÍO ◻':'⏳ EN ESPERA CHASIS';
+    var badgeCol=d.estado==='full'?'var(--green)':d.estado==='vacio'?'#c084fc':'var(--orange)';
+    body.innerHTML=
+      '<div class="ocu-card" style="border-left-color:'+c2.bg+';">'
+      +'<div class="ocu-num" style="color:'+c2.txt+';">'+d.cont+'</div>'
+      +'<div class="ocu-detail">'
+      +'Línea: <b>'+d.linea+'</b><br>'
+      +'Operador: '+d.op+'<br>'
+      +'<span style="font-size:10px;color:var(--text3);">'+d.ts+'</span>'
       +'</div>'
-      +'<div class="fld"><label>N° Contenedor</label><input type="text" id="m-cont" value="'+d.cont+'" style="text-transform:uppercase;font-family:var(--mono)"></div>'
+      +'<span class="ocu-badge" style="background:'+badgeCol+'22;color:'+badgeCol+';border:1px solid '+badgeCol+'44;">'+badgeTxt+'</span>'
+      +(d.obs?'<div style="font-size:11px;color:var(--text2);margin-top:8px;font-style:italic;">'+d.obs+'</div>':'')
+      +'</div>'
+      +'<div class="fld"><label>Actualizar contenedor</label><input type="text" id="m-cont" value="'+d.cont+'" style="text-transform:uppercase;font-family:var(--mono);font-size:15px;"></div>'
       +'<div class="fld-row">'
       +'<div class="fld"><label>Línea</label><select id="m-linea">'+LINEAS.map(l=>'<option value="'+l+'"'+(l===d.linea?' selected':'')+'>'+l+'</option>').join('')+'</select></div>'
-      +'<div class="fld"><label>Estado</label><select id="m-full"><option value="1"'+(d.full?' selected':'')+'>FULL</option><option value="0"'+(!d.full?' selected':'')+'>VACÍO</option></select></div>'
+      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPS.map(o=>'<option value="'+o+'"'+(o===d.op?' selected':'')+'>'+o+'</option>').join('')+'</select></div>'
       +'</div>'
-      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPERADORES.map(o=>'<option value="'+o+'"'+(o===d.op?' selected':'')+'>'+o+'</option>').join('')+'</select></div>';
+      +'<div class="fld"><label>Estado del contenedor</label>'
+      +'<div class="estado-btns">'
+      +'<button class="est-btn full'+(d.estado==='full'?' sel':'')+'" onclick="selEstado(\'full\',this)">📦 Full</button>'
+      +'<button class="est-btn vacio'+(d.estado==='vacio'?' sel':'')+'" onclick="selEstado(\'vacio\',this)">◻ Vacío</button>'
+      +'<button class="est-btn espera-btn'+(d.estado==='espera'?' sel':'')+'" onclick="selEstado(\'espera\',this)">⏳ Espera chasis</button>'
+      +'</div></div>'
+      +'<div class="fld"><label>Observaciones</label><textarea id="m-obs" placeholder="Notas adicionales...">'+( d.obs||'')+'</textarea></div>';
+    estadoSel=d.estado||'full';
     btns.innerHTML='<button class="btn btn-ok" onclick="confirmar()">✓ Actualizar</button>'
       +'<button class="btn btn-sal" onclick="vaciar()">↑ Despachar</button>'
+      +'<button class="btn" style="background:rgba(240,165,0,.1);border-color:rgba(240,165,0,.3);color:var(--amber);" onclick="mostrarMoverPos()">📍 Mover</button>'
       +'<button class="btn btn-cancel" onclick="cerrarModal()">✕</button>';
   } else {
-    body.innerHTML='<div class="fld"><label>N° Contenedor</label><input type="text" id="m-cont" placeholder="OOLU190633-7" style="text-transform:uppercase;font-family:var(--mono)"></div>'
+    body.innerHTML=
+      '<div class="fld"><label>N° Contenedor</label><input type="text" id="m-cont" placeholder="Ej: OOLU190633-7" style="text-transform:uppercase;font-family:var(--mono);font-size:15px;"></div>'
       +'<div class="fld-row">'
       +'<div class="fld"><label>Línea / Cliente</label><select id="m-linea">'+LINEAS.map(l=>'<option value="'+l+'">'+l+'</option>').join('')+'</select></div>'
-      +'<div class="fld"><label>Estado</label><select id="m-full"><option value="1">FULL</option><option value="0">VACÍO</option></select></div>'
+      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPS.map(o=>'<option value="'+o+'">'+o+'</option>').join('')+'</select></div>'
       +'</div>'
-      +'<div class="fld"><label>Operador</label><select id="m-op">'+OPERADORES.map(o=>'<option value="'+o+'">'+o+'</option>').join('')+'</select></div>';
+      +'<div class="fld"><label>Estado del contenedor</label>'
+      +'<div class="estado-btns">'
+      +'<button class="est-btn full sel" onclick="selEstado(\'full\',this)">📦 Full</button>'
+      +'<button class="est-btn vacio" onclick="selEstado(\'vacio\',this)">◻ Vacío</button>'
+      +'<button class="est-btn espera-btn" onclick="selEstado(\'espera\',this)">⏳ Espera chasis</button>'
+      +'</div></div>'
+      +'<div class="fld"><label>Observaciones</label><textarea id="m-obs" placeholder="Notas adicionales..."></textarea></div>';
     btns.innerHTML='<button class="btn btn-ok" onclick="confirmar()">📥 Ingresar</button>'
       +'<button class="btn btn-cancel" onclick="cerrarModal()">✕ Cancelar</button>';
   }
   document.getElementById('overlay').classList.add('open');
 }
+
+function selEstado(est,btn){
+  estadoSel=est;
+  document.querySelectorAll('.est-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
 function cerrarModal(){ document.getElementById('overlay').classList.remove('open'); }
 
 async function confirmar(){
   var cont=(document.getElementById('m-cont').value||'').trim().toUpperCase();
   if(!cont){alert('Ingresa el número de contenedor');return;}
   var linea=document.getElementById('m-linea').value;
-  var full=document.getElementById('m-full').value==='1';
   var op=document.getElementById('m-op').value;
+  var obs=(document.getElementById('m-obs').value||'').trim();
   var ts=new Date().toLocaleString('es-CL');
   var prev=estado[celdaActual];
-  estado[celdaActual]={cont,linea,full,op,ts};
-  historial.unshift({pos:celdaActual,cont,linea,full,op,ts,accion:prev?'ACTUALIZA':'INGRESO'});
-  guardarLocal();cerrarModal();buildYard();renderHist();
-  await syncSheets({pos:celdaActual,cont,linea,full,op,ts,accion:prev?'ACTUALIZA':'INGRESO'});
+  var reg={cont,linea,estado:estadoSel,op,obs,ts};
+  estado[celdaActual]=reg;
+  historial.unshift({pos:celdaActual,cont,linea,estado:estadoSel,op,obs,ts,accion:prev?'ACTUALIZA':'INGRESO'});
+  guardarLocal(); cerrarModal(); buildYard(); renderHist();
+  await syncSheets({pos:celdaActual,cont,linea,estado:estadoSel,op,obs,ts,accion:prev?'ACTUALIZA':'INGRESO'});
 }
 
 async function vaciar(){
-  if(!confirm('¿Despachar esta posición?'))return;
+  if(!confirm('¿Despachar/liberar esta posición?'))return;
   var d=estado[celdaActual];
-  if(d){var ts=new Date().toLocaleString('es-CL');historial.unshift({pos:celdaActual,cont:d.cont,linea:d.linea,full:d.full,op:d.op,ts,accion:'SALIDA'});await syncSheets({pos:celdaActual,cont:d.cont,linea:d.linea,full:d.full,op:d.op,ts,accion:'SALIDA'});}
+  if(d){
+    var ts=new Date().toLocaleString('es-CL');
+    historial.unshift({pos:celdaActual,cont:d.cont,linea:d.linea,estado:d.estado,op:d.op,obs:d.obs||'',ts,accion:'SALIDA'});
+    await syncSheets({pos:celdaActual,cont:d.cont,linea:d.linea,estado:d.estado,op:d.op,obs:d.obs||'',ts,accion:'SALIDA'});
+  }
   delete estado[celdaActual];
-  guardarLocal();cerrarModal();buildYard();renderHist();
+  guardarLocal(); cerrarModal(); buildYard(); renderHist();
 }
 
-// ═══ HISTORIAL ════════════════════════════════════
+// ── HISTORIAL ──────────────────────────────────
 function renderHist(){
   var el=document.getElementById('hist-list');
   if(!historial.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos</div>';return;}
-  var ac={INGRESO:'var(--green)',SALIDA:'var(--red)',ACTUALIZA:'var(--amber)'};
-  el.innerHTML=historial.slice(0,60).map(h=>
-    '<div class="hist-item"><div><div class="hist-accion" style="color:'+( ac[h.accion]||'var(--text2)')+';">'+h.accion+'</div>'
+  var ac={INGRESO:'var(--green)',SALIDA:'var(--red)',ACTUALIZA:'var(--amber)',MOVIMIENTO:'var(--accent)'};
+  el.innerHTML=historial.slice(0,80).map(h=>
+    '<div class="hist-item"><div>'
+    +'<div class="hist-accion" style="color:'+(ac[h.accion]||'var(--text2)')+';">'+h.accion+'</div>'
     +'<div class="hist-info">'+h.cont+' · '+h.pos+'</div>'
-    +'<div style="font-size:10px;color:var(--text3);">'+h.linea+' · '+(h.full?'FULL':'VACÍO')+' · '+h.op+'</div></div>'
-    +'<div class="hist-time">'+(h.ts.split(',')[1]||h.ts)+'</div></div>'
+    +'<div style="font-size:10px;color:var(--text3);">'+h.linea+' · '+(h.estado==='full'?'FULL':h.estado==='espera'?'⏳ espera chasis':'VACÍO')+' · '+h.op+'</div>'
+    +(h.obs?'<div class="hist-obs">'+h.obs+'</div>':'')
+    +'</div><div class="hist-time">'+(h.ts.split(',')[1]||h.ts)+'</div></div>'
   ).join('');
 }
 
-// ═══ BUSCAR ═══════════════════════════════════════
+// ── MOVER POSICIÓN ────────────────────────────
+function mostrarMoverPos(){
+  var d=estado[celdaActual];
+  if(!d) return;
+  var body=document.getElementById('m-body');
+  // Generar opciones de bloque
+  var bloqueOpts=BLOQUES.map(bl=>'<option value="'+bl.id+'">Bloque '+bl.id+'</option>').join('');
+  // Generar opciones de posición 1-14
+  var posOpts='';for(var p=1;p<=14;p++) posOpts+='<option value="'+p+'">'+p+'</option>';
+  // Generar opciones de piso 1-3
+  var pisoOpts='<option value="1">Piso 1</option><option value="2">Piso 2</option><option value="3">Piso 3</option>';
+
+  var panelMover=`
+    <div style="background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.25);border-radius:10px;padding:14px;margin-top:12px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--amber);text-transform:uppercase;margin-bottom:12px;">📍 Mover a nueva posición</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Contenedor: <b style="color:var(--text);font-family:var(--mono);">${d.cont}</b><br>Desde: <span style="color:var(--text3);">${celdaActual}</span></div>
+      <div class="fld-row3">
+        <div class="fld"><label>Bloque</label><select id="mv-bloque">${bloqueOpts}</select></div>
+        <div class="fld"><label>Posición</label><select id="mv-pos">${posOpts}</select></div>
+        <div class="fld"><label>Piso</label><select id="mv-piso">${pisoOpts}</select></div>
+      </div>
+      <button onclick="confirmarMover()" style="width:100%;background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.35);color:var(--amber);font-family:var(--sans);font-size:13px;font-weight:700;padding:11px;border-radius:8px;cursor:pointer;margin-top:4px;">✓ Confirmar movimiento</button>
+    </div>`;
+  // Agregar panel al body sin reemplazar lo existente
+  var existing=body.querySelector('.mover-panel');
+  if(existing) existing.remove();
+  var div=document.createElement('div');
+  div.className='mover-panel';
+  div.innerHTML=panelMover;
+  body.appendChild(div);
+  div.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+async function confirmarMover(){
+  var nuevoBloque=document.getElementById('mv-bloque').value;
+  var nuevaPos=document.getElementById('mv-pos').value;
+  var nuevoPiso=document.getElementById('mv-piso').value;
+  var nuevaKey=nuevoBloque+'-'+String(nuevaPos).padStart(2,'0')+'-P'+nuevoPiso;
+
+  // Validar que el bloque acepta esa posición
+  var bl=BLOQUES.find(b=>b.id===nuevoBloque);
+  if(bl && (parseInt(nuevaPos)<bl.posMin || parseInt(nuevaPos)>bl.posMax)){
+    alert('El Bloque '+nuevoBloque+' solo tiene posiciones '+bl.posMin+' a '+bl.posMax);
+    return;
+  }
+  if(nuevaKey===celdaActual){alert('Es la misma posición');return;}
+  if(estado[nuevaKey]){
+    if(!confirm('La posición '+nuevaKey+' ya está ocupada con '+estado[nuevaKey].cont+'.
+¿Deseas reemplazarla?')) return;
+  }
+
+  var d=estado[celdaActual];
+  var ts=new Date().toLocaleString('es-CL');
+  var op=document.getElementById('m-op')?document.getElementById('m-op').value:d.op;
+
+  // Mover
+  estado[nuevaKey]={...d, op:op, ts:ts};
+  delete estado[celdaActual];
+
+  historial.unshift({
+    pos:nuevaKey, cont:d.cont, linea:d.linea, estado:d.estado,
+    op:op, obs:'Movido desde '+celdaActual, ts:ts, accion:'MOVIMIENTO'
+  });
+  guardarLocal(); cerrarModal(); buildYard(); renderHist();
+  await syncSheets({pos:nuevaKey, cont:d.cont, linea:d.linea, estado:d.estado, op:op, obs:'Movido desde '+celdaActual, ts:ts, accion:'MOVIMIENTO'});
+}
+
+// ── BUSCAR ─────────────────────────────────────
 function buscar(val){
   val=val.trim().toUpperCase();
   var el=document.getElementById('search-res');
@@ -472,59 +642,93 @@ function buscar(val){
   var res=Object.keys(estado).filter(k=>estado[k].cont.includes(val)||estado[k].linea.toUpperCase().includes(val));
   if(!res.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:16px;">No encontrado</div>';return;}
   el.innerHTML=res.map(k=>{
-    var d=estado[k],c2=COLORES[d.linea]||COLORES.Otros;
+    var d=estado[k], c2=COLS[d.linea]||COLS.Otros;
+    var stColor=d.estado==='espera'?'var(--orange)':d.estado==='full'?'var(--green)':'#c084fc';
     return '<div class="s-result" style="border-left-color:'+c2.bg+';" onclick="irAPos(\''+k+'\')">'
-      +'<div class="s-cont" style="color:'+c2.txt+';">'+d.cont+'</div>'
-      +'<div class="s-det">'+k+' · '+d.linea+' · '+(d.full?'FULL':'VACÍO')+'</div>'
-      +'<div style="font-size:10px;color:var(--text3);">Op: '+d.op+' · '+d.ts+'</div>'
+      +'<div style="font-family:var(--mono);font-size:14px;font-weight:700;color:'+c2.txt+';">'+d.cont+'</div>'
+      +'<div style="font-size:11px;color:var(--text2);margin-top:3px;">'+k+' · '+d.linea+'</div>'
+      +'<div style="font-size:11px;margin-top:2px;color:'+stColor+';">'+(d.estado==='full'?'📦 FULL':d.estado==='espera'?'⏳ En espera chasis':'◻ VACÍO')+'</div>'
+      +(d.obs?'<div style="font-size:10px;color:var(--text3);font-style:italic;margin-top:2px;">'+d.obs+'</div>':'')
       +'</div>';
   }).join('');
 }
 
 function irAPos(k){
-  setTab('mapa',document.querySelector('.tab'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelector('[data-tab="mapa"]').classList.add('active');
+  document.getElementById('pane-mapa').classList.add('active');
   setTimeout(function(){
     var cell=document.getElementById('cell-'+k);
-    if(cell){cell.scrollIntoView({behavior:'smooth',block:'center'});cell.style.boxShadow='0 0 0 3px var(--accent)';setTimeout(()=>cell.style.boxShadow='',2000);}
+    if(cell){cell.scrollIntoView({behavior:'smooth',block:'center'});cell.style.boxShadow='0 0 0 3px var(--accent)';setTimeout(()=>cell.style.boxShadow='',2500);}
   },200);
 }
 
-// ═══ EXPORT ═══════════════════════════════════════
+// ── EXPORT ─────────────────────────────────────
 function exportCSV(){
-  var rows=[['Posición','Bloque','Pos','Piso','Contenedor','Línea','Estado','Operador','Fecha/Hora']];
-  Object.keys(estado).forEach(k=>{var d=estado[k],p=k.split('-');rows.push([k,p[0],p[1],p[2],d.cont,d.linea,d.full?'FULL':'VACÍO',d.op,d.ts]);});
+  var rows=[['Posición','Bloque','Pos','Piso','Contenedor','Línea','Estado','Operador','Observación','Fecha/Hora']];
+  Object.keys(estado).forEach(k=>{
+    var d=estado[k],p=k.split('-');
+    rows.push([k,p[0],p[1],p[2],d.cont,d.linea,d.estado==='full'?'FULL':d.estado==='espera'?'EN ESPERA CHASIS':'VACÍO',d.op,d.obs||'',d.ts]);
+  });
   var csv='data:text/csv;charset=utf-8,\uFEFF'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');
-  var a=document.createElement('a');a.href=encodeURI(csv);a.download='CCTI_Deposito_'+new Date().toISOString().split('T')[0]+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);
+  var a=document.createElement('a');a.href=encodeURI(csv);a.download='CCTI_Deposito_'+new Date().toISOString().split('T')[0]+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 
-// ═══ SYNC ═════════════════════════════════════════
+// ── SYNC ───────────────────────────────────────
 async function syncSheets(data){
   if(!SCRIPT_URL)return;
   setSyncDot('spin','Sincronizando...');
-  try{await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});setSyncDot('ok','Sync · '+new Date().toTimeString().slice(0,5));}
-  catch(e){setSyncDot('err','Error sync');}
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    setSyncDot('ok','Sync · '+new Date().toTimeString().slice(0,5));
+  }catch(e){setSyncDot('err','Error sync');}
 }
 function setSyncDot(t,m){document.getElementById('sync-dot').className='sync-dot '+t;document.getElementById('sync-msg').textContent=m;}
 
-// ═══ LOCAL ════════════════════════════════════════
-function guardarLocal(){localStorage.setItem('ccti_dep_estado',JSON.stringify(estado));localStorage.setItem('ccti_dep_hist',JSON.stringify(historial.slice(0,200)));}
-
-// ═══ CONFIG ═══════════════════════════════════════
-function guardarCfg(){SCRIPT_URL=document.getElementById('cfg-s').value.trim();localStorage.setItem('ccti_dep_script',SCRIPT_URL);setSyncDot('ok','Google Sheets configurado');alert('Guardado ✓');}
-
-// ═══ TABS ═════════════════════════════════════════
-function setTab(id,btn){
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('pane-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
+// ── LOCAL STORAGE ──────────────────────────────
+function guardarLocal(){
+  localStorage.setItem('ccti_dep_e',JSON.stringify(estado));
+  localStorage.setItem('ccti_dep_h',JSON.stringify(historial.slice(0,200)));
 }
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){setTab(this.textContent.toLowerCase().includes('map')?'mapa':this.textContent.toLowerCase().includes('bus')?'buscar':this.textContent.toLowerCase().includes('his')?'hist':'cfg',this);}));
 
-// ═══ INIT ═════════════════════════════════════════
+// ── CONFIG ─────────────────────────────────────
+function guardarCfg(){
+  SCRIPT_URL=document.getElementById('cfg-s').value.trim();
+  localStorage.setItem('ccti_dep_sc',SCRIPT_URL);
+  // Guardar pisos por bloque
+  var pisosA=parseInt(document.getElementById('cfg-pisosA').value)||3;
+  var pisosB=parseInt(document.getElementById('cfg-pisosB').value)||3;
+  var pisosC=parseInt(document.getElementById('cfg-pisosC').value)||3;
+  CFG_PISOS={A:pisosA,B:pisosB,C:pisosC};
+  localStorage.setItem('ccti_dep_pisos',JSON.stringify(CFG_PISOS));
+  BLOQUES[0].pisos=pisosA;
+  BLOQUES[1].pisos=pisosB;
+  BLOQUES[2].pisos=pisosC;
+  if(SCRIPT_URL) setSyncDot('ok','Google Sheets configurado');
+  buildYard();
+  alert('Guardado ✓ — mapa actualizado');
+}
+
+// ── TABS ───────────────────────────────────────
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('pane-'+this.dataset.tab).classList.add('active');
+  });
+});
+
+// ── INIT ───────────────────────────────────────
 document.getElementById('cfg-s').value=SCRIPT_URL;
-if(SCRIPT_URL)setSyncDot('ok','Google Sheets configurado');
-buildYard();renderHist();
+document.getElementById('cfg-pisosA').value=String(CFG_PISOS.A||3);
+document.getElementById('cfg-pisosB').value=String(CFG_PISOS.B||3);
+document.getElementById('cfg-pisosC').value=String(CFG_PISOS.C||3);
+if(SCRIPT_URL) setSyncDot('ok','Google Sheets configurado');
+buildYard();
+renderHist();
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
 </script>
 </body>
