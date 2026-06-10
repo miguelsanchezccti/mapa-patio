@@ -54,7 +54,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .pos-lbl{font-size:8px;color:var(--text3);width:22px;text-align:right;margin-right:3px;flex-shrink:0;font-family:var(--mono);}
 .pisos-row{display:flex;gap:3px;}
 
-/* CELDA CON HOVER/TOOLTIP MEJORADO */
 .cell{
   width:48px;height:42px;border-radius:5px;
   border:1px solid var(--border);
@@ -222,7 +221,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   margin-top: 10px;
 }
 
-/* ══ HISTORIAL ══════════════════════════════════════ */
+/* ══ HISTORIAL Y CONFIG ═════════════════════════════ */
 .hist-item{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);font-size:11px;}
 .hist-accion{font-weight:700;font-family:var(--mono);font-size:10px;letter-spacing:.5px;}
 .hist-info{color:var(--text2);margin-top:2px;}
@@ -256,6 +255,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   <div class="tab active" data-tab="mapa">🗺 Mapa</div>
   <div class="tab" data-tab="buscar">🔍 Buscar</div>
   <div class="tab" data-tab="hist">📋 Historial</div>
+  <div class="tab" data-tab="cfg">⚙ Config</div>
 </div>
 
 <div class="pane active" id="pane-mapa">
@@ -294,6 +294,19 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   <div id="hist-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Sin movimientos</div></div>
 </div>
 
+<div class="pane" id="pane-cfg">
+  <div style="padding:16px;">
+    <div class="fld">
+      <label>Google Sheets — Apps Script URL</label>
+      <input type="text" id="cfg-s" placeholder="https://script.google.com/macros/s/..." style="font-size:12px;font-family:var(--mono);">
+    </div>
+    <button onclick="guardarCfg()" style="width:100%;background:rgba(0,200,255,.1);border:1px solid rgba(0,200,255,.3);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:700;padding:13px;border-radius:9px;cursor:pointer;margin-bottom:20px;">✓ Guardar Enlace Nube</button>
+    <div style="border-top:1px solid var(--border);padding-top:16px;">
+      <button onclick="if(confirm('¿Resetear todo el estado del patio?')){estado={};historial=[];guardarLocal();buildYard();}" style="width:100%;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.25);color:var(--red);font-family:var(--sans);font-size:12px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">⚠ Resetear patio completo</button>
+    </div>
+  </div>
+</div>
+
 <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span id="sync-msg">Sin configurar</span></div>
 
 <div class="overlay" id="overlay">
@@ -316,7 +329,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
-// AUTO-INICIALIZACIÓN: Escudo que obliga a Windows/Navegador a pintar el mapa completo pase lo que pase
 var BLOQUES = [
   {id:'A', posMin:1, posMax:14, fondos:3},
   {id:'B', posMin:6, posMax:11, fondos:3},
@@ -405,7 +417,6 @@ function buildYard(){
           var topContenedor = null;
           var alturaOcupada = 0;
           
-          // 🖲️ REQUERIMIENTO COMPLEMENTADO: Construcción nativa del Tooltip (Puntero del mouse / Hover)
           var tooltipHTML = `<div class="cell-tooltip"><b>📍 ${bl.id}${parseInt(pos)} — Fondo ${f}</b><hr style="border:0;border-top:1px solid var(--border);margin:4px 0;">`;
           var tieneUnidades = false;
 
@@ -441,9 +452,7 @@ function buildYard(){
             cell.innerHTML += `<span class="cell-height-badge">[${alturaOcupada}]</span>`;
           }
 
-          // Inyectar Tooltip flotante
           cell.innerHTML += tooltipHTML;
-
           cell.addEventListener('click',function(){ abrirModalPila(this.dataset.bpf); });
           pisos.appendChild(cell);
         }
@@ -580,7 +589,6 @@ function conmutarPanelMover(piso) {
   if(panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 }
 
-// 🛠️ TRASLADO MEJORADO: Borra el origen por completo y cierra la ventana al instante para evitar bloqueos visuales
 function ejecutarMovimientoInterPila(pisoOrigen) {
   var blDest = document.getElementById(`mv-bl-${pisoOrigen}`).value;
   var posDest = String(document.getElementById(`mv-pos-${pisoOrigen}`).value).padStart(2,'0');
@@ -600,7 +608,6 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
   var d = estado[llaveOrigen];
   var ts = new Date().toLocaleString('es-CL');
 
-  // Registrar en destino
   estado[llaveDestino] = { 
     cont: d.cont, 
     linea: d.linea, 
@@ -610,7 +617,6 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
     obs: `Movido desde ${llaveOrigen.replace('-F',' F').replace('-P',' P')}` 
   };
   
-  // LIMPIEZA ABSOLUTA DE LA MEMORIA DE ORIGEN
   delete estado[llaveOrigen];
 
   historial.unshift({
@@ -625,8 +631,8 @@ function ejecutarMovimientoInterPila(pisoOrigen) {
   });
 
   guardarLocal(); 
-  cerrarModal(); // Cierra la ventana emergente para que no quede pegada en el aire
-  buildYard(); // Redibuja el patio completo con los datos limpios de inmediato
+  cerrarModal(); 
+  buildYard(); 
   
   syncSheets({ pos: llaveDestino, cont: d.cont, linea: d.linea, estado: d.estado, op: d.op, obs: `TRASLADO DESDE ${llaveOrigen}`, ts: ts, accion: 'MOVIMIENTO' });
 }
@@ -656,7 +662,7 @@ function actualizarNivel(piso) {
   historial.unshift({ pos: k, cont, linea, estado: reg.estado, op, obs, ts, accion: prev ? 'ACTUALIZA' : 'INGRESO' });
   guardarLocal(); buildYard(); abrirModalPila(celdaActualFondo);
   
-  syncSheets({ pos: k, cont, linea, estado: reg.estado, op, obs, ts, accion: prev ? 'ACTUALIZA' : 'INGRESO' });
+  syncSheets({ pos: k, cont, linea: reg.linea, estado: reg.estado, op, obs, ts, accion: prev ? 'ACTUALIZA' : 'INGRESO' });
 }
 
 function despacharNivel(piso) {
@@ -727,6 +733,7 @@ function guardarLocal(){
   localStorage.setItem('ccti_dep_h',JSON.stringify(historial.slice(0,100)));
 }
 
+// 💻 Sincronización blindada hacia el cerebro central de la nube
 async function syncSheets(data){
   if(!SCRIPT_URL) return;
   setSyncDot('spin','Sincronizando...');
@@ -735,9 +742,17 @@ async function syncSheets(data){
     setSyncDot('ok','Sync · '+new Date().toTimeString().slice(0,5));
   }catch(e){ setSyncDot('error','Guardado Local (Sin Red)'); }
 }
+
 function setSyncDot(t,m){
   var dot = document.getElementById('sync-dot'); var msg = document.getElementById('sync-msg');
   if(dot && msg) { dot.className='sync-dot '+t; msg.textContent=m; }
+}
+
+function guardarCfg(){
+  SCRIPT_URL=document.getElementById('cfg-s').value.trim();
+  localStorage.setItem('ccti_dep_sc',SCRIPT_URL);
+  if(SCRIPT_URL) setSyncDot('ok','Google Sheets configurado');
+  alert('Enlace de Google Sheets guardado con éxito ✓');
 }
 
 document.querySelectorAll('.tab').forEach(function(tab){
@@ -750,7 +765,10 @@ document.querySelectorAll('.tab').forEach(function(tab){
   });
 });
 
-// ARRANQUE SEGURO
+// START SEGURO
+document.getElementById('cfg-s').value=SCRIPT_URL;
+if(SCRIPT_URL) setSyncDot('ok','Google Sheets activo');
+
 buildYard();
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
 </script>
