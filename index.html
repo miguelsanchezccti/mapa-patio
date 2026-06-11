@@ -93,8 +93,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .m-pos-badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin-bottom:18px;width:100%;}
 .m-bloque{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);}
 .m-estado{font-size:11px;margin-left:auto;}
-.m-estado.disp{color:var(--green);}
-.m-estado.ocu{color:var(--amber);}
+.m-estado{font-size:11px;font-weight:700;letter-spacing:1px;padding:5px 12px;border-radius:20px;}
+.m-estado.disp{color:var(--green);background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.25);}
+.m-estado.ocu{color:var(--amber);background:rgba(240,165,0,.1);border:1px solid rgba(240,165,0,.25);}
 
 /* TIPO: Propio / Arriendo */
 .tipo-btns{display:flex;gap:8px;margin-bottom:14px;}
@@ -255,6 +256,7 @@ select.fld-sel option{background:var(--surface2);}
       <input type="text" id="cfgS" placeholder="https://script.google.com/macros/s/..." style="font-size:12px;font-family:var(--mono);">
     </div>
     <button onclick="saveCfg()" style="width:100%;background:rgba(0,200,255,.1);border:1px solid rgba(0,200,255,.3);color:var(--accent);font-family:var(--sans);font-size:13px;font-weight:700;padding:13px;border-radius:9px;cursor:pointer;margin-bottom:18px;">✓ Guardar y aplicar</button>
+    <button onclick="forzarRecarga()" style="width:100%;background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.2);color:var(--accent);font-family:var(--sans);font-size:12px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;margin-bottom:10px;">🔄 Forzar recarga desde nube</button>
     <button onclick="if(confirm('Resetear patio?')){E={};H=[];save();build();renderH();}" style="width:100%;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.2);color:var(--red);font-family:var(--sans);font-size:12px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer;">⚠ Resetear patio</button>
   </div>
 </div>
@@ -265,8 +267,12 @@ select.fld-sel option{background:var(--surface2);}
 <div class="overlay" id="ov">
   <div class="modal" id="modal">
     <div class="m-handle"></div>
-    <div class="m-pos-badge" id="mpb">
-      <span class="m-bloque" id="mbl">—</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--accent);text-transform:uppercase;">Nivel altura</div>
+        <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--text);" id="mbl">—</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:1px;" id="mbl2"></div>
+      </div>
       <span class="m-estado disp" id="mest">DISPONIBLE</span>
     </div>
     <div id="mbody"></div>
@@ -287,7 +293,7 @@ function getPisos(id){ return parseInt(BL_CFG[id]) || 3; }
 var OPS = ['Alexis Perez','Joel Popa','Victor Ramirez','Claudio Araya'];
 var E = JSON.parse(localStorage.getItem('ccti_dep_e') || '{}');
 var H = JSON.parse(localStorage.getItem('ccti_dep_h') || '[]');
-var SU = localStorage.getItem('ccti_dep_su') || '';
+var SU = localStorage.getItem('ccti_dep_su') || 'https://script.google.com/macros/s/AKfycbx2wKQGDNObTJaid9IaCG315jC2GuJeiGdOgIXUg_s7pk5r2Gigd4lnehrYh8WKFmS0/exec';
 var K = null; // celda actual
 var tipoSel = 'propio';
 var estSel  = 'full';
@@ -419,7 +425,10 @@ function openModal(cell){
   var b=cell.dataset.b, p=cell.dataset.p, pi=cell.dataset.pi;
   var d=E[K];
 
-  document.getElementById('mbl').textContent='Bloque '+b+' · Pos '+p+' · Piso '+pi;
+  var pisoTxt='Piso '+pi;
+  var pisoNames=['','Planta baja','Segundo nivel','Tercer nivel'];
+  document.getElementById('mbl').textContent=pisoTxt;
+  document.getElementById('mbl2').textContent='Bloque '+b+' · Posición '+p+(pisoNames[parseInt(pi)]?' — '+pisoNames[parseInt(pi)]:'');
   var mest=document.getElementById('mest');
   if(d){ mest.textContent='OCUPADO'; mest.className='m-estado ocu'; }
   else  { mest.textContent='DISPONIBLE'; mest.className='m-estado disp'; }
@@ -486,7 +495,8 @@ function openModal(cell){
       +'<div class="fld"><label>Operador</label><select id="mop">'+OPS.map(function(o){return '<option>'+o+'</option>';}).join('')+'</select></div>'
       +'<div class="fld"><label>Observaciones</label><input type="text" id="mobs" placeholder="Notas opcionales..."></div>'
       +'</div>';
-    btns.innerHTML='<button class="btn btn-ok" onclick="confirm_()">📥 Ingresar</button>'
+    var pisoBtn=K?K.split('-').pop():'P?';
+    btns.innerHTML='<button class="btn btn-ok" onclick="confirm_()">📥 Ingresar '+pisoBtn+'</button>'
       +'<button class="btn btn-x" onclick="closeModal()">✕ Cancelar</button>';
   }
   document.getElementById('ov').classList.add('open');
@@ -643,6 +653,25 @@ function setSd(t,m){
   var s=document.getElementById('smsg'); if(s) s.textContent=m;
 }
 
+// ── FORZAR RECARGA DESDE NUBE ──────────────────
+async function forzarRecarga(){
+  if(!SU){alert('Configura la URL del Apps Script primero');return;}
+  setSd('spin','Cargando desde nube...');
+  try{
+    var res=await fetch(SU+'?accion=getEstado&_='+Date.now());
+    var json=await res.json();
+    if(json.estado==='ok' && json.data){
+      E=json.data;
+      save(); build(); renderH();
+      setSd('ok','Recargado desde nube · '+new Date().toTimeString().slice(0,5));
+    } else {
+      setSd('ok','Nube sin datos previos');
+    }
+  }catch(e){
+    setSd('err','Error al conectar con la nube');
+  }
+}
+
 // ── LOCAL ──────────────────────────────────────
 function save(){
   localStorage.setItem('ccti_dep_e',JSON.stringify(E));
@@ -677,6 +706,11 @@ document.getElementById('ov').addEventListener('click',function(e){if(e.target==
 
 // ── INIT ───────────────────────────────────────
 window.addEventListener('DOMContentLoaded',function(){
+  // Si no hay URL guardada, usar la default ya cargada
+  if(!localStorage.getItem('ccti_dep_su') && SU) {
+    localStorage.setItem('ccti_dep_su',SU);
+    setSd('ok','Google Sheets configurado (default)');
+  }
   var cs=document.getElementById('cfgS'); if(cs) cs.value=SU;
   var ca=document.getElementById('cfgA'); if(ca) ca.value=String(BL_CFG.A||3);
   var cb=document.getElementById('cfgB'); if(cb) cb.value=String(BL_CFG.B||3);
